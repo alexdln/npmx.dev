@@ -271,19 +271,6 @@ function formatOgDate(isoDate?: string): string {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
-function formatCompactNumber(num: number): string {
-  if (num >= 1_000_000_000) {
-    return `${(num / 1_000_000_000).toFixed(num >= 10_000_000_000 ? 0 : 1).replace(/\.0$/, '')}B`
-  }
-  if (num >= 1_000_000) {
-    return `${(num / 1_000_000).toFixed(num >= 10_000_000 ? 0 : 1).replace(/\.0$/, '')}M`
-  }
-  if (num >= 1_000) {
-    return `${(num / 1_000).toFixed(num >= 10_000 ? 0 : 1).replace(/\.0$/, '')}K`
-  }
-  return num.toString()
-}
-
 // Computed values for OG image
 const ogRepoRef = computed(() => {
   const repoUrl = displayVersion.value?.repository?.url
