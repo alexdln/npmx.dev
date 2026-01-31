@@ -155,9 +155,9 @@ const sortedOptionalDependencies = computed(() => {
         <li
           v-for="peer in sortedPeerDependencies.slice(0, peerDepsExpanded ? undefined : 10)"
           :key="peer.name"
-          class="flex items-center justify-between py-1 text-sm gap-2 min-w-0"
+          class="flex items-center justify-between py-1 text-sm gap-1 min-w-0"
         >
-          <div class="flex items-center gap-2 shrink-0">
+          <div class="flex items-center gap-1 shrink-0">
             <NuxtLink
               :to="{ name: 'package', params: { package: peer.name.split('/') } }"
               class="font-mono text-fg-muted hover:text-fg transition-colors duration-200"
@@ -166,10 +166,11 @@ const sortedOptionalDependencies = computed(() => {
             </NuxtLink>
             <span
               v-if="peer.optional"
-              class="px-1 py-0.5 font-mono text-[10px] text-fg-subtle bg-bg-muted border border-border rounded shrink-0"
+              class="shrink-0 text-fg-muted hover:text-fg transition-colors duration-200 cursor-help inline-flex items-center"
               :title="$t('package.dependencies.optional')"
+              :aria-label="$t('package.dependencies.optional')"
             >
-              {{ $t('package.dependencies.optional') }}
+              <span aria-hidden="true" class="i-carbon:information w-3 h-3 block" />
             </span>
           </div>
           <NuxtLink
