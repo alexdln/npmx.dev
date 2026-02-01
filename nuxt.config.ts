@@ -73,6 +73,18 @@ export default defineNuxtConfig({
           href: '/opensearch.xml',
         },
       ],
+      script: [
+        {
+          innerHTML: `
+            (function () {
+              const preferredBackgroundTheme = localStorage.getItem('npmx-background-theme')
+              if (preferredBackgroundTheme) {
+                document.documentElement.dataset.bgTheme = preferredBackgroundTheme
+              }
+            })()
+          `,
+        },
+      ],
     },
   },
 
