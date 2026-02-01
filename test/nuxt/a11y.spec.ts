@@ -1808,6 +1808,8 @@ describe('background theme accessibility', () => {
     ['dark', 'zinc'],
     ['light', 'slate'],
     ['dark', 'slate'],
+    ['light', 'contrast'],
+    ['dark', 'contrast'],
   ] as const
 
   function applyTheme(colorMode: string, bgTheme: string | null) {
