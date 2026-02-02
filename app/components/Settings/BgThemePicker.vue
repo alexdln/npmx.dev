@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { useBackgroundTheme } from '~/composables/useBackgroundTheme'
-
 const { backgroundThemes, selectedBackgroundTheme, setBackgroundTheme } = useBackgroundTheme()
 
 onPrehydrate(el => {
-  const id = localStorage.getItem('npmx-background-theme')
+  const settings = JSON.parse(localStorage.getItem('npmx-settings') || '{}')
+  const id = settings.preferredBackgroundTheme
   if (id) {
     const input = el.querySelector<HTMLInputElement>(`input[value="${id || 'neutral'}"]`)
     if (input) {
