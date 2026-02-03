@@ -107,12 +107,7 @@ const setLocale: typeof setNuxti18nLocale = locale => {
             </div>
 
             <!-- Text sizes -->
-            <div class="space-y-3">
-              <span class="block text-sm text-fg font-medium">
-                {{ $t('settings.text_size') }}
-              </span>
-              <SettingsTextSizePicker />
-            </div>
+            <SettingsTextSizePicker />
           </div>
         </section>
 

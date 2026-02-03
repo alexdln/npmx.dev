@@ -17,8 +17,10 @@ onPrehydrate(el => {
 </script>
 
 <template>
-  <fieldset>
-    <legend class="sr-only">{{ $t('settings.text_size') }}</legend>
+  <div class="space-y-3">
+    <label for="text-size-select" class="block text-sm text-fg font-medium">
+      {{ $t('settings.text_size') }}
+    </label>
     <select
       id="text-size-select"
       :value="selectedTextSize"
@@ -29,5 +31,5 @@ onPrehydrate(el => {
         {{ $t(`settings.text_sizes.${textSize.id}`) }}
       </option>
     </select>
-  </fieldset>
+  </div>
 </template>
