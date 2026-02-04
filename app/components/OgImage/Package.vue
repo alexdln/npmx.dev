@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed, toRefs } from 'vue'
 import { joinURL } from 'ufo'
 
 const props = withDefaults(
