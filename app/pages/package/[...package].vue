@@ -23,7 +23,7 @@ definePageMeta({
 })
 
 defineOgImageComponent('Package', {
-  name: () => packageName,
+  name: () => packageName.value,
   version: () => requestedVersion.value ?? '',
   primaryColor: '#60a5fa',
 })
@@ -140,7 +140,7 @@ const {
   data: pkg,
   status,
   error,
-} = usePackage(packageName, resolvedVersion.value ?? requestedVersion)
+} = usePackage(packageName, resolvedVersion.value ?? requestedVersion.value)
 const displayVersion = computed(() => pkg.value?.requestedVersion ?? null)
 
 // Process package description
