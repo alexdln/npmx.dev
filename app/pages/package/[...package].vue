@@ -53,7 +53,7 @@ if (import.meta.server) {
   assertValidPackageName(packageName.value)
 }
 
-const { data: downloads } = usePackageDownloads(packageName, 'last-week')
+const { data: downloads, refresh: refreshDownloads } = usePackageDownloads(packageName, 'last-week')
 
 // Fetch README for specific version if requested, otherwise latest
 const { data: readmeData } = useLazyFetch<ReadmeResponse>(
@@ -136,6 +136,7 @@ const {
   data: pkg,
   status,
   error,
+  refresh: refreshPkg,
 } = usePackage(packageName, resolvedVersion.value ?? requestedVersion)
 const displayVersion = computed(() => pkg.value?.requestedVersion ?? null)
 
@@ -243,7 +244,15 @@ const repositoryUrl = computed(() => {
   return url
 })
 
-const { meta: repoMeta, repoRef, stars, starsLink, forks, forksLink } = useRepoMeta(repositoryUrl)
+const {
+  meta: repoMeta,
+  repoRef,
+  stars,
+  starsLink,
+  forks,
+  forksLink,
+  refresh: refreshRepoMeta,
+} = useRepoMeta(repositoryUrl)
 
 const PROVIDER_ICONS: Record<string, string> = {
   github: 'i-carbon:logo-github',
@@ -446,12 +455,27 @@ onKeyStroke(
   },
 )
 
+// Wait for all critical data to be received on the server side for correct OG rendering and better results for robots
+if (import.meta.server) {
+  const event = useRequestEvent()
+  const agent = event?.node.req.headers['user-agent']?.toLowerCase() || ''
+  const crawlerRegex =
+    /(facebookexternalhit|bluesky|twitterbot|linkedinbot|discordbot|slackbot|telegrambot|whatsapp|vkshare|skypeuripreview|googlebot|bingbot|yandexbot|baiduspider|duckduckbot|crawler|spider|bot|preview)/i
+
+  const isCrawler = crawlerRegex.test(agent)
+
+  if (isCrawler) {
+    await refreshPkg()
+    await Promise.all([refreshRepoMeta(), refreshDownloads()])
+  }
+}
+
 defineOgImageComponent('Package', {
   name: () => pkg.value?.name ?? 'Package',
   version: () => resolvedVersion.value ?? '',
   downloads: () => (downloads.value ? $n(downloads.value.downloads) : ''),
   license: () => pkg.value?.license ?? '',
-  stars: () => stars.value ?? 0,
+  stars: () => repoMeta.value?.stars ?? 0,
   primaryColor: '#60a5fa',
 })
 </script>
