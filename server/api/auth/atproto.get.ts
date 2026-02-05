@@ -76,7 +76,12 @@ export default defineEventHandler(async event => {
           message: 'Handle not provided in query',
         })
       }
-      return "this api works"
+
+      const redirectUrl = await atclient.authorize(handle, {
+        scope,
+        prompt: create ? 'create' : undefined,
+      })
+      return redirectUrl
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Authentication failed.'
 
