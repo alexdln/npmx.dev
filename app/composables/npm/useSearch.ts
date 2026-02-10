@@ -52,7 +52,7 @@ export function useSearch(
   const suggestionsLoading = shallowRef(false)
   const packageAvailability = shallowRef<{ name: string; available: boolean } | null>(null)
   const existenceCache = shallowRef<Record<string, boolean>>({})
-  let suggestionRequestId = 0
+  const suggestionRequestId = shallowRef(0)
 
   /**
    * Determine which extra checks to include in the Algolia multi-search.
@@ -225,23 +225,6 @@ export function useSearch(
     { default: emptySearchPayload },
   )
 
-  watch(
-    [() => asyncData.data.value.suggestions, () => suggestions.value],
-    ([payloadSuggestions, localSuggestions]) => {
-      if (!payloadSuggestions.length && !localSuggestions.length) return
-      suggestions.value = payloadSuggestions.length ? payloadSuggestions : localSuggestions
-    },
-    { immediate: true },
-  )
-
-  watch(
-    [() => asyncData.data.value?.packageAvailability, () => packageAvailability.value],
-    ([payloadPackageAvailability, localPackageAvailability]) => {
-      packageAvailability.value = payloadPackageAvailability || localPackageAvailability
-    },
-    { immediate: true },
-  )
-
   async function fetchMore(targetSize: number): Promise<void> {
     const q = toValue(query).trim()
     const provider = searchProvider.value
@@ -346,118 +329,140 @@ export function useSearch(
     return asyncData.data.value?.searchResponse ?? null
   })
 
-  if (import.meta.client && asyncData.data.value?.searchResponse.isStale) {
-    onMounted(() => {
-      asyncData.refresh()
-    })
-  }
-
   const hasMore = computed(() => {
     if (!cache.value) return true
     return cache.value.objects.length < cache.value.total
   })
 
-  // npm suggestion checking (Algolia handles suggestions inside the search handler above)
-  if (config.suggestions) {
-    async function validateSuggestionsNpm(q: string) {
-      const requestId = ++suggestionRequestId
-      const { intent, name } = parseSuggestionIntent(q)
+  async function validateSuggestionsNpm(q: string) {
+    const requestId = ++suggestionRequestId.value
+    const { intent, name } = parseSuggestionIntent(q)
+    let availability: { name: string; available: boolean } | null = null
 
-      const trimmed = q.trim()
-      if (isValidNewPackageName(trimmed)) {
-        checkPackageExists(trimmed)
-          .then(exists => {
-            if (trimmed === toValue(query).trim()) {
-              packageAvailability.value = { name: trimmed, available: !exists }
-            }
-          })
-          .catch(() => {
-            packageAvailability.value = null
-          })
-      } else {
-        packageAvailability.value = null
+    const trimmed = q.trim()
+    if (isValidNewPackageName(trimmed)) {
+      checkPackageExists(trimmed)
+        .then(exists => {
+          if (trimmed === toValue(query).trim()) {
+            availability = { name: trimmed, available: !exists }
+            packageAvailability.value = availability
+          }
+        })
+        .catch(() => {
+          availability = null
+        })
+    } else {
+      availability = null
+    }
+
+    if (!intent || !name) {
+      suggestionsLoading.value = false
+      return { suggestions: [], packageAvailability: availability }
+    }
+
+    suggestionsLoading.value = true
+    const result: SearchSuggestion[] = []
+    const lowerName = name.toLowerCase()
+
+    try {
+      const wantOrg = intent === 'org' || intent === 'both'
+      const wantUser = intent === 'user' || intent === 'both'
+
+      const promises: Promise<void>[] = []
+
+      if (wantOrg && existenceCache.value[`org:${lowerName}`] === undefined) {
+        promises.push(
+          checkOrgNpm(name)
+            .then(exists => {
+              existenceCache.value = { ...existenceCache.value, [`org:${lowerName}`]: exists }
+            })
+            .catch(() => {
+              existenceCache.value = { ...existenceCache.value, [`org:${lowerName}`]: false }
+            }),
+        )
       }
 
-      if (!intent || !name) {
-        suggestions.value = []
+      if (wantUser && existenceCache.value[`user:${lowerName}`] === undefined) {
+        promises.push(
+          checkUserNpm(name)
+            .then(exists => {
+              existenceCache.value = { ...existenceCache.value, [`user:${lowerName}`]: exists }
+            })
+            .catch(() => {
+              existenceCache.value = { ...existenceCache.value, [`user:${lowerName}`]: false }
+            }),
+        )
+      }
+
+      if (promises.length > 0) {
+        await Promise.all(promises)
+      }
+
+      if (requestId !== suggestionRequestId.value)
+        return { suggestions: [], packageAvailability: availability }
+
+      const isOrg = wantOrg && existenceCache.value[`org:${lowerName}`]
+      const isUser = wantUser && existenceCache.value[`user:${lowerName}`]
+
+      if (isOrg) {
+        result.push({ type: 'org', name, exists: true })
+      }
+      if (isUser && !isOrg) {
+        result.push({ type: 'user', name, exists: true })
+      }
+    } finally {
+      if (requestId === suggestionRequestId.value) {
         suggestionsLoading.value = false
-        return
-      }
-
-      suggestionsLoading.value = true
-      const result: SearchSuggestion[] = []
-      const lowerName = name.toLowerCase()
-
-      try {
-        const wantOrg = intent === 'org' || intent === 'both'
-        const wantUser = intent === 'user' || intent === 'both'
-
-        const promises: Promise<void>[] = []
-
-        if (wantOrg && existenceCache.value[`org:${lowerName}`] === undefined) {
-          promises.push(
-            checkOrgNpm(name)
-              .then(exists => {
-                existenceCache.value = { ...existenceCache.value, [`org:${lowerName}`]: exists }
-              })
-              .catch(() => {
-                existenceCache.value = { ...existenceCache.value, [`org:${lowerName}`]: false }
-              }),
-          )
-        }
-
-        if (wantUser && existenceCache.value[`user:${lowerName}`] === undefined) {
-          promises.push(
-            checkUserNpm(name)
-              .then(exists => {
-                existenceCache.value = { ...existenceCache.value, [`user:${lowerName}`]: exists }
-              })
-              .catch(() => {
-                existenceCache.value = { ...existenceCache.value, [`user:${lowerName}`]: false }
-              }),
-          )
-        }
-
-        if (promises.length > 0) {
-          await Promise.all(promises)
-        }
-
-        if (requestId !== suggestionRequestId) return
-
-        const isOrg = wantOrg && existenceCache.value[`org:${lowerName}`]
-        const isUser = wantUser && existenceCache.value[`user:${lowerName}`]
-
-        if (isOrg) {
-          result.push({ type: 'org', name, exists: true })
-        }
-        if (isUser && !isOrg) {
-          result.push({ type: 'user', name, exists: true })
-        }
-      } finally {
-        if (requestId === suggestionRequestId) {
-          suggestionsLoading.value = false
-        }
-      }
-
-      if (requestId === suggestionRequestId) {
-        suggestions.value = result
       }
     }
 
-    watch(
-      () => toValue(query),
-      q => {
-        if (searchProvider.value !== 'algolia') {
-          validateSuggestionsNpm(q)
-        }
-      },
-      { immediate: true },
-    )
+    if (requestId === suggestionRequestId.value) {
+      suggestions.value = result
+      return { suggestions: result, packageAvailability: availability }
+    }
 
-    watch(searchProvider, () => {
-      if (searchProvider.value !== 'algolia') {
-        validateSuggestionsNpm(toValue(query))
+    return { suggestions: [], packageAvailability: availability }
+  }
+
+  const npmSuggestions = useLazyAsyncData(
+    () => `npm-suggestions:${searchProvider.value}:${toValue(query)}`,
+    async () => {
+      const q = toValue(query).trim()
+      if (searchProvider.value === 'algolia' || !q)
+        return { suggestions: [], packageAvailability: null }
+      const { intent, name } = parseSuggestionIntent(q)
+      if (!intent || !name) return { suggestions: [], packageAvailability: null }
+      return validateSuggestionsNpm(q)
+    },
+    { default: () => ({ suggestions: [], packageAvailability: null }) },
+  )
+
+  watch(
+    [() => asyncData.data.value.suggestions, () => npmSuggestions.data.value.suggestions],
+    ([algoliaSuggestions, npmSuggestions]) => {
+      if (algoliaSuggestions.length || npmSuggestions.length) {
+        suggestions.value = algoliaSuggestions.length ? algoliaSuggestions : npmSuggestions
       }
+    },
+    { immediate: true },
+  )
+
+  watch(
+    [
+      () => asyncData.data.value?.packageAvailability,
+      () => npmSuggestions.data.value.packageAvailability,
+    ],
+    ([algoliaPackageAvailability, npmPackageAvailability]) => {
+      if (algoliaPackageAvailability || npmPackageAvailability) {
+        packageAvailability.value = algoliaPackageAvailability || npmPackageAvailability
+      }
+    },
+    { immediate: true },
+  )
+
+  if (import.meta.client && asyncData.data.value?.searchResponse.isStale) {
+    onMounted(() => {
+      asyncData.refresh()
     })
   }
 
