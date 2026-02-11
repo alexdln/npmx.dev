@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { SEVERITY_TEXT_COLORS, getHighestSeverity } from '#shared/utils/severity'
 import { getOutdatedTooltip, getVersionClass } from '~/utils/npm/outdated-dependencies'
+import { clean } from 'semver'
 
 const props = defineProps<{
   packageName: string
@@ -40,30 +41,40 @@ const optionalDepsExpanded = shallowRef(false)
 // Sort dependencies alphabetically
 const sortedDependencies = computed(() => {
   if (!props.dependencies) return []
-  return Object.entries(props.dependencies).sort(([a], [b]) => a.localeCompare(b))
+  const cleanedEntries = Object.entries(props.dependencies).map(([name, version]) => ({
+    name,
+    origVersion: version,
+    cleanVersion: clean(version),
+  }))
+  return cleanedEntries.sort((a, b) => a.name.localeCompare(b.name))
 })
 
 // Sort peer dependencies alphabetically, with required first then optional
 const sortedPeerDependencies = computed(() => {
   if (!props.peerDependencies) return []
 
-  return Object.entries(props.peerDependencies)
-    .map(([name, version]) => ({
-      name,
-      version,
-      optional: props.peerDependenciesMeta?.[name]?.optional ?? false,
-    }))
-    .sort((a, b) => {
-      // Required first, then optional
-      if (a.optional !== b.optional) return a.optional ? 1 : -1
-      return a.name.localeCompare(b.name)
-    })
+  const cleanedEntries = Object.entries(props.peerDependencies).map(([name, version]) => ({
+    name,
+    origVersion: version,
+    cleanVersion: clean(version),
+    optional: props.peerDependenciesMeta?.[name]?.optional ?? false,
+  }))
+  return cleanedEntries.sort((a, b) => {
+    // Required first, then optional
+    if (a.optional !== b.optional) return a.optional ? 1 : -1
+    return a.name.localeCompare(b.name)
+  })
 })
 
 // Sort optional dependencies alphabetically
 const sortedOptionalDependencies = computed(() => {
   if (!props.optionalDependencies) return []
-  return Object.entries(props.optionalDependencies).sort(([a], [b]) => a.localeCompare(b))
+  const cleanedEntries = Object.entries(props.optionalDependencies).map(([name, version]) => ({
+    name,
+    origVersion: version,
+    cleanVersion: clean(version),
+  }))
+  return cleanedEntries.sort((a, b) => a.name.localeCompare(b.name))
 })
 
 const numberFormatter = useNumberFormatter()
@@ -87,7 +98,10 @@ const numberFormatter = useNumberFormatter()
     >
       <ul class="px-1 space-y-1 list-none m-0" :aria-label="$t('package.dependencies.list_label')">
         <li
-          v-for="[dep, version] in sortedDependencies.slice(0, depsExpanded ? undefined : 10)"
+          v-for="{ name: dep, origVersion, cleanVersion } in sortedDependencies.slice(
+            0,
+            depsExpanded ? undefined : 10,
+          )"
           :key="dep"
           class="flex items-center justify-between py-1 text-sm gap-2"
         >
@@ -124,12 +138,12 @@ const numberFormatter = useNumberFormatter()
               <span class="sr-only">{{ $t('package.deprecated.label') }}</span>
             </LinkBase>
             <LinkBase
-              :to="packageRoute(dep, version)"
+              :to="packageRoute(dep, cleanVersion)"
               class="block truncate"
               :class="getVersionClass(outdatedDeps[dep])"
-              :title="outdatedDeps[dep] ? getOutdatedTooltip(outdatedDeps[dep], $t) : version"
+              :title="outdatedDeps[dep] ? getOutdatedTooltip(outdatedDeps[dep], $t) : origVersion"
             >
-              {{ version }}
+              {{ origVersion }}
             </LinkBase>
             <span v-if="outdatedDeps[dep]" class="sr-only">
               ({{ getOutdatedTooltip(outdatedDeps[dep], $t) }})
@@ -173,25 +187,28 @@ const numberFormatter = useNumberFormatter()
         :aria-label="$t('package.peer_dependencies.list_label')"
       >
         <li
-          v-for="peer in sortedPeerDependencies.slice(0, peerDepsExpanded ? undefined : 10)"
-          :key="peer.name"
+          v-for="{ name: dep, optional, origVersion, cleanVersion } in sortedPeerDependencies.slice(
+            0,
+            peerDepsExpanded ? undefined : 10,
+          )"
+          :key="dep"
           class="flex items-center justify-between py-1 text-sm gap-1 min-w-0"
         >
           <div class="flex items-center gap-1 min-w-0 flex-1">
-            <LinkBase :to="packageRoute(peer.name)" class="block truncate" dir="ltr">
-              {{ peer.name }}
+            <LinkBase :to="packageRoute(dep)" class="block truncate" dir="ltr">
+              {{ dep }}
             </LinkBase>
-            <TagStatic v-if="peer.optional" :title="$t('package.dependencies.optional')">
+            <TagStatic v-if="optional" :title="$t('package.dependencies.optional')">
               {{ $t('package.dependencies.optional') }}
             </TagStatic>
           </div>
           <LinkBase
-            :to="packageRoute(peer.name, peer.version)"
+            :to="packageRoute(dep, cleanVersion)"
             class="block truncate max-w-[40%]"
-            :title="peer.version"
+            :title="origVersion"
             dir="ltr"
           >
-            {{ peer.version }}
+            {{ origVersion }}
           </LinkBase>
         </li>
       </ul>
@@ -232,7 +249,7 @@ const numberFormatter = useNumberFormatter()
         :aria-label="$t('package.optional_dependencies.list_label')"
       >
         <li
-          v-for="[dep, version] in sortedOptionalDependencies.slice(
+          v-for="{ name: dep, origVersion, cleanVersion } in sortedOptionalDependencies.slice(
             0,
             optionalDepsExpanded ? undefined : 10,
           )"
@@ -243,12 +260,12 @@ const numberFormatter = useNumberFormatter()
             {{ dep }}
           </LinkBase>
           <LinkBase
-            :to="packageRoute(dep, version)"
+            :to="packageRoute(dep, cleanVersion)"
             class="block truncate"
-            :title="version"
+            :title="origVersion"
             dir="ltr"
           >
-            {{ version }}
+            {{ origVersion }}
           </LinkBase>
         </li>
       </ul>
