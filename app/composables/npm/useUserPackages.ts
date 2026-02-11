@@ -23,12 +23,12 @@ const MAX_RESULTS = 250
  */
 export function useUserPackages(username: MaybeRefOrGetter<string>) {
   const route = useRoute()
-  const searchProviderParam = computed(() => {
-    const p = normalizeSearchParam(route.query.p)
-    return p === 'npm' ? 'npm' : 'algolia'
-  })
   const { searchProvider } = useSearchProvider()
-  const searchProviderValue = computed(() => searchProviderParam.value || searchProvider.value)
+  const searchProviderValue = computed(() => {
+    const p = normalizeSearchParam(route.query.p)
+    if (p === 'npm' || searchProvider.value === 'npm') return 'npm'
+    return 'algolia'
+  })
   // this is only used in npm path, but we need to extract it when the composable runs
   const { $npmRegistry } = useNuxtApp()
   const { searchByOwner } = useAlgoliaSearch()

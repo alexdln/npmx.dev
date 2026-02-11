@@ -11,12 +11,12 @@ import { mapWithConcurrency } from '#shared/utils/async'
  */
 export function useOrgPackages(orgName: MaybeRefOrGetter<string>) {
   const route = useRoute()
-  const searchProviderParam = computed(() => {
-    const p = normalizeSearchParam(route.query.p)
-    return p === 'npm' ? 'npm' : 'algolia'
-  })
   const { searchProvider } = useSearchProvider()
-  const searchProviderValue = computed(() => searchProviderParam.value || searchProvider.value)
+  const searchProviderValue = computed(() => {
+    const p = normalizeSearchParam(route.query.p)
+    if (p === 'npm' || searchProvider.value === 'npm') return 'npm'
+    return 'algolia'
+  })
   const { getPackagesByName } = useAlgoliaSearch()
 
   const asyncData = useLazyAsyncData(

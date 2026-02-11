@@ -16,13 +16,11 @@ const emit = defineEmits(['blur', 'focus'])
 const router = useRouter()
 const route = useRoute()
 const { searchProvider } = useSearchProvider()
-// The actual search provider (from URL, used for API calls)
-const searchProviderParam = computed(() => {
+const searchProviderValue = computed(() => {
   const p = normalizeSearchParam(route.query.p)
-  if (!p && searchProvider.value === 'npm') return 'npm'
-  return p === 'npm' ? 'npm' : 'algolia'
+  if (p === 'npm' || searchProvider.value === 'npm') return 'npm'
+  return 'algolia'
 })
-const searchProviderValue = computed(() => searchProviderParam.value || searchProvider.value)
 
 const isSearchFocused = shallowRef(false)
 
