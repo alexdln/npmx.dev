@@ -10,6 +10,7 @@ export function useGlobalSearchQuery() {
     urlQuery => {
       const value = normalizeSearchParam(urlQuery)
       if (!value) searchQuery.value = ''
+      if (!searchQuery.value) searchQuery.value = value
     },
   )
   return searchQuery
