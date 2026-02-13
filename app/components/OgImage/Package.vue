@@ -123,7 +123,7 @@ try {
         </div>
 
         <h1
-          class="font-bold text-8xl origin-cl tracking-tighter text-nowrap flex flex-nowrap"
+          class="font-bold text-8xl origin-cl tracking-tighter text-nowrap whitespace-nowrap flex flex-nowrap"
           :style="{ transform: `scale(${titleScale})` }"
         >
           <span
