@@ -64,7 +64,6 @@ export function useGlobalSearch(place: 'header' | 'content' = 'content') {
     get: () => searchQuery.value,
     set: async (value: string) => {
       searchQuery.value = value
-      console.log('searchQueryValue', value, updateUrlQuery.isPending())
 
       // Leading debounce implementation as it doesn't work properly out of the box (https://github.com/unjs/perfect-debounce/issues/43)
       if (!updateUrlQuery.isPending()) {
