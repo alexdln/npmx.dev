@@ -75,19 +75,21 @@ defineOgImageComponent('Default', {
                   /
                 </span>
 
-                <InputBase
-                  id="home-search"
-                  v-model="searchQuery"
-                  type="search"
-                  name="q"
-                  autofocus
-                  :placeholder="$t('search.placeholder')"
-                  no-correct
-                  size="large"
-                  class="w-full ps-8 pe-24"
-                  @focus="isSearchFocused = true"
-                  @blur="isSearchFocused = false"
-                />
+                <div class="home-input-wrapper relative w-full">
+                  <InputBase
+                    id="home-search"
+                    v-model="searchQuery"
+                    type="search"
+                    name="q"
+                    autofocus
+                    :placeholder="$t('search.placeholder')"
+                    no-correct
+                    size="large"
+                    class="w-full ps-8 pe-24"
+                    @focus="isSearchFocused = true"
+                    @blur="isSearchFocused = false"
+                  />
+                </div>
 
                 <ButtonBase
                   type="submit"
@@ -139,6 +141,33 @@ defineOgImageComponent('Default', {
   .home-tag-dot {
     forced-color-adjust: none;
     background-color: CanvasText;
+  }
+}
+
+.home-input-wrapper {
+  &::before {
+    content: '';
+    @apply absolute -inset-0.5 rounded-xl -z-1;
+    animation: glide 1s 0.8s ease-in-out;
+    background: linear-gradient(
+      -30deg,
+      transparent 40%,
+      var(--accent) 41%,
+      var(--accent) 59%,
+      transparent 60%
+    );
+    background-size: 300% 100%;
+    background-position: -150% 0;
+    opacity: 0.5;
+  }
+}
+
+@keyframes glide {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -150% 0;
   }
 }
 </style>
