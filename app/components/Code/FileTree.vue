@@ -87,6 +87,7 @@ watch(
       <!-- File -->
       <template v-else>
         <LinkBase
+          trailing-slash="remove"
           variant="button-secondary"
           :to="getFileRoute(node.path)"
           :aria-current="currentPath === node.path"

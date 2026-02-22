@@ -418,6 +418,7 @@ watch(lastExecutionTime, () => {
               class="flex items-center justify-start py-1 ps-2 pe-1 rounded hover:bg-bg-subtle transition-colors duration-200"
             >
               <NuxtLink
+                trailing-slash="append"
                 :to="{ name: '~username', params: { username: user } }"
                 class="font-mono text-sm text-fg-muted hover:text-fg transition-colors duration-200"
               >

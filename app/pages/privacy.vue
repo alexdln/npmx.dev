@@ -139,6 +139,7 @@ const { locale } = useI18n()
               </template>
               <template #settings>
                 <NuxtLink
+                  trailing-slash="append"
                   :to="{ name: 'settings' }"
                   class="text-fg-muted hover:text-fg underline decoration-fg-subtle/50 hover:decoration-fg"
                 >
@@ -267,6 +268,7 @@ const { locale } = useI18n()
             <i18n-t keypath="privacy_policy.authenticated.p2" tag="span" scope="global">
               <template #settings>
                 <NuxtLink
+                  trailing-slash="append"
                   :to="{ name: 'settings' }"
                   class="text-fg-muted hover:text-fg underline decoration-fg-subtle/50 hover:decoration-fg"
                 >

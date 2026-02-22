@@ -313,6 +313,7 @@ defineOgImageComponent('Default', {
         <!-- Package info and navigation -->
         <div class="flex items-center gap-2 mb-3 flex-wrap min-w-0">
           <NuxtLink
+            trailing-slash="append"
             :to="packageRoute(packageName, version)"
             class="font-mono text-lg font-medium hover:text-fg transition-colors min-w-0 truncate max-w-[60vw] sm:max-w-none"
             :title="packageName"
@@ -350,6 +351,7 @@ defineOgImageComponent('Default', {
         >
           <NuxtLink
             v-if="filePath"
+            trailing-slash="append"
             :to="getCurrentCodeUrlWithPath()"
             class="text-fg-muted hover:text-fg transition-colors shrink-0"
           >
@@ -360,6 +362,7 @@ defineOgImageComponent('Default', {
             <span class="text-fg-subtle">/</span>
             <NuxtLink
               v-if="i < breadcrumbs.length - 1"
+              trailing-slash="append"
               :to="getCurrentCodeUrlWithPath(crumb.path)"
               class="text-fg-muted hover:text-fg transition-colors"
             >

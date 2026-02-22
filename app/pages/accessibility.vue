@@ -58,6 +58,7 @@ const canGoBack = useCanGoBack()
             <i18n-t keypath="a11y.approach.p2" tag="span" scope="global">
               <template #about>
                 <NuxtLink
+                  trailing-slash="append"
                   :to="{ name: 'about' }"
                   class="text-fg-muted hover:text-fg underline decoration-fg-subtle/50 hover:decoration-fg"
                 >

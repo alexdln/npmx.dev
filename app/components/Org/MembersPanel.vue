@@ -446,6 +446,7 @@ watch(lastExecutionTime, () => {
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-3">
             <NuxtLink
+              trailing-slash="append"
               :to="{ name: '~username', params: { username: member.name } }"
               class="font-mono text-sm text-fg hover:text-fg transition-colors duration-200"
             >

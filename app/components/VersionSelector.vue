@@ -554,6 +554,7 @@ watch(
 
             <!-- Version link -->
             <NuxtLink
+              trailing-slash="append"
               :to="getVersionUrl(group.primaryVersion.version)"
               class="flex-1 truncate hover:text-fg transition-colors"
               @click="isOpen = false"
@@ -583,6 +584,7 @@ watch(
           >
             <template v-for="v in group.versions.slice(1)" :key="v.version">
               <NuxtLink
+                trailing-slash="append"
                 :id="`version-${v.version}`"
                 :to="getVersionUrl(v.version)"
                 role="option"
@@ -622,6 +624,7 @@ watch(
         <!-- Link to package page for full version list -->
         <div class="border-t border-border mt-1 pt-1 px-3 py-2">
           <NuxtLink
+            trailing-slash="append"
             :to="packageRoute(packageName)"
             class="text-xs text-fg-subtle hover:text-fg transition-[color] focus-visible:outline-none focus-visible:text-fg"
             @click="isOpen = false"

@@ -58,6 +58,7 @@ function handleKeydown(event: KeyboardEvent) {
     @keydown="handleKeydown"
   >
     <NuxtLink
+      trailing-slash="append"
       :to="{ name: '~username-orgs', params: { username } }"
       class="link-subtle font-mono text-sm inline-flex items-center gap-1"
     >
@@ -94,6 +95,7 @@ function handleKeydown(event: KeyboardEvent) {
           <ul v-else-if="orgs.length > 0" class="py-1 max-h-80 overflow-y-auto">
             <li v-for="org in orgs" :key="org">
               <NuxtLink
+                trailing-slash="append"
                 :to="{ name: 'org', params: { org } }"
                 class="block px-3 py-2 font-mono text-sm text-fg hover:bg-bg-subtle transition-colors"
               >
@@ -108,6 +110,7 @@ function handleKeydown(event: KeyboardEvent) {
 
           <div class="px-3 py-2 border-t border-border">
             <NuxtLink
+              trailing-slash="append"
               :to="{ name: '~username-orgs', params: { username } }"
               class="link-subtle font-mono text-xs inline-flex items-center gap-1"
             >

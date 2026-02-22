@@ -93,6 +93,7 @@ function parsePackageString(pkg: string): { name: string; version: string } {
           >
             <span v-if="idx > 0" class="text-fg-subtle me-1">└─</span>
             <NuxtLink
+              trailing-slash="append"
               :to="
                 packageRoute(
                   parsePackageString(pathItem).name,

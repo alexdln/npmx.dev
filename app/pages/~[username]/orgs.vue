@@ -136,6 +136,7 @@ defineOgImageComponent('Default', {
       <!-- Back link -->
       <nav aria-labelledby="back-to-profile">
         <NuxtLink
+          trailing-slash="append"
           :to="{ name: '~username', params: { username } }"
           id="back-to-profile"
           class="link-subtle font-mono text-sm inline-flex items-center gap-1.5"
@@ -194,6 +195,7 @@ defineOgImageComponent('Default', {
         <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <li v-for="org in orgs" :key="org.name">
             <NuxtLink
+              trailing-slash="append"
               :to="{ name: 'org', params: { org: org.name } }"
               class="block p-5 bg-bg-subtle border border-border rounded-lg hover:border-fg-subtle transition-colors h-full"
             >

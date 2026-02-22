@@ -51,6 +51,7 @@ const allMaintainersText = computed(() => {
     <!-- Name (always visible) -->
     <td class="py-2 px-3">
       <NuxtLink
+        trailing-slash="append"
         :to="packageUrl"
         class="row-link font-mono text-sm text-fg hover:text-accent-fallback transition-colors duration-200"
         dir="ltr"
@@ -107,6 +108,7 @@ const allMaintainersText = computed(() => {
           :key="maintainer.username || maintainer.email"
         >
           <NuxtLink
+            trailing-slash="append"
             :to="{
               name: '~username',
               params: { username: maintainer.username || maintainer.name || '' },

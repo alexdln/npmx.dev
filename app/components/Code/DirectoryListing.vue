@@ -103,6 +103,7 @@ const bytesFormatter = useBytesFormatter()
         >
           <td colspan="2">
             <LinkBase
+              :trailing-slash="node.type === 'directory' ? 'append' : 'remove'"
               :to="getCodeRoute(node.path)"
               class="py-2 px-4 font-mono text-sm w-full"
               no-underline

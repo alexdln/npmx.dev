@@ -175,6 +175,7 @@ const previewPackageJson = computed(() => {
 
       <div class="flex gap-3">
         <NuxtLink
+          trailing-slash="append"
           :to="packageRoute(packageName)"
           class="flex-1 px-4 py-2 font-mono text-sm text-center text-bg bg-fg rounded-md transition-colors duration-200 hover:bg-fg/90 focus-visible:outline-accent/70"
           @click="close"
@@ -289,6 +290,7 @@ const previewPackageJson = computed(() => {
               <span v-else class="w-4 h-4 shrink-0" />
               <div class="min-w-0">
                 <NuxtLink
+                  trailing-slash="append"
                   :to="packageRoute(pkg.name)"
                   class="font-mono text-sm text-fg hover:underline focus-visible:outline-accent/70 rounded"
                   target="_blank"

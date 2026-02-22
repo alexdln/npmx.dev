@@ -14,6 +14,7 @@ defineProps<{
 <template>
   <BaseCard :isExactMatch="isExactMatch">
     <NuxtLink
+      trailing-slash="append"
       :to="
         type === 'user'
           ? { name: '~username', params: { username: name } }

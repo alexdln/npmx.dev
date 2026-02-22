@@ -195,6 +195,7 @@ onUnmounted(deactivate)
                   </span>
                   <div>
                     <NuxtLink
+                      trailing-slash="append"
                       v-for="link in group.items"
                       :key="link.name"
                       :to="link.to"
