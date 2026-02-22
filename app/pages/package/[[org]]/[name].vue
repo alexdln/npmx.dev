@@ -194,18 +194,9 @@ const { data: skillsData } = useLazyFetch<SkillsListResponse>(
 const { data: packageAnalysis } = usePackageAnalysis(packageName, requestedVersion)
 const { data: moduleReplacement } = useModuleReplacement(packageName)
 
-const {
-  data: resolvedVersion,
-  status: versionStatus,
-  error: versionError,
-} = await useResolvedVersion(packageName, requestedVersion)
+const resolvedVersion = await useResolvedVersion(packageName, requestedVersion)
 
-if (
-  versionStatus.value === 'error' &&
-  versionError.value?.statusCode &&
-  versionError.value.statusCode >= 400 &&
-  versionError.value.statusCode < 500
-) {
+if (resolvedVersion.value === null) {
   throw createError({
     statusCode: 404,
     statusMessage: $t('package.not_found'),
