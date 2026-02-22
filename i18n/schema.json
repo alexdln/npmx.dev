@@ -1107,6 +1107,12 @@
                 }
               },
               "additionalProperties": false
+            },
+            "play_animation": {
+              "type": "string"
+            },
+            "pause_animation": {
+              "type": "string"
             }
           },
           "additionalProperties": false
@@ -3461,9 +3467,6 @@
               "type": "string"
             },
             "social_link": {
-              "type": "string"
-            },
-            "add_to_calendar": {
               "type": "string"
             }
           },
