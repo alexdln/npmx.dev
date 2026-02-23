@@ -135,10 +135,6 @@ export default defineNuxtConfig({
       },
     },
     // pages
-    '/package/:name': getISRConfig(60),
-    '/package/:name/v/:version': getISRConfig(3600),
-    '/package/:org/:name': getISRConfig(60),
-    '/package/:org/:name/v/:version': getISRConfig(3600),
     '/package/:name/': getISRConfig(60),
     '/package/:name/v/:version/': getISRConfig(3600),
     '/package/:org/:name/': getISRConfig(60),
