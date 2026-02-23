@@ -36,9 +36,9 @@ const props = withDefaults(
     /** should only be used for links where the context makes it very clear they are clickable. Don't just use this, because you don't like underlines. */
     noUnderline?: boolean
 
-    trailingSlash?: 'append' | 'remove' | undefined
+    trailingSlash?: 'append' | 'remove' | undefined | null
   }>(),
-  { variant: 'link', size: 'medium', trailingSlash: 'append' },
+  { variant: 'link', size: 'medium' },
 )
 
 const isLinkExternal = computed(
@@ -76,7 +76,7 @@ const isButtonMedium = computed(() => props.size === 'medium' && !isLink.value)
   <NuxtLink
     v-bind="props"
     v-else
-    :trailing-slash="trailingSlash"
+    :trailing-slash="isLinkExternal ? undefined : (trailingSlash ?? 'append')"
     class="group/link gap-x-1 items-center"
     :class="{
       'flex': block,
