@@ -106,7 +106,7 @@ test.describe('Organization Management', () => {
   })
 
   test('shows org members when connected', async ({ page, gotoConnected }) => {
-    await gotoConnected('/@testorg/')
+    await gotoConnected('/@testorg')
 
     // The org management region contains the members panel
     const orgManagement = page.getByRole('region', { name: /organization management/i })
@@ -123,7 +123,7 @@ test.describe('Organization Management', () => {
   })
 
   test('can filter members by role', async ({ page, gotoConnected }) => {
-    await gotoConnected('/@testorg/')
+    await gotoConnected('/@testorg')
 
     const orgManagement = page.getByRole('region', { name: /organization management/i })
     await expect(orgManagement).toBeVisible({ timeout: 10_000 })
@@ -144,7 +144,7 @@ test.describe('Organization Management', () => {
   })
 
   test('can search members by name', async ({ page, gotoConnected }) => {
-    await gotoConnected('/@testorg/')
+    await gotoConnected('/@testorg')
 
     const orgManagement = page.getByRole('region', { name: /organization management/i })
     await expect(orgManagement).toBeVisible({ timeout: 10_000 })
@@ -162,7 +162,7 @@ test.describe('Organization Management', () => {
   })
 
   test('can add a new member operation', async ({ page, gotoConnected, mockConnector }) => {
-    await gotoConnected('/@testorg/')
+    await gotoConnected('/@testorg')
 
     const orgManagement = page.getByRole('region', { name: /organization management/i })
     await expect(orgManagement).toBeVisible({ timeout: 10_000 })
@@ -194,7 +194,7 @@ test.describe('Organization Management', () => {
   })
 
   test('can remove a member (adds operation)', async ({ page, gotoConnected, mockConnector }) => {
-    await gotoConnected('/@testorg/')
+    await gotoConnected('/@testorg')
 
     const orgManagement = page.getByRole('region', { name: /organization management/i })
     await expect(orgManagement).toBeVisible({ timeout: 10_000 })
@@ -215,7 +215,7 @@ test.describe('Organization Management', () => {
     gotoConnected,
     mockConnector,
   }) => {
-    await gotoConnected('/@testorg/')
+    await gotoConnected('/@testorg')
 
     const orgManagement = page.getByRole('region', { name: /organization management/i })
     await expect(orgManagement).toBeVisible({ timeout: 10_000 })
