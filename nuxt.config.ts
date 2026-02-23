@@ -134,10 +134,10 @@ export default defineNuxtConfig({
     },
     // pages
     '/package/**': getISRConfig(60, { fallback: 'html' }),
-    '/package/:name/_payload.json': getISRConfig(60, { fallback: 'json' }),
-    '/package/:name/v/:version/_payload.json': getISRConfig(60, { fallback: 'json' }),
-    '/package/:org/:name/_payload.json': getISRConfig(60, { fallback: 'json' }),
-    '/package/:org/:name/v/:version/_payload.json': getISRConfig(60, { fallback: 'json' }),
+    '/package/:name/_payload.json': { isr: 60 },
+    '/package/:name/v/:version/_payload.json': { isr: 60 },
+    '/package/:org/:name/_payload.json': { isr: 60 },
+    '/package/:org/:name/v/:version/_payload.json': { isr: 60 },
     // infinite cache (versioned - doesn't change)
     '/package-code/**': { isr: true, cache: { maxAge: 365 * 24 * 60 * 60 } },
     '/package-docs/**': { isr: true, cache: { maxAge: 365 * 24 * 60 * 60 } },
@@ -364,7 +364,6 @@ function getISRConfig(expirationSeconds: number, options: ISRConfigOptions = {})
         fallback:
           options.fallback === 'html' ? 'spa.prerender-fallback.html' : 'payload-fallback.json',
         initialHeaders: options.fallback === 'json' ? { 'content-type': 'application/json' } : {},
-        initialStatus: options.fallback === 'json' ? 404 : undefined,
       } as { expiration: number },
     }
   }
