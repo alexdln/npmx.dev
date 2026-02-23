@@ -134,7 +134,10 @@ export default defineNuxtConfig({
     },
     // pages
     '/package/**': getISRConfig(60, { fallback: 'html' }),
-    '/package/**/_payload.json': getISRConfig(60, { fallback: 'json' }),
+    '/package/:name/_payload.json': getISRConfig(60, { fallback: 'json' }),
+    '/package/:name/v/:version/_payload.json': getISRConfig(60, { fallback: 'json' }),
+    '/package/:org/:name/_payload.json': getISRConfig(60, { fallback: 'json' }),
+    '/package/:org/:name/v/:version/_payload.json': getISRConfig(60, { fallback: 'json' }),
     // infinite cache (versioned - doesn't change)
     '/package-code/**': { isr: true, cache: { maxAge: 365 * 24 * 60 * 60 } },
     '/package-docs/**': { isr: true, cache: { maxAge: 365 * 24 * 60 * 60 } },
