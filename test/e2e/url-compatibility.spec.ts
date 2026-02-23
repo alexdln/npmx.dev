@@ -3,7 +3,7 @@ import { expect, test } from './test-utils'
 test.describe('npmjs.com URL Compatibility', () => {
   test.describe('Package Pages', () => {
     test('/package/vue → package page', async ({ page, goto }) => {
-      await goto('/package/vue', { waitUntil: 'domcontentloaded' })
+      await goto('/package/vue/', { waitUntil: 'domcontentloaded' })
 
       // Should show package name
       await expect(page.locator('h1')).toContainText('vue')
@@ -12,14 +12,14 @@ test.describe('npmjs.com URL Compatibility', () => {
     })
 
     test('/package/@nuxt/kit → scoped package page', async ({ page, goto }) => {
-      await goto('/package/@nuxt/kit', { waitUntil: 'domcontentloaded' })
+      await goto('/package/@nuxt/kit/', { waitUntil: 'domcontentloaded' })
 
       // Should show scoped package name
       await expect(page.locator('h1')).toContainText('@nuxt/kit')
     })
 
     test('/package/vue/v/3.5.27 → specific version', async ({ page, goto }) => {
-      await goto('/package/vue/v/3.5.27', { waitUntil: 'domcontentloaded' })
+      await goto('/package/vue/v/3.5.27/', { waitUntil: 'domcontentloaded' })
 
       // Should show package name
       await expect(page.locator('h1')).toContainText('vue')
@@ -31,7 +31,7 @@ test.describe('npmjs.com URL Compatibility', () => {
       page,
       goto,
     }) => {
-      await goto('/package/@nuxt/kit/v/3.20.0', { waitUntil: 'domcontentloaded' })
+      await goto('/package/@nuxt/kit/v/3.20.0/', { waitUntil: 'domcontentloaded' })
 
       // Should show scoped package name
       await expect(page.locator('h1')).toContainText('@nuxt/kit')
@@ -40,7 +40,7 @@ test.describe('npmjs.com URL Compatibility', () => {
     })
 
     test('/package/nonexistent-pkg-12345 → 404 handling', async ({ page, goto }) => {
-      await goto('/package/nonexistent-pkg-12345', { waitUntil: 'domcontentloaded' })
+      await goto('/package/nonexistent-pkg-12345/', { waitUntil: 'domcontentloaded' })
 
       // Should show error state - look for the heading specifically
       await expect(page.getByRole('heading', { name: /not found/i })).toBeVisible()
@@ -49,7 +49,7 @@ test.describe('npmjs.com URL Compatibility', () => {
 
   test.describe('Search Pages', () => {
     test('/search?q=vue → search results', async ({ page, goto }) => {
-      await goto('/search?q=vue', { waitUntil: 'domcontentloaded' })
+      await goto('/search/?q=vue', { waitUntil: 'domcontentloaded' })
 
       // Should show search input with query
       await expect(page.locator('input[type="search"]')).toHaveValue('vue')
@@ -58,7 +58,7 @@ test.describe('npmjs.com URL Compatibility', () => {
     })
 
     test('/search?q=keywords:framework → keyword search', async ({ page, goto }) => {
-      await goto('/search?q=keywords:framework', { waitUntil: 'domcontentloaded' })
+      await goto('/search/?q=keywords:framework', { waitUntil: 'domcontentloaded' })
 
       // Should show search input with query
       await expect(page.locator('input[type="search"]')).toHaveValue('keywords:framework')
@@ -67,7 +67,7 @@ test.describe('npmjs.com URL Compatibility', () => {
     })
 
     test('/search → empty search page', async ({ page, goto }) => {
-      await goto('/search', { waitUntil: 'domcontentloaded' })
+      await goto('/search/', { waitUntil: 'domcontentloaded' })
 
       // Should show empty state prompt
       await expect(page.locator('text=/start typing/i')).toBeVisible()
@@ -76,7 +76,7 @@ test.describe('npmjs.com URL Compatibility', () => {
 
   test.describe('User Profile Pages', () => {
     test('/~qwerzl → user profile', async ({ page, goto }) => {
-      await goto('/~qwerzl', { waitUntil: 'hydration' })
+      await goto('/~qwerzl/', { waitUntil: 'hydration' })
 
       // Should show username
       await expect(page.locator('h1')).toContainText('~qwerzl')
@@ -87,7 +87,7 @@ test.describe('npmjs.com URL Compatibility', () => {
     })
 
     test('/~nonexistent-user-12345 → empty user handling', async ({ page, goto }) => {
-      await goto('/~nonexistent-user-12345', { waitUntil: 'domcontentloaded' })
+      await goto('/~nonexistent-user-12345/', { waitUntil: 'domcontentloaded' })
 
       // Should show username in header
       await expect(page.locator('h1')).toContainText('~nonexistent-user-12345')
@@ -98,7 +98,7 @@ test.describe('npmjs.com URL Compatibility', () => {
 
   test.describe('Organization Pages', () => {
     test('/org/nuxt → organization page', async ({ page, goto }) => {
-      await goto('/org/nuxt', { waitUntil: 'domcontentloaded' })
+      await goto('/org/nuxt/', { waitUntil: 'domcontentloaded' })
 
       // Should show org name
       await expect(page.locator('h1')).toContainText('@nuxt')
@@ -107,7 +107,7 @@ test.describe('npmjs.com URL Compatibility', () => {
     })
 
     test('/org/nonexistent-org-12345 → 404 handling', async ({ page, goto }) => {
-      await goto('/org/nonexistent-org-12345', { waitUntil: 'domcontentloaded' })
+      await goto('/org/nonexistent-org-12345/', { waitUntil: 'domcontentloaded' })
 
       // Should show 404 error page
       await expect(page.locator('h1')).toContainText('Organization not found')
@@ -116,19 +116,19 @@ test.describe('npmjs.com URL Compatibility', () => {
 
   test.describe('Edge Cases', () => {
     test('package name with dots: /package/lodash.merge', async ({ page, goto }) => {
-      await goto('/package/lodash.merge', { waitUntil: 'domcontentloaded' })
+      await goto('/package/lodash.merge/', { waitUntil: 'domcontentloaded' })
 
       await expect(page.locator('h1')).toContainText('lodash.merge')
     })
 
     test('package name with hyphens: /package/is-odd', async ({ page, goto }) => {
-      await goto('/package/is-odd', { waitUntil: 'domcontentloaded' })
+      await goto('/package/is-odd/', { waitUntil: 'domcontentloaded' })
 
       await expect(page.locator('h1')).toContainText('is-odd')
     })
 
     test('scoped package with hyphens: /package/@types/node', async ({ page, goto }) => {
-      await goto('/package/@types/node', { waitUntil: 'domcontentloaded' })
+      await goto('/package/@types/node/', { waitUntil: 'domcontentloaded' })
 
       await expect(page.locator('h1')).toContainText('@types/node')
     })

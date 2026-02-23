@@ -15,7 +15,7 @@ export default defineNuxtRouteMiddleware(to => {
     if (url.includes('_payload')) return
   }
 
-  if (to.path.startsWith('/package-code/')) return
+  if (to.path.startsWith('/package-code/') || to.path.startsWith('/api/')) return
 
   if (to.path !== '' && !to.path.endsWith('/')) {
     return navigateTo(

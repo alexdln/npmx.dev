@@ -2,7 +2,7 @@ import { expect, test } from './test-utils'
 
 test.describe('Compare Page', () => {
   test('no-dep column renders separately from package columns', async ({ page, goto }) => {
-    await goto('/compare?packages=vue,__no_dependency__', { waitUntil: 'hydration' })
+    await goto('/compare/?packages=vue,__no_dependency__', { waitUntil: 'hydration' })
 
     const grid = page.locator('.comparison-grid')
     await expect(grid).toBeVisible({ timeout: 15000 })
@@ -20,7 +20,7 @@ test.describe('Compare Page', () => {
     goto,
   }) => {
     // Start with vue and no-dep
-    await goto('/compare?packages=vue,__no_dependency__', { waitUntil: 'hydration' })
+    await goto('/compare/?packages=vue,__no_dependency__', { waitUntil: 'hydration' })
 
     const grid = page.locator('.comparison-grid')
     await expect(grid).toBeVisible({ timeout: 15000 })
@@ -50,8 +50,8 @@ test.describe('Compare Page', () => {
 })
 
 test.describe('Search Pages', () => {
-  test('/search?q=vue → keyboard navigation (arrow keys + enter)', async ({ page, goto }) => {
-    await goto('/search?q=vue', { waitUntil: 'hydration' })
+  test('/search/?q=vue → keyboard navigation (arrow keys + enter)', async ({ page, goto }) => {
+    await goto('/search/?q=vue', { waitUntil: 'hydration' })
 
     await expect(page.locator('text=/found \\d+|showing \\d+/i').first()).toBeVisible({
       timeout: 15000,
@@ -73,7 +73,7 @@ test.describe('Search Pages', () => {
     await expect(page).toHaveURL(/\/(package|org|user)\/vue/)
   })
 
-  test('/search?q=vue → "/" focuses the search input from results', async ({ page, goto }) => {
+  test('/search/?q=vue → "/" focuses the search input from results', async ({ page, goto }) => {
     await goto('/search?q=vue', { waitUntil: 'hydration' })
 
     await expect(page.locator('text=/found \\d+|showing \\d+/i').first()).toBeVisible({
@@ -108,8 +108,8 @@ test.describe('Search Pages', () => {
     await expect(headerSearchInput).toBeFocused()
   })
 
-  test('/settings → search, keeps focus on search input', async ({ page, goto }) => {
-    await goto('/settings', { waitUntil: 'hydration' })
+  test('/settings/ → search, keeps focus on search input', async ({ page, goto }) => {
+    await goto('/settings/', { waitUntil: 'hydration' })
 
     const searchInput = page.locator('input[type="search"]')
     await expect(searchInput).toBeVisible()
@@ -130,7 +130,7 @@ test.describe('Search Pages', () => {
 
 test.describe('Keyboard Shortcuts', () => {
   test('"c" navigates to /compare', async ({ page, goto }) => {
-    await goto('/settings', { waitUntil: 'hydration' })
+    await goto('/settings/', { waitUntil: 'hydration' })
 
     await page.keyboard.press('c')
 
@@ -138,7 +138,7 @@ test.describe('Keyboard Shortcuts', () => {
   })
 
   test('"c" does not navigate when any modifier key is pressed', async ({ page, goto }) => {
-    await goto('/settings', { waitUntil: 'hydration' })
+    await goto('/settings/', { waitUntil: 'hydration' })
 
     await page.keyboard.press('Shift+c')
     await expect(page).toHaveURL(/\/settings/)
@@ -156,16 +156,16 @@ test.describe('Keyboard Shortcuts', () => {
     page,
     goto,
   }) => {
-    await goto('/package/vue', { waitUntil: 'hydration' })
+    await goto('/package/vue/', { waitUntil: 'hydration' })
 
     await page.keyboard.press('c')
 
     // Should navigate to /compare with the package in the query
-    await expect(page).toHaveURL(/\/compare\?packages=vue/)
+    await expect(page).toHaveURL(/\/compare\/\?packages=vue/)
   })
 
   test('"c" does not navigate when search input is focused', async ({ page, goto }) => {
-    await goto('/settings', { waitUntil: 'hydration' })
+    await goto('/settings/', { waitUntil: 'hydration' })
 
     const searchInput = page.locator('#header-search')
     await searchInput.focus()
@@ -174,7 +174,7 @@ test.describe('Keyboard Shortcuts', () => {
     await page.keyboard.press('c')
 
     // Should still be on settings, not navigated to compare
-    await expect(page).toHaveURL(/\/settings/)
+    await expect(page).toHaveURL(/\/settings\//)
     // The 'c' should have been typed into the input
     await expect(searchInput).toHaveValue('c')
   })
@@ -183,7 +183,7 @@ test.describe('Keyboard Shortcuts', () => {
     page,
     goto,
   }) => {
-    await goto('/package/vue', { waitUntil: 'hydration' })
+    await goto('/package/vue/', { waitUntil: 'hydration' })
 
     await page.keyboard.press('Shift+c')
     await expect(page).toHaveURL(/\/vue/)
@@ -198,7 +198,7 @@ test.describe('Keyboard Shortcuts', () => {
   })
 
   test('"," navigates to /settings', async ({ page, goto }) => {
-    await goto('/compare', { waitUntil: 'hydration' })
+    await goto('/compare/', { waitUntil: 'hydration' })
 
     await page.keyboard.press(',')
 
@@ -206,7 +206,7 @@ test.describe('Keyboard Shortcuts', () => {
   })
 
   test('"," does not navigate when any modifier key is pressed', async ({ page, goto }) => {
-    await goto('/settings', { waitUntil: 'hydration' })
+    await goto('/settings/', { waitUntil: 'hydration' })
 
     const searchInput = page.locator('#header-search')
     await searchInput.focus()
@@ -225,7 +225,7 @@ test.describe('Keyboard Shortcuts', () => {
   })
 
   test('"," does not navigate when search input is focused', async ({ page, goto }) => {
-    await goto('/compare', { waitUntil: 'hydration' })
+    await goto('/compare/', { waitUntil: 'hydration' })
 
     const searchInput = page.locator('#header-search')
     await searchInput.focus()

@@ -3,13 +3,13 @@ import { expect, test } from './test-utils'
 
 const PAGES = [
   '/',
-  '/about',
-  '/settings',
-  '/privacy',
-  '/compare',
-  '/search',
-  '/package/nuxt',
-  '/search?q=vue',
+  '/about/',
+  '/settings/',
+  '/privacy/',
+  '/compare/',
+  '/search/',
+  '/package/nuxt/',
+  '/search/?q=vue',
 ] as const
 
 // ---------------------------------------------------------------------------

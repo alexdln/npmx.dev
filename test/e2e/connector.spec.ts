@@ -18,7 +18,7 @@ test.describe.configure({ mode: 'serial' })
  * This helper waits for the packages link to appear as proof of successful connection.
  */
 async function expectConnected(page: Page, username = 'testuser') {
-  await expect(page.locator(`a[href="/~${username}"]`, { hasText: 'packages' })).toBeVisible({
+  await expect(page.locator(`a[href="/~${username}/"]`, { hasText: 'packages' })).toBeVisible({
     timeout: 10_000,
   })
 }
@@ -79,7 +79,7 @@ test.describe('Connector Connection', () => {
     await modal.getByRole('button', { name: /close/i }).click()
 
     // The "packages" link should disappear since we're disconnected
-    await expect(page.locator('a[href="/~testuser"]', { hasText: 'packages' })).not.toBeVisible({
+    await expect(page.locator('a[href="/~testuser/"]', { hasText: 'packages' })).not.toBeVisible({
       timeout: 5000,
     })
 
@@ -106,7 +106,7 @@ test.describe('Organization Management', () => {
   })
 
   test('shows org members when connected', async ({ page, gotoConnected }) => {
-    await gotoConnected('/@testorg')
+    await gotoConnected('/@testorg/')
 
     // The org management region contains the members panel
     const orgManagement = page.getByRole('region', { name: /organization management/i })
@@ -123,7 +123,7 @@ test.describe('Organization Management', () => {
   })
 
   test('can filter members by role', async ({ page, gotoConnected }) => {
-    await gotoConnected('/@testorg')
+    await gotoConnected('/@testorg/')
 
     const orgManagement = page.getByRole('region', { name: /organization management/i })
     await expect(orgManagement).toBeVisible({ timeout: 10_000 })
@@ -144,7 +144,7 @@ test.describe('Organization Management', () => {
   })
 
   test('can search members by name', async ({ page, gotoConnected }) => {
-    await gotoConnected('/@testorg')
+    await gotoConnected('/@testorg/')
 
     const orgManagement = page.getByRole('region', { name: /organization management/i })
     await expect(orgManagement).toBeVisible({ timeout: 10_000 })
@@ -162,7 +162,7 @@ test.describe('Organization Management', () => {
   })
 
   test('can add a new member operation', async ({ page, gotoConnected, mockConnector }) => {
-    await gotoConnected('/@testorg')
+    await gotoConnected('/@testorg/')
 
     const orgManagement = page.getByRole('region', { name: /organization management/i })
     await expect(orgManagement).toBeVisible({ timeout: 10_000 })
@@ -194,7 +194,7 @@ test.describe('Organization Management', () => {
   })
 
   test('can remove a member (adds operation)', async ({ page, gotoConnected, mockConnector }) => {
-    await gotoConnected('/@testorg')
+    await gotoConnected('/@testorg/')
 
     const orgManagement = page.getByRole('region', { name: /organization management/i })
     await expect(orgManagement).toBeVisible({ timeout: 10_000 })
@@ -215,7 +215,7 @@ test.describe('Organization Management', () => {
     gotoConnected,
     mockConnector,
   }) => {
-    await gotoConnected('/@testorg')
+    await gotoConnected('/@testorg/')
 
     const orgManagement = page.getByRole('region', { name: /organization management/i })
     await expect(orgManagement).toBeVisible({ timeout: 10_000 })
@@ -257,7 +257,7 @@ test.describe('Package Access Controls', () => {
   async function goToPackageConnected(page: Page, gotoConnected: (path: string) => Promise<void>) {
     await gotoConnected('/')
     await expectConnected(page)
-    await page.goto('/package/@nuxt/kit')
+    await page.goto('/package/@nuxt/kit/')
     await expect(page.locator('h1')).toContainText('kit', { timeout: 30_000 })
   }
 
