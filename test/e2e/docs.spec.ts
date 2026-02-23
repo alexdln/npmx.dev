@@ -81,7 +81,7 @@ test.describe('API Documentation Pages', () => {
     await packageLink.click()
 
     // Should navigate to package page (URL ends with /ufo)
-    await expect(page).toHaveURL(/\/package\/ufo$/)
+    await expect(page).toHaveURL(/\/package\/ufo\/$/)
   })
 
   test('docs page handles package gracefully when types unavailable', async ({ page, goto }) => {
