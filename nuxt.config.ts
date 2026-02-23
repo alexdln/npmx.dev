@@ -92,6 +92,7 @@ export default defineNuxtConfig({
   router: {
     options: {
       scrollBehaviorType: 'smooth',
+      strict: true,
     },
   },
 
@@ -138,6 +139,10 @@ export default defineNuxtConfig({
     '/package/:name/v/:version': getISRConfig(3600),
     '/package/:org/:name': getISRConfig(60),
     '/package/:org/:name/v/:version': getISRConfig(3600),
+    '/package/:name/': getISRConfig(60),
+    '/package/:name/v/:version/': getISRConfig(3600),
+    '/package/:org/:name/': getISRConfig(60),
+    '/package/:org/:name/v/:version/': getISRConfig(3600),
     // infinite cache (versioned - doesn't change)
     '/package-code/**': { isr: true, cache: { maxAge: 365 * 24 * 60 * 60 } },
     '/package-docs/**': { isr: true, cache: { maxAge: 365 * 24 * 60 * 60 } },
