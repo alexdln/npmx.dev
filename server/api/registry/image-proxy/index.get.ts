@@ -42,17 +42,11 @@ export default defineEventHandler(async event => {
   const sig = (Array.isArray(query.sig) ? query.sig[0] : query.sig) as string | undefined
 
   if (!url) {
-    throw createError({
-      statusCode: 400,
-      message: 'Missing required "url" query parameter.',
-    })
+    return url
   }
 
   if (!sig) {
-    throw createError({
-      statusCode: 400,
-      message: 'Missing required "sig" query parameter.',
-    })
+    return { sig }
   }
 
   // Verify HMAC signature to ensure this URL was generated server-side
