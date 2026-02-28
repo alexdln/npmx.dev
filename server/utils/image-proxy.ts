@@ -75,6 +75,7 @@ const TRUSTED_IMAGE_DOMAINS = [
   'nodei.co',
   'travis-ci.org',
   'secure.travis-ci.org',
+  'img.badgesize.io',
 ]
 
 /**
