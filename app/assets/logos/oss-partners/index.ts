@@ -174,12 +174,12 @@ export const OSS_PARTNERS = [
     url: 'https://lunaria.dev/',
   },
   {
-    name: 'Typescript',
+    name: 'TypeScript',
     logo: LogoTypescript,
     url: 'https://www.typescriptlang.org/',
   },
   {
-    name: 'Node',
+    name: 'Node.js',
     logo: LogoNode,
     url: 'https://nodejs.org/',
   },
