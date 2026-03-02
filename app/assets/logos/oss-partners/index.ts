@@ -11,6 +11,7 @@ import LogoAlgolia from '~/assets/logos/oss-partners/algolia.svg'
 import LogoAlgoliaLight from '~/assets/logos/oss-partners/algolia-light.svg'
 import LogoAtmosphereConf from './atmosphereconf.png'
 import LogoAtmosphereConfLight from './atmosphereconf-light.png'
+import LogoE18e from './e18e.svg'
 import LogoShiki from './shiki.svg'
 import LogoUnoCss from './unocss.svg'
 import LogoVitePwa from './vite-pwa.svg'
@@ -99,6 +100,11 @@ export const OSS_PARTNERS = [
       light: LogoAtmosphereConfLight,
     },
     url: 'https://atmosphereconf.org/',
+  },
+  {
+    name: 'e18e',
+    logo: LogoE18e,
+    url: 'https://e18e.dev/',
   },
   {
     name: 'Shiki',
