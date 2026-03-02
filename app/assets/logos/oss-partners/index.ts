@@ -98,7 +98,7 @@ export const OSS_PARTNERS = [
     url: 'https://storybook.js.org/',
   },
   {
-    name: 'atmosphereconf',
+    name: 'ATmosphereConf',
     logo: {
       dark: LogoAtmosphereConf,
       light: LogoAtmosphereConfLight,
