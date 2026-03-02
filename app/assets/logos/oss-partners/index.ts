@@ -186,7 +186,7 @@ export const OSS_PARTNERS = [
   {
     name: 'JSR',
     logo: LogoJsr,
-    url: 'https://jsr.dev/',
+    url: 'https://jsr.io/',
   },
   {
     name: 'Deno',
