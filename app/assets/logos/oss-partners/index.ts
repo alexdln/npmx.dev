@@ -22,6 +22,7 @@ import LogoUnJs from './unjs.svg'
 import LogoH3 from './h3.svg'
 import LogoNitro from './nitro.svg'
 import LogoKnip from './knip.svg'
+import LogoAtcute from './atcute.png'
 import LogoNapiRs from './napi-rs.png'
 import LogoValibot from './valibot.svg'
 import LogoFastCheck from './fast-check.svg'
@@ -153,6 +154,11 @@ export const OSS_PARTNERS = [
     name: 'Knip',
     logo: LogoKnip,
     url: 'https://knip.dev/',
+  },
+  {
+    name: 'atcute',
+    logo: LogoAtcute,
+    url: 'https://tangled.org/mary.my.id/atcute',
   },
   {
     name: 'Napi RS',
