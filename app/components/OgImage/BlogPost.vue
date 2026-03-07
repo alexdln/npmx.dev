@@ -125,7 +125,7 @@ const formattedAuthorNames = computed(() => {
           >
             <img
               v-if="author.avatar"
-              v-bind="{ src: author.avatar }"
+              src="https://npmx.dev/pwa-512x512.png"
               :alt="author.name"
               class="w-full h-full object-cover"
             />
