@@ -16,16 +16,15 @@ import {
 import { globSync } from 'tinyglobby'
 import { isProduction } from '../config/env'
 import { BLUESKY_API } from '../shared/utils/constants'
-import { mkdir, writeFile } from 'node:fs/promises'
+import { mkdir } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
-import crypto from 'node:crypto'
 
 /**
  * Fetches Bluesky avatars for a set of authors at build time.
  * Returns a map of handle → avatar URL.
  */
 async function fetchBlueskyAvatars(
-  imagesDir: string,
+  _imagesDir: string,
   handles: string[],
 ): Promise<Map<string, string>> {
   const avatarMap = new Map<string, string>()
@@ -49,17 +48,7 @@ async function fetchBlueskyAvatars(
     const data = (await response.json()) as { profiles: Array<{ handle: string; avatar?: string }> }
 
     for (const profile of data.profiles) {
-      if (profile.avatar) {
-        const hash = crypto.createHash('sha256').update(profile.avatar).digest('hex')
-        const dest = join(imagesDir, `${hash}.jpg`)
-
-        if (!existsSync(dest)) {
-          const res = await fetch(profile.avatar)
-          await writeFile(join(imagesDir, `${hash}.jpg`), res.body!)
-        }
-
-        avatarMap.set(profile.handle, `/blog/avatar/${hash}.jpg`)
-      }
+      if (profile.avatar) avatarMap.set(profile.handle, profile.avatar)
     }
   } catch (error) {
     console.warn(`[blog] Failed to fetch Bluesky avatars:`, error)
@@ -195,7 +184,6 @@ export default defineNuxtModule({
     })
 
     nuxt.options.alias['#blog/posts'] = join(nuxt.options.buildDir, 'blog/posts')
-    nuxt.options.alias['/blog/avatar'] = join(nuxt.options.dir.public, 'blog/avatar')
 
     // Add X-Robots-Tag header for draft posts to prevent indexing
     for (const post of allPosts) {
