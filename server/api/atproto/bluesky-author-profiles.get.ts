@@ -7,13 +7,10 @@ import * as app from '#shared/types/lexicons/app'
 
 export default defineCachedEventHandler(
   async event => {
-    console.log('bluesky author profiles 1')
     const query = getQuery(event)
     const authorsParam = query.authors
-    console.log('bluesky author profiles 2', authorsParam)
 
     if (!authorsParam || typeof authorsParam !== 'string') {
-      console.log('bluesky author profiles 3')
       throw createError({
         statusCode: 400,
         statusMessage: 'authors query parameter is required (JSON array)',
@@ -25,7 +22,6 @@ export default defineCachedEventHandler(
       const parsed = JSON.parse(authorsParam)
       authors = v.parse(v.array(AuthorSchema), parsed)
     } catch (error) {
-      console.log('bluesky author profiles 4', error)
       if (error instanceof v.ValiError) {
         throw createError({
           statusCode: 400,
@@ -37,14 +33,12 @@ export default defineCachedEventHandler(
         statusMessage: 'authors must be valid JSON',
       })
     }
-    console.log('bluesky author profiles 5', authors)
 
     if (!Array.isArray(authors) || authors.length === 0) {
       return { authors: [] }
     }
 
     const handles = authors.map(a => a.blueskyHandle).filter(v => v != null)
-    console.log('bluesky author profiles 6', handles)
 
     if (handles.length === 0) {
       return {
@@ -73,7 +67,6 @@ export default defineCachedEventHandler(
           : null,
       }),
     )
-    console.log('bluesky author profiles 7', resolvedAuthors)
 
     return { authors: resolvedAuthors }
   },
