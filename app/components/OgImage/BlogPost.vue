@@ -36,7 +36,16 @@ const formattedDate = computed(() => {
 const MAX_VISIBLE_AUTHORS = 2
 
 const visibleAuthors = computed(() => {
-  console.log('blog post 5', props.authors)
+  console.log('blog post 5')
+  props.authors.map(author => {
+    console.log(
+      'blog post 5.1',
+      author.avatar,
+      author.name,
+      typeof author.avatar,
+      typeof author.name,
+    )
+  })
   if (props.authors.length <= 3) return props.authors
   return props.authors.slice(0, MAX_VISIBLE_AUTHORS)
 })
@@ -106,13 +115,13 @@ const formattedAuthorNames = computed(() => {
             class="flex items-center justify-center rounded-full border border-[#050505] bg-[#1a1a1a] overflow-hidden w-12 h-12"
             :style="{ marginLeft: index > 0 ? '-20px' : '0' }"
           >
-            <!-- <img
+            <img
               v-if="author.avatar"
               :src="author.avatar"
               :alt="author.name"
               class="w-full h-full object-cover"
             />
-            <span v-else style="font-size: 20px; color: #666; font-weight: 500">
+            <!-- <span v-else style="font-size: 20px; color: #666; font-weight: 500">
               {{ getInitials(author.name) }}
             </span> -->
           </span>
