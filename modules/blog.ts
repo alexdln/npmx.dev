@@ -26,7 +26,6 @@ import crypto from 'node:crypto'
  */
 async function fetchBlueskyAvatars(
   imagesDir: string,
-  publicAvatarBasePath: string,
   handles: string[],
 ): Promise<Map<string, string>> {
   const avatarMap = new Map<string, string>()
@@ -59,14 +58,12 @@ async function fetchBlueskyAvatars(
           await writeFile(join(imagesDir, `${hash}.jpg`), res.body!)
         }
 
-        avatarMap.set(profile.handle, join(publicAvatarBasePath, `${hash}.jpg`))
+        avatarMap.set(profile.handle, `/blog/avatar/${hash}.jpg`)
       }
     }
   } catch (error) {
     console.warn(`[blog] Failed to fetch Bluesky avatars:`, error)
   }
-
-  console.log('avatarMap', avatarMap);
 
   return avatarMap
 }
@@ -87,11 +84,7 @@ function resolveAuthors(authors: Author[], avatarMap: Map<string, string>): Reso
  * Returns all posts (including drafts) sorted by date descending.
  * Resolves Bluesky avatars at build time.
  */
-async function loadBlogPosts(
-  blogDir: string,
-  imagesDir: string,
-  publicAvatarBasePath: string,
-): Promise<BlogPostFrontmatter[]> {
+async function loadBlogPosts(blogDir: string, imagesDir: string): Promise<BlogPostFrontmatter[]> {
   const files: string[] = globSync(join(blogDir, '*.md'))
 
   // First pass: extract raw frontmatter and collect all Bluesky handles
@@ -125,7 +118,7 @@ async function loadBlogPosts(
   }
 
   // Batch-fetch all Bluesky avatars in a single request
-  const avatarMap = await fetchBlueskyAvatars(imagesDir, publicAvatarBasePath, [...allHandles])
+  const avatarMap = await fetchBlueskyAvatars(imagesDir, [...allHandles])
 
   // Second pass: validate with raw schema, then enrich authors with avatars
   const posts: BlogPostFrontmatter[] = []
@@ -154,7 +147,6 @@ export default defineNuxtModule({
     const resolver = createResolver(import.meta.url)
     const blogDir = resolver.resolve('../app/pages/blog')
     const blogImagesDir = resolver.resolve('../public/blog/avatar')
-    const publicAvatarBasePath = join(nuxt.options.app.baseURL || '/', 'blog/avatar')
 
     nuxt.options.extensions.push('.md')
     nuxt.options.vite.vue = defu(nuxt.options.vite.vue, {
@@ -185,7 +177,7 @@ export default defineNuxtModule({
     )
 
     // Load posts once with resolved Bluesky avatars (shared across template + route rules)
-    const allPosts = await loadBlogPosts(blogDir, blogImagesDir, publicAvatarBasePath)
+    const allPosts = await loadBlogPosts(blogDir, blogImagesDir)
 
     // Expose frontmatter for the `/blog` listing page.
     const showDrafts = nuxt.options.dev || !isProduction
@@ -203,6 +195,7 @@ export default defineNuxtModule({
     })
 
     nuxt.options.alias['#blog/posts'] = join(nuxt.options.buildDir, 'blog/posts')
+    nuxt.options.alias['/blog/avatar'] = join(nuxt.options.dir.public, '/blog/avatar')
 
     // Add X-Robots-Tag header for draft posts to prevent indexing
     for (const post of allPosts) {
