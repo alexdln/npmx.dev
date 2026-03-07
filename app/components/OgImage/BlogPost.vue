@@ -35,6 +35,14 @@ const formattedDate = computed(() => {
 
 const MAX_VISIBLE_AUTHORS = 2
 
+const getInitials = (name: string) =>
+  name
+    .split(' ')
+    .map(n => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2)
+
 const visibleAuthors = computed(() => {
   console.log('blog post 5')
   props.authors.map(author => {
@@ -117,13 +125,13 @@ const formattedAuthorNames = computed(() => {
           >
             <img
               v-if="author.avatar"
-              :src="author.avatar"
+              v-bind="{ src: author.avatar }"
               :alt="author.name"
               class="w-full h-full object-cover"
             />
-            <!-- <span v-else style="font-size: 20px; color: #666; font-weight: 500">
+            <span v-else style="font-size: 20px; color: #666; font-weight: 500">
               {{ getInitials(author.name) }}
-            </span> -->
+            </span>
           </span>
           <!-- +N badge -->
           <span
