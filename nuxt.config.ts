@@ -205,8 +205,6 @@ export default defineNuxtConfig({
   compatibilityDate: '2026-01-31',
 
   nitro: {
-    debug: true,
-    logLevel: 999,
     externals: {
       inline: [
         'shiki',
