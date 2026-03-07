@@ -125,7 +125,7 @@ const formattedAuthorNames = computed(() => {
           >
             <img
               v-if="author.avatar"
-              src="https://npmx.dev/pwa-512x512.png"
+              :src="`/blog/avatar/${author.avatar.replace('/blog/avatar/', '')}`"
               :alt="author.name"
               class="w-full h-full object-cover"
             />
