@@ -1091,7 +1091,7 @@ This provides the following benefits:
 
 ## Pre-commit hooks
 
-The project uses `lint-staged` with `simple-git-hooks` to automatically lint files on commit.
+The project uses [`vite-plus`](https://viteplus.dev/guide/commit-hooks) to automatically lint files on commit.
 
 ## Using AI
 
