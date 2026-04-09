@@ -55,6 +55,7 @@ export default defineConfig({
       'e18e/prefer-date-now': 'error',
       'e18e/prefer-regex-test': 'error',
       'e18e/prefer-array-some': 'error',
+      'vitest/require-mock-type-parameters': 'off',
       // RegExp - Possible Errors
       'regexp/no-contradiction-with-assertion': 'error',
       'regexp/no-dupe-disjunctions': 'error',
