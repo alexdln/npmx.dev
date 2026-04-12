@@ -558,8 +558,8 @@ export async function renderReadmeHtml(
     return `<h${semanticLevel} id="${id}" data-level="${depth}"${preservedAttrs}><a href="#${id}">${displayHtml}</a></h${semanticLevel}>\n`
   }
 
+  const anchorTokenRegex = /^<a(\s.+)?\/?>$/
   renderer.heading = function ({ tokens, depth }: Tokens.Heading) {
-    const anchorTokenRegex = /^<a(\s.+)?\/?>$/
     const isAnchorHeading =
       anchorTokenRegex.test(tokens[0]?.raw ?? '') && tokens[tokens.length - 1]?.raw === '</a>'
 
