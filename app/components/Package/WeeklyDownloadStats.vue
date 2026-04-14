@@ -60,6 +60,7 @@ function handleModalTransitioned() {
 }
 
 const { fetchPackageDownloadEvolution } = useCharts()
+const numberFormatter = useNumberFormatter()
 
 const { accentColors, selectedAccentColor } = useAccentColor()
 
@@ -359,6 +360,9 @@ const config = computed<VueUiSparklineConfig>(() => {
         fontSize: 28,
         bold: false,
         color: colors.value.fg,
+        formatter: ({ value }) => {
+          return numberFormatter.value.format(value)
+        },
       },
       line: {
         color: colors.value.borderHover,
@@ -434,7 +438,7 @@ const config = computed<VueUiSparklineConfig>(() => {
 
               <template #skeleton>
                 <!-- This empty div overrides the default built-in scanning animation on load -->
-                <div />
+                <div></div>
               </template>
             </VueUiSparkline>
             <template #fallback>
@@ -511,7 +515,7 @@ const config = computed<VueUiSparklineConfig>(() => {
 }
 
 :deep(.vue-data-ui-component svg:focus-visible) {
-  outline: 0.1rem solid var(--accent-color) !important;
+  outline: 0.1rem solid var(--accent) !important;
   border-radius: 0.1rem;
   outline-offset: 3px;
 }

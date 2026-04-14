@@ -17,10 +17,12 @@ allowBuilds:
   'unrs-resolver': false
   'vue-demi': false
 
+dedupePeers: true
+
 overrides:
   sharp: 0.34.5
-  vite: npm:@voidzero-dev/vite-plus-core@0.1.12
-  vitest: npm:@voidzero-dev/vite-plus-test@0.1.12
+  vite: npm:@voidzero-dev/vite-plus-core@0.1.16
+  vitest: npm:@voidzero-dev/vite-plus-test@0.1.16
   storybook: ^10.3.1
 
 packageExtensions:
@@ -39,10 +41,14 @@ savePrefix: ''
 shellEmulator: true
 
 catalogs:
+  msw:
+    'msw': '^2.13.2'
+
   storybook:
     '@storybook-vue/nuxt': '9.0.1'
     '@storybook/addon-a11y': '^10.3.1'
     '@storybook/addon-docs': '^10.3.1'
     '@storybook/addon-themes': '^10.3.1'
+    'msw-storybook-addon': '^2.0.7'
     'storybook': '^10.3.1'
     'storybook-i18n': '^10.1.1'
