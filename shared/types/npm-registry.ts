@@ -47,6 +47,9 @@ export type PublishTrustLevel = 'none' | 'trustedPublisher' | 'provenance'
 export type SlimVersion = Pick<SlimPackumentVersion, 'version' | 'deprecated' | 'tags'> & {
   hasProvenance?: boolean
   trustLevel?: PublishTrustLevel
+  license?: string
+  /** Package type field — "module" indicates ESM */
+  type?: string
 }
 
 /**
@@ -186,6 +189,8 @@ export interface NpmSearchPackage {
   publisher?: NpmSearchPublisher
   maintainers?: NpmPerson[]
   license?: string
+  /** Algolia-only: package is an npm-owned security-holder takedown */
+  isSecurityHeld?: boolean
 }
 
 /**

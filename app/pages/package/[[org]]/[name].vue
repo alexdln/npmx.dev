@@ -2,12 +2,6 @@
 import { assertValidPackageName } from '#shared/utils/npm'
 import { getDependencyCount } from '~/utils/npm/dependency-count'
 
-defineOgImageComponent('Package', {
-  name: () => packageName.value,
-  version: () => requestedVersion.value ?? '',
-  primaryColor: '#60a5fa',
-})
-
 const readmeHeader = useTemplateRef('readmeHeader')
 const isReadmeHeaderPinned = shallowRef(false)
 const packageHeaderHeight = usePackageHeaderHeight()
@@ -41,12 +35,30 @@ const { data: resolvedVersion, status: resolvedStatus } = await useResolvedVersi
   requestedVersion,
 )
 
+defineOgImage(
+  'Package.takumi',
+  {
+    name: () => packageName.value,
+    version: () => requestedVersion.value,
+    variant: 'download-chart',
+  },
+  [
+    { key: 'og', alt: () => `npm package ${packageName.value} download chart and stats` },
+    {
+      key: 'whatsapp',
+      width: 800,
+      height: 800,
+      alt: () => `npm package ${packageName.value} download chart and stats`,
+    },
+  ],
+)
+
 if (import.meta.server) {
   assertValidPackageName(packageName.value)
 }
 
-// Fetch README for specific version if requested, otherwise latest
-const { data: readmeData } = useLazyFetch<ReadmeResponse>(
+// Fetch README for specific version if requested; otherwise, latest
+const { data: readmeData, status: readmeStatus } = useLazyFetch<ReadmeResponse>(
   () => {
     const base = `/api/registry/readme/${packageName.value}`
     const version = resolvedVersion.value
@@ -96,24 +108,20 @@ const {
 )
 
 //copy README file as Markdown
-const { copied: copiedReadme, copy: copyReadme } = useClipboard({
-  source: () => '',
-  copiedDuring: 2000,
-})
+const { copied: copiedReadme, copy: copyReadme } = useClipboardAsync(
+  async () => {
+    await fetchReadmeMarkdown()
+    return readmeMarkdownData.value?.markdown ?? ''
+  },
+  {
+    copiedDuring: 2000,
+  },
+)
 
 function prefetchReadmeMarkdown() {
   if (readmeMarkdownStatus.value === 'idle') {
     fetchReadmeMarkdown()
   }
-}
-
-async function copyReadmeHandler() {
-  await fetchReadmeMarkdown()
-
-  const markdown = readmeMarkdownData.value?.markdown
-  if (!markdown) return
-
-  await copyReadme(markdown)
 }
 
 // Track active TOC item based on scroll position
@@ -226,7 +234,7 @@ useCommandPalettePackageCommands(commandPalettePackageContext)
 // 1. SPA fallback (200.html): No real content was server-rendered.
 //    → Show skeleton while data fetches on the client.
 //
-// 2. SSR-rendered HTML with missing payload: Content was rendered but the external _payload.json
+// 2. SSR-rendered HTML missing payload: Content was rendered but the external _payload.json
 //    returned an ISR fallback.
 //    → Preserve the server-rendered DOM, don't flash to skeleton.
 const nuxtApp = useNuxtApp()
@@ -518,7 +526,7 @@ const showSkeleton = shallowRef(false)
   </DevOnly>
   <main v-if="!isVersionsRoute" class="flex-1 pb-8">
     <!-- Scenario 1: SPA fallback — show skeleton (no real content to preserve) -->
-    <!-- Scenario 2: SSR with missing payload — preserve server DOM, skip skeleton -->
+    <!-- Scenario 2: SSR missing payload — preserve server DOM, skip skeleton -->
     <PackageSkeleton
       v-if="isSpaFallback || (!hasServerContentOnly && (showSkeleton || status === 'pending'))"
     />
@@ -671,7 +679,7 @@ const showSkeleton = shallowRef(false)
                 <TooltipApp v-if="sizeTooltip" :text="sizeTooltip" interactive>
                   <span
                     tabindex="0"
-                    class="inline-flex items-center justify-center min-w-6 min-h-6 -m-1 p-1 text-fg-subtle cursor-help focus-visible:outline-2 focus-visible:outline-accent/70 rounded"
+                    class="inline-flex items-center justify-center min-w-6 min-h-6 -m-1 p-1 text-fg-subtle hover:text-fg transition-colors cursor-help focus-visible:outline-2 focus-visible:outline-accent/70 rounded"
                   >
                     <span class="i-lucide:info w-3 h-3" aria-hidden="true" />
                   </span>
@@ -905,9 +913,15 @@ const showSkeleton = shallowRef(false)
 
         <div class="space-y-6" :class="$style.areaVulns">
           <!-- Bad package warning -->
-          <PackageReplacement v-if="moduleReplacement" :replacement="moduleReplacement" />
+          <PackageReplacement
+            v-if="moduleReplacement"
+            :mapping="moduleReplacement.mapping"
+            :replacement="moduleReplacement.replacement"
+          />
           <!-- Size / dependency increase notice -->
-          <PackageSizeIncrease v-if="sizeDiff" :diff="sizeDiff" />
+          <PackageSizeIncrease v-if="sizeDiff?.direction === 'increase'" :diff="sizeDiff" />
+          <!-- Size / dependency decrease celebration -->
+          <PackageSizeDecrease v-else-if="sizeDiff?.direction === 'decrease'" :diff="sizeDiff" />
           <!-- Vulnerability scan -->
           <ClientOnly>
             <PackageVulnerabilityTree
@@ -925,7 +939,7 @@ const showSkeleton = shallowRef(false)
         </div>
 
         <PackageSidebar :class="$style.areaSidebar">
-          <div class="flex flex-col gap-4 sm:gap-6 xl:pt-4">
+          <div class="flex flex-col gap-4 sm:gap-6 lg:pt-4">
             <!-- Team access controls (for scoped packages when connected) -->
             <ClientOnly>
               <PackageAccessControls :package-name="pkg.name" />
@@ -1019,7 +1033,7 @@ const showSkeleton = shallowRef(false)
                 <ButtonBase
                   @mouseenter="prefetchReadmeMarkdown"
                   @focus="prefetchReadmeMarkdown"
-                  @click="copyReadmeHandler()"
+                  @click="copyReadme"
                   :aria-pressed="copiedReadme"
                   :aria-label="
                     copiedReadme ? $t('common.copied') : $t('package.readme.copy_as_markdown')
@@ -1039,7 +1053,20 @@ const showSkeleton = shallowRef(false)
 
           <!-- eslint-disable vue/no-v-html -- HTML is sanitized server-side -->
           <Readme v-if="readmeData?.html" :html="readmeData.html" />
-          <p v-else class="text-fg-muted italic">
+          <p
+            v-else-if="readmeStatus === 'pending'"
+            class="flex items-center gap-2 text-fg-subtle italic"
+          >
+            <span class="i-svg-spinners:ring-resize w-4 h-4" aria-hidden="true" />
+            <span>{{ $t('common.loading') }}…</span>
+          </p>
+          <p v-else-if="readmeStatus === 'error'" class="text-fg-muted italic">
+            {{ $t('package.readme.error_loading') }}
+          </p>
+          <p
+            v-else-if="readmeStatus === 'success' && !readmeData?.html"
+            class="text-fg-muted italic"
+          >
             {{ $t('package.readme.no_readme') }}
             <a
               v-if="repositoryUrl"

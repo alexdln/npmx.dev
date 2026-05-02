@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { VueUiSparkline } from 'vue-data-ui/vue-ui-sparkline'
-import { VueUiPatternSeed } from 'vue-data-ui/vue-ui-pattern-seed'
-import { useCssVariables } from '~/composables/useColors'
 import {
+  VueUiSparkline,
   type VueUiSparklineConfig,
   type VueUiSparklineDatasetItem,
-  type VueUiXyDatasetItem,
-} from 'vue-data-ui'
+} from 'vue-data-ui/vue-ui-sparkline'
+import { VueUiPatternSeed } from 'vue-data-ui/vue-ui-pattern-seed'
+import { useCssVariables } from '~/composables/useColors'
+import type { VueUiXyDatasetItem } from 'vue-data-ui/vue-ui-xy'
 import { getPalette, lightenColor } from 'vue-data-ui/utils'
 import { CHART_PATTERN_CONFIG } from '~/utils/charts'
 
@@ -31,6 +31,7 @@ const props = defineProps<{
 
 const { locale } = useI18n()
 const colorMode = useColorMode()
+const numberFormatter = useNumberFormatter()
 const resolvedMode = shallowRef<'light' | 'dark'>('light')
 const rootEl = shallowRef<HTMLElement | null>(null)
 const palette = getPalette('')
@@ -100,7 +101,7 @@ const configs = computed(() => {
       ? Array.from(new Set([...(unit.dashIndices ?? []), lastIndex]))
       : unit.dashIndices
 
-    // Ensure we loop through available palette colours when the series count is higher than the avalable palette
+    // Ensure we loop through available palette colours when the series count is higher than the available palette
     const fallbackColor = palette[i] ?? palette[i % palette.length] ?? palette[0]!
     const seriesColor = unit.color ?? fallbackColor
     const lightenedSeriesColor: string = unit.color
@@ -153,6 +154,9 @@ const configs = computed(() => {
           fontSize: 24,
           bold: false,
           color: colors.value.fg,
+          formatter: ({ value }) => {
+            return numberFormatter.value.format(value)
+          },
           datetimeFormatter: {
             enable: true,
             locale: locale.value,
@@ -229,9 +233,10 @@ const configs = computed(() => {
           {{ applyEllipsis(dataset?.[i]?.name ?? '', 27) }}
         </div>
         <VueUiSparkline
+          v-if="datasets[i]"
           :key="`${i}_${step}`"
           :config
-          :dataset="datasets?.[i]"
+          :dataset="datasets[i]"
           :selectedIndex
           @hoverIndex="hoverIndex"
         >

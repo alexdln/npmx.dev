@@ -20,7 +20,10 @@
     "chat": "chat",
     "builders_chat": "builders",
     "keyboard_shortcuts": "keyboard shortcuts",
-    "brand": "brand"
+    "brand": "brand",
+    "resources": "Resources",
+    "features": "Features",
+    "other": "Other"
   },
   "shortcuts": {
     "section": {
@@ -42,7 +45,8 @@
     "open_docs": "Open docs",
     "disable_shortcuts": "You can disable keyboard shortcuts in {settings}.",
     "open_main": "Open main information",
-    "open_diff": "Open version differences"
+    "open_diff": "Open version differences",
+    "open_timeline": "Open timeline"
   },
   "search": {
     "label": "Search npm packages",
@@ -380,15 +384,23 @@
       "size": "Install size increased by {percent} ({size} larger)",
       "deps": "{count} more dependencies"
     },
+    "size_decrease": {
+      "title_size": "Package size decreased since v{version}!",
+      "title_deps": "Dependency count decreased since v{version}!",
+      "title_both": "Package size and dependency count decreased since v{version}!",
+      "size": "Install size reduced by {percent} ({size} smaller)",
+      "deps": "{count} fewer dependencies"
+    },
     "replacement": {
       "title": "You might not need this dependency.",
-      "native": "This can be replaced with {replacement}, available since Node {nodeVersion}.",
-      "simple": "The {community} has flagged this package as redundant, with the advice: {replacement}.",
+      "example": "Example:",
+      "native": "This package can be replaced with {replacement}, available since Node {nodeVersion}.",
+      "native_no_version": "This package can be replaced with {replacement}.",
+      "simple": "The {community} has flagged this package as redundant, with the advice: {replacement}",
       "documented": "The {community} has flagged this package as having more performant alternatives.",
       "none": "This package has been flagged as no longer needed, and its functionality is likely available natively in all engines.",
       "learn_more": "Learn more",
       "learn_more_above": "Learn more above.",
-      "mdn": "MDN",
       "community": "community",
       "consider_no_dep": "+ Consider no dep?"
     },
@@ -434,6 +446,7 @@
       "docs": "docs",
       "fund": "fund",
       "compare": "compare",
+      "timeline": "timeline",
       "compare_this_package": "compare this package"
     },
     "likes": {
@@ -479,7 +492,8 @@
         "warning": "Warning",
         "caution": "Caution"
       },
-      "copy_as_markdown": "Copy README as Markdown"
+      "copy_as_markdown": "Copy README as Markdown",
+      "error_loading": "Failed to load README details"
     },
     "provenance_section": {
       "title": "Provenance",
@@ -557,6 +571,23 @@
       "page_title": "Version History",
       "current_tags": "Current Tags",
       "no_match_filter": "No versions match {filter}"
+    },
+    "timeline": {
+      "load_more": "Load more",
+      "load_error": "Failed to load timeline. Please try again later.",
+      "size_increase": "Install size increased by {percent}% ({size})",
+      "size_decrease": "Install size decreased by {percent}% ({size})",
+      "dep_increase": "{count} dependencies added",
+      "dep_decrease": "{count} dependencies removed",
+      "license_change": "License changed from {from} to {to}",
+      "esm_added": "Module type changed to ESM",
+      "esm_removed": "Module type changed from ESM to CJS",
+      "types_added": "TypeScript types added",
+      "types_removed": "TypeScript types removed",
+      "trusted_publisher_added": "Trusted publishing enabled",
+      "trusted_publisher_removed": "Trusted publishing removed",
+      "provenance_added": "Provenance enabled",
+      "provenance_removed": "Provenance removed"
     },
     "dependencies": {
       "title": "Dependency ({count}) | Dependencies ({count})",
