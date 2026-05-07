@@ -1,0 +1,37 @@
+{
+  "id": "net.atview.managed.profile",
+  "defs": {
+    "main": {
+      "key": "tid",
+      "type": "record",
+      "record": {
+        "type": "object",
+        "required": ["createdAt", "name", "description"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 640,
+            "maxGraphemes": 64
+          },
+          "avatar": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 2048
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2560,
+            "maxGraphemes": 256
+          }
+        }
+      },
+      "description": "Managed Profile experiment"
+    }
+  },
+  "$type": "com.atproto.lexicon.schema",
+  "lexicon": 1
+}

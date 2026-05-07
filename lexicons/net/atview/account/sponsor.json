@@ -1,0 +1,29 @@
+{
+  "id": "net.atview.account.sponsor",
+  "defs": {
+    "main": {
+      "key": "tid",
+      "type": "record",
+      "record": {
+        "type": "object",
+        "required": ["createdAt", "amount", "account"],
+        "properties": {
+          "amount": {
+            "type": "integer"
+          },
+          "account": {
+            "ref": "net.atview.account.actor",
+            "type": "ref"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      },
+      "description": "Account Sponsor experiment"
+    }
+  },
+  "$type": "com.atproto.lexicon.schema",
+  "lexicon": 1
+}

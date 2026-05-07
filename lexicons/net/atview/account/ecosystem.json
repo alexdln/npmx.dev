@@ -1,0 +1,31 @@
+{
+  "id": "net.atview.account.ecosystem",
+  "defs": {
+    "main": {
+      "key": "tid",
+      "type": "record",
+      "record": {
+        "type": "object",
+        "required": ["createdAt", "account"],
+        "properties": {
+          "note": {
+            "type": "string",
+            "maxLength": 2560,
+            "maxGraphemes": 256
+          },
+          "account": {
+            "ref": "net.atview.account.actor",
+            "type": "ref"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      },
+      "description": "Account Ecosystem experiment"
+    }
+  },
+  "$type": "com.atproto.lexicon.schema",
+  "lexicon": 1
+}
