@@ -6,14 +6,16 @@
       "type": "record",
       "record": {
         "type": "object",
-        "required": ["createdAt", "amount", "account"],
+        "required": ["createdAt", "account"],
         "properties": {
-          "amount": {
-            "type": "integer"
+          "note": {
+            "type": "string",
+            "maxLength": 2560,
+            "maxGraphemes": 256
           },
           "account": {
-            "ref": "net.atview.account.actor",
-            "type": "ref"
+            "type": "string",
+            "format": "at-uri"
           },
           "createdAt": {
             "type": "string",

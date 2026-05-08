@@ -98,6 +98,13 @@
           "type": "union",
           "description": "An optional embed associated with the status."
         },
+        "labels": {
+          "type": "array",
+          "items": {
+            "ref": "com.atproto.label.defs#label",
+            "type": "ref"
+          }
+        },
         "record": {
           "type": "unknown"
         },
@@ -569,7 +576,7 @@
         },
         "isValid": {
           "type": "boolean",
-          "description": "True if the verification passes validation; otherwise, false."
+          "description": "True if the verification passes validation, otherwise false."
         },
         "createdAt": {
           "type": "string",

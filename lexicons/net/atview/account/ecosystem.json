@@ -14,8 +14,8 @@
             "maxGraphemes": 256
           },
           "account": {
-            "ref": "net.atview.account.actor",
-            "type": "ref"
+            "type": "string",
+            "format": "at-uri"
           },
           "createdAt": {
             "type": "string",
