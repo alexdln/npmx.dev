@@ -14,6 +14,7 @@
     "com.atproto.repo.applyWrites",
     "com.atproto.repo.getRecord",
     "com.atproto.sync.getLatestCommit",
+    "net.atview.account.actor",
     "net.atview.account.ecosystem",
     "net.atview.account.nested",
     "net.atview.account.role",
@@ -139,6 +140,10 @@
     "com.atproto.sync.getLatestCommit": {
       "uri": "at://did:plc:6msi3pj7krzih5qxqtryxlzw/com.atproto.lexicon.schema/com.atproto.sync.getLatestCommit",
       "cid": "bafyreifewzvfus7z6rnmtv74lpulhldvikqmhzepwqdlaqmhllgyg4oejq"
+    },
+    "net.atview.account.actor": {
+      "uri": "at://did:plc:ycd3zyxa6iru5fiplr3un6nr/com.atproto.lexicon.schema/net.atview.account.actor",
+      "cid": "bafyreiaxxckxh4bt62h6emo4jsqpz4de4tv6yluc3frhru3ajy2scrmhs4"
     },
     "net.atview.account.ecosystem": {
       "uri": "at://did:plc:ycd3zyxa6iru5fiplr3un6nr/com.atproto.lexicon.schema/net.atview.account.ecosystem",
