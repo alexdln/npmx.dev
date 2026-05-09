@@ -14,10 +14,8 @@ export default eventHandlerWithOAuthSession(async event => {
   }
 
   try {
-    const utils = new IdentityUtils()
-    const minidoc = await utils.getMiniDoc(identifier)
-    const rolesUtil = new RoleUtils()
-    return await rolesUtil.getRoles(minidoc)
+    const minidoc = await new IdentityUtils().getMiniDoc(identifier)
+    return await new RoleUtils().getRoles(minidoc)
   } catch (error: unknown) {
     console.error('[profile-roles-get]', error)
     handleApiError(error, {

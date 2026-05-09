@@ -14,10 +14,8 @@ export default eventHandlerWithOAuthSession(async event => {
   }
 
   try {
-    const utils = new IdentityUtils()
-    const minidoc = await utils.getMiniDoc(identifier)
-    const ecosystemUtil = new EcosystemUtils()
-    return await ecosystemUtil.getEcosystem(minidoc)
+    const minidoc = await new IdentityUtils().getMiniDoc(identifier)
+    return await new EcosystemUtils().getEcosystem(minidoc)
   } catch (error: unknown) {
     console.error('[profile-ecosystem-get]', error)
     handleApiError(error, {

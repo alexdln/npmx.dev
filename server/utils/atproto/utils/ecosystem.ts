@@ -1,50 +1,58 @@
 import type * as blue from '#shared/types/lexicons/blue'
 import * as net from '#shared/types/lexicons/net'
 import { Client } from '@atproto/lex'
+import { AccountUtils, type PopulatedAccount } from './account'
 
-//Cache keys and helpers
+const HEADERS = { 'User-Agent': 'npmx' }
+const LIST_LIMIT = 50
+
 const CACHE_PREFIX = 'atproto-ecosystem:'
 const CACHE_ECOSYSTEM_KEY = (did: string) => `${CACHE_PREFIX}${did}:ecosystem`
 
-/**
- * Logic to handle and update package queries
- */
+export type EcosystemEntry = Omit<net.atview.account.ecosystem.Main, 'account'> & {
+  account: PopulatedAccount | undefined
+}
+
 export class EcosystemUtils {
   private readonly cache: CacheAdapter
+  private readonly accountUtils: AccountUtils
 
   constructor() {
     this.cache = getCacheAdapter('generic')
+    this.accountUtils = new AccountUtils()
   }
 
   /**
-   * Gets ecosystem list based on a handle
-   * @param handle
-   * @returns
+   * Lists the ecosystem accounts referenced by `minidoc.did`, with each entry's
+   * `account` hydrated.
    */
   async getEcosystem(
     minidoc: blue.microcosm.identity.resolveMiniDoc.$OutputBody,
-  ): Promise<net.atview.account.ecosystem.Main[] | undefined> {
-    console.log('[getEcosystem]', minidoc)
-    const ecosystemKey = CACHE_ECOSYSTEM_KEY(minidoc.did)
-    const cachedEcosystem = await this.cache.get<net.atview.account.ecosystem.Main[]>(ecosystemKey)
+  ): Promise<EcosystemEntry[]> {
+    const cacheKey = CACHE_ECOSYSTEM_KEY(minidoc.did)
+    const cached = await this.cache.get<EcosystemEntry[]>(cacheKey)
+    if (cached) return cached
 
-    let ecosystem: net.atview.account.ecosystem.Main[] | undefined
-    if (cachedEcosystem) {
-      ecosystem = cachedEcosystem
-    } else {
-      const client = new Client(minidoc.pds, {
-        headers: { 'User-Agent': 'npmx' },
-      })
+    const client = new Client(minidoc.pds, { headers: HEADERS })
+    const response = await client.listRecords(net.atview.account.ecosystem.$nsid, {
+      limit: LIST_LIMIT,
+      repo: minidoc.did,
+    })
 
-      const response = await client.listRecords(net.atview.account.ecosystem.$nsid, {
-        limit: 50,
-        repo: minidoc.did,
-      })
-      ecosystem = response.body.records.map(
-        record => record.value as net.atview.account.ecosystem.Main,
-      )
-    }
+    const records = response.body.records.map(
+      record => record.value as net.atview.account.ecosystem.Main,
+    )
+    const populated = await this.accountUtils.populateAccounts(
+      records.map(record => record.account),
+    )
+    const populatedByUri = new Map(populated.map(account => [account.uri, account]))
 
-    return ecosystem
+    const entries = records.map(record => ({
+      ...record,
+      account: populatedByUri.get(record.account),
+    }))
+
+    await this.cache.set(cacheKey, entries)
+    return entries
   }
 }

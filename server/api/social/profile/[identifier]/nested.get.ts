@@ -14,10 +14,8 @@ export default eventHandlerWithOAuthSession(async event => {
   }
 
   try {
-    const utils = new IdentityUtils()
-    const minidoc = await utils.getMiniDoc(identifier)
-    const nestedUtil = new NestedUtils()
-    return await nestedUtil.getNested(minidoc)
+    const minidoc = await new IdentityUtils().getMiniDoc(identifier)
+    return await new NestedUtils().getNested(minidoc)
   } catch (error: unknown) {
     console.error('[profile-nested-get]', error)
     handleApiError(error, {

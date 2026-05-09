@@ -14,10 +14,8 @@ export default eventHandlerWithOAuthSession(async event => {
   }
 
   try {
-    const utils = new IdentityUtils()
-    const minidoc = await utils.getMiniDoc(identifier)
-    const sponsorsUtil = new SponsorUtils()
-    return await sponsorsUtil.getSponsors(minidoc)
+    const minidoc = await new IdentityUtils().getMiniDoc(identifier)
+    return await new SponsorUtils().getSponsors(minidoc)
   } catch (error: unknown) {
     console.error('[profile-sponsors-get]', error)
     handleApiError(error, {

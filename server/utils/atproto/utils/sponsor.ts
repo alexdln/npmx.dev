@@ -1,50 +1,58 @@
 import type * as blue from '#shared/types/lexicons/blue'
 import * as net from '#shared/types/lexicons/net'
 import { Client } from '@atproto/lex'
+import { AccountUtils, type PopulatedAccount } from './account'
 
-//Cache keys and helpers
+const HEADERS = { 'User-Agent': 'npmx' }
+const LIST_LIMIT = 50
+
 const CACHE_PREFIX = 'atproto-sponsor:'
 const CACHE_SPONSORS_KEY = (did: string) => `${CACHE_PREFIX}${did}:sponsors`
 
-/**
- * Logic to handle and update package queries
- */
+export type SponsorEntry = Omit<net.atview.account.sponsor.Main, 'account'> & {
+  account: PopulatedAccount | undefined
+}
+
 export class SponsorUtils {
   private readonly cache: CacheAdapter
+  private readonly accountUtils: AccountUtils
 
   constructor() {
     this.cache = getCacheAdapter('generic')
+    this.accountUtils = new AccountUtils()
   }
 
   /**
-   * Gets sponsors list based on a handle
-   * @param handle
-   * @returns
+   * Lists the sponsor accounts referenced by `minidoc.did`, with each entry's
+   * `account` hydrated.
    */
   async getSponsors(
     minidoc: blue.microcosm.identity.resolveMiniDoc.$OutputBody,
-  ): Promise<net.atview.account.sponsor.Main[] | undefined> {
-    console.log('[getSponsors]', minidoc)
-    const sponsorsKey = CACHE_SPONSORS_KEY(minidoc.did)
-    const cachedSponsors = await this.cache.get<net.atview.account.sponsor.Main[]>(sponsorsKey)
+  ): Promise<SponsorEntry[]> {
+    const cacheKey = CACHE_SPONSORS_KEY(minidoc.did)
+    const cached = await this.cache.get<SponsorEntry[]>(cacheKey)
+    if (cached) return cached
 
-    let sponsors: net.atview.account.sponsor.Main[] | undefined
-    if (cachedSponsors) {
-      sponsors = cachedSponsors
-    } else {
-      const client = new Client(minidoc.pds, {
-        headers: { 'User-Agent': 'npmx' },
-      })
+    const client = new Client(minidoc.pds, { headers: HEADERS })
+    const response = await client.listRecords(net.atview.account.sponsor.$nsid, {
+      limit: LIST_LIMIT,
+      repo: minidoc.did,
+    })
 
-      const response = await client.listRecords(net.atview.account.sponsor.$nsid, {
-        limit: 50,
-        repo: minidoc.did,
-      })
-      sponsors = response.body.records.map(
-        record => record.value as net.atview.account.sponsor.Main,
-      )
-    }
+    const records = response.body.records.map(
+      record => record.value as net.atview.account.sponsor.Main,
+    )
+    const populated = await this.accountUtils.populateAccounts(
+      records.map(record => record.account),
+    )
+    const populatedByUri = new Map(populated.map(account => [account.uri, account]))
 
-    return sponsors
+    const entries = records.map(record => ({
+      ...record,
+      account: populatedByUri.get(record.account),
+    }))
+
+    await this.cache.set(cacheKey, entries)
+    return entries
   }
 }

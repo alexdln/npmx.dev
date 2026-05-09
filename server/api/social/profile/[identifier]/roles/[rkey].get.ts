@@ -1,7 +1,7 @@
 /**
  * GET /api/social/profile/:identifier/roles/:rkey
  *
- * Gets the roles for a npmx user
+ * Gets a single role with its assigned users for a npmx user
  */
 export default eventHandlerWithOAuthSession(async event => {
   const identifier = getRouterParam(event, 'identifier')
@@ -15,10 +15,8 @@ export default eventHandlerWithOAuthSession(async event => {
   }
 
   try {
-    const utils = new IdentityUtils()
-    const minidoc = await utils.getMiniDoc(identifier)
-    const rolesUtil = new RoleUtils()
-    return await rolesUtil.getRole(minidoc, rkey)
+    const minidoc = await new IdentityUtils().getMiniDoc(identifier)
+    return await new RoleUtils().getRole(minidoc, rkey)
   } catch (error: unknown) {
     console.error('[profile-role-get]', error)
     handleApiError(error, {
