@@ -1072,6 +1072,9 @@
         "likes": {
           "type": "string"
         },
+        "tabs": {
+          "type": "string"
+        },
         "seo_title": {
           "type": "string"
         },
@@ -1107,9 +1110,6 @@
             },
             "no_sponsors": {
               "type": "string"
-            },
-            "section_nav": {
-              "type": "string"
             }
           },
           "additionalProperties": false
@@ -1133,6 +1133,39 @@
               "type": "string"
             },
             "empty": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "roles": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "empty": {
+              "type": "string"
+            },
+            "seo_description": {
+              "type": "string"
+            },
+            "not_found": {
+              "type": "string"
+            },
+            "not_found_message": {
+              "type": "string"
+            },
+            "detail_seo_fallback": {
+              "type": "string"
+            },
+            "back_to_list": {
+              "type": "string"
+            },
+            "assignees": {
+              "type": "string"
+            },
+            "no_assignees": {
               "type": "string"
             }
           },

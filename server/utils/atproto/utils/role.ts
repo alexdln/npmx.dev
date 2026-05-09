@@ -31,6 +31,8 @@ export type BaseRole = net.atview.managed.role.Main & {
   atUri: string
 }
 
+type RoleRecordWithUri = net.atview.managed.role.Main & { atUri: string }
+
 export class RoleUtils {
   private readonly cache: CacheAdapter
   private readonly slingshotClient: Client
@@ -59,9 +61,9 @@ export class RoleUtils {
    */
   async getRoles(
     minidoc: blue.microcosm.identity.resolveMiniDoc.$OutputBody,
-  ): Promise<net.atview.managed.role.Main[]> {
+  ): Promise<RoleRecordWithUri[]> {
     const cacheKey = CACHE_ROLES_KEY(minidoc.did)
-    const cached = await this.cache.get<net.atview.managed.role.Main[]>(cacheKey)
+    const cached = await this.cache.get<RoleRecordWithUri[]>(cacheKey)
     if (cached) return cached
 
     const client = new Client(minidoc.pds, { headers: HEADERS })
@@ -69,7 +71,7 @@ export class RoleUtils {
       limit: LIST_LIMIT,
       repo: minidoc.did,
     })
-    const roles = response.body.records.map(record => ({
+    const roles: RoleRecordWithUri[] = response.body.records.map(record => ({
       ...(record.value as net.atview.managed.role.Main),
       atUri: record.uri,
     }))

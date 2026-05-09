@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ProfileAccountEntry } from '~/components/Profile/RelatedAccountsList.vue'
+import type { AccountEntry } from '~/components/Profile/AccountsList.vue'
 
 const route = useRoute()
 const identity = computed(() => route.params.identity)
@@ -29,7 +29,7 @@ const {
   data: nested,
   status: nestedStatus,
   error: nestedError,
-} = await useFetch<ProfileAccountEntry[]>(() => `/api/social/profile/${identity.value}/nested`, {
+} = await useFetch<AccountEntry[]>(() => `/api/social/profile/${identity.value}/nested`, {
   default: () => [],
 })
 

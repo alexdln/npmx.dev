@@ -14,7 +14,7 @@ export type AccountEntry = {
 defineProps<{
   entries: AccountEntry[] | null
   status: string
-  error: unknown
+  error?: unknown
   emptyLabel: string
 }>()
 </script>
@@ -29,13 +29,13 @@ defineProps<{
   <div v-else-if="entries?.length" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
     <div
       v-for="(entry, index) in entries"
-      :key="entry.account?.uri ?? `entry-${index}`"
+      :key="entry.account?.uri || `entry-${index}`"
       class="p-4 bg-bg-subtle border border-border rounded-lg decoration-none"
     >
-      <p class="font-mono text-sm truncate">
+      <p class="font-mono font-medium truncate">
         {{
-          entry.account?.actor?.displayName ??
-          entry.account?.handle ??
+          entry.account?.actor?.displayName ||
+          entry.account?.handle ||
           $t('profile.related_accounts.unknown')
         }}
       </p>
