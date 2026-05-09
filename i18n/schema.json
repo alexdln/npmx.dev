@@ -1098,6 +1098,18 @@
             }
           },
           "additionalProperties": false
+        },
+        "sponsors": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "no_sponsors": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false

@@ -88,7 +88,7 @@ useSeoMeta({
         </div>
       </div>
       <div v-else class="p-4 bg-bg-subtle border border-border rounded-lg text-fg-muted">
-        {{ $t('about.sponsors.title') }}: 0
+        {{ $t('profile.sponsors.no_sponsors') }}
       </div>
     </section>
   </main>

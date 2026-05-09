@@ -87,7 +87,7 @@ const profileTabs = computed(() => [
   },
   {
     key: 'sponsors',
-    label: $t('about.sponsors.title'),
+    label: $t('profile.sponsors.title'),
     to: `/profile/${props.identity}/sponsors`,
   },
 ])
