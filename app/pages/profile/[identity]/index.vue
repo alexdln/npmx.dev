@@ -83,8 +83,13 @@ const { data: likes, status } = useProfileLikes(identity)
 const profileTabs = computed(() => [
   {
     key: 'likes',
-    label: `${$t('profile.likes')} (${likes.value?.records?.length ?? 0})`,
+    label: $t('profile.likes'),
     to: { name: 'profile-identity' as const, params: { identity: identity.value } },
+  },
+  {
+    key: 'sponsors',
+    label: $t('about.sponsors.title'),
+    to: `/profile/${identity.value}/sponsors`,
   },
 ])
 
