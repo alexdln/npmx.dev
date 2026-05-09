@@ -395,6 +395,7 @@ export default defineNuxtConfig({
         'semver',
         'validate-npm-package-name',
         '@atproto/lex',
+        '@atproto/syntax',
         'fast-npm-meta',
         '@floating-ui/vue',
         'algoliasearch/lite',
