@@ -76,7 +76,7 @@ useSeoMeta({
       @update-profile="profile = $event"
     />
 
-    <section class="flex flex-col gap-8 mt-8">
+    <section class="mt-8">
       <div v-if="roleStatus === 'pending'" class="space-y-4">
         <SkeletonBlock class="h-10 max-w-md rounded-lg" />
         <SkeletonBlock class="h-16 max-w-2xl rounded-lg" />
@@ -110,7 +110,7 @@ useSeoMeta({
           </div>
         </header>
 
-        <div>
+        <div class="mt-8">
           <h2 class="font-mono uppercase text-fg-muted mb-4">
             {{ $t('profile.roles.assignees') }}
           </h2>

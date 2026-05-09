@@ -361,6 +361,9 @@
     "seo_description": "npmx profile by {handle}",
     "not_found": "Profile Not Found",
     "not_found_message": "The profile for {handle} could not be found.",
+    "account": {
+      "warning": "The specified connections are currently based solely on claims made by the current user and have not been independently verified. Please double-check the information if accuracy is important for your task. This limitation is temporary and will be improved in future updates."
+    },
     "invite": {
       "message": "It doesn't look like they're using npmx yet. Want to tell them about it?",
       "share_button": "Share on Bluesky",

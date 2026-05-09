@@ -57,7 +57,7 @@ useSeoMeta({
       @update-profile="profile = $event"
     />
 
-    <section class="flex flex-col gap-8 mt-8">
+    <section class="mt-8">
       <div v-if="rolesStatus === 'pending'" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <SkeletonBlock v-for="i in 4" :key="i" class="h-20 rounded-lg" />
       </div>

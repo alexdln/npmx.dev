@@ -1087,6 +1087,15 @@
         "not_found_message": {
           "type": "string"
         },
+        "account": {
+          "type": "object",
+          "properties": {
+            "warning": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
         "invite": {
           "type": "object",
           "properties": {

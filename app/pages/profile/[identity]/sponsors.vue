@@ -49,7 +49,7 @@ useSeoMeta({
       @update-profile="profile = $event"
     />
 
-    <section class="flex flex-col gap-8 mt-8">
+    <section class="mt-8">
       <ProfileAccountsList
         :entries="sponsors"
         :status="sponsorsStatus"
