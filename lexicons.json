@@ -19,7 +19,6 @@
     "net.atview.account.nested",
     "net.atview.account.role",
     "net.atview.account.sponsor",
-    "net.atview.external.npmpackage",
     "net.atview.managed.role",
     "site.standard.document",
     "site.standard.publication"
@@ -160,10 +159,6 @@
     "net.atview.account.sponsor": {
       "uri": "at://did:plc:ycd3zyxa6iru5fiplr3un6nr/com.atproto.lexicon.schema/net.atview.account.sponsor",
       "cid": "bafyreieq4aa43xailggnm7gllb4yicvcthxwqqb3gtmr5iqulmzzd5do2e"
-    },
-    "net.atview.external.npmpackage": {
-      "uri": "at://did:plc:ycd3zyxa6iru5fiplr3un6nr/com.atproto.lexicon.schema/net.atview.external.npmpackage",
-      "cid": "bafyreic4mox2vvjzztu3us7zj52vs7qeo2s6ibcgyqun2xjd74xl4uw3oi"
     },
     "net.atview.managed.role": {
       "uri": "at://did:plc:ycd3zyxa6iru5fiplr3un6nr/com.atproto.lexicon.schema/net.atview.managed.role",
