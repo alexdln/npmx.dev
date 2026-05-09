@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { getSafeHttpUrl } from '#shared/utils/url'
-
 type SponsorAccount = {
   uri?: string
   handle?: string
@@ -8,7 +6,6 @@ type SponsorAccount = {
     handle?: string
     displayName?: string
     description?: string
-    avatar?: string
   }
 }
 
@@ -18,6 +15,7 @@ type SponsorEntry = {
 
 const route = useRoute()
 const identity = computed(() => route.params.identity)
+const { user } = useAtproto()
 
 const { data: profile, error: profileError } = await useFetch<NPMXProfile>(
   () => `/api/social/profile/${identity.value}`,
@@ -47,21 +45,6 @@ const {
   default: () => [],
 })
 
-const profileTabs = computed(() => [
-  {
-    key: 'likes',
-    label: $t('profile.likes'),
-    to: { name: 'profile-identity' as const, params: { identity: identity.value } },
-  },
-  {
-    key: 'sponsors',
-    label: $t('about.sponsors.title'),
-    to: `/profile/${identity.value}/sponsors`,
-  },
-])
-
-const safeProfileWebsiteUrl = computed(() => getSafeHttpUrl(profile.value.website))
-
 useSeoMeta({
   title: () => `${identity.value} sponsors - npmx`,
   description: () => `Sponsors supporting ${identity.value}`,
@@ -70,31 +53,15 @@ useSeoMeta({
 
 <template>
   <main class="container flex-1 flex flex-col py-8 sm:py-12 w-full">
-    <header class="mb-8 pb-8 border-b border-border">
-      <div class="flex flex-col flex-wrap gap-4">
-        <h1 v-if="profile.displayName" class="font-mono text-2xl sm:text-3xl font-medium">
-          {{ profile.displayName }}
-        </h1>
-        <p v-if="profile.description">{{ profile.description }}</p>
-        <div class="flex gap-4 items-center font-mono text-sm">
-          <h2>@{{ profile.handle ?? identity }}</h2>
-          <LinkBase
-            v-if="safeProfileWebsiteUrl"
-            :to="safeProfileWebsiteUrl"
-            classicon="i-lucide:link"
-          >
-            {{ profile.website }}
-          </LinkBase>
-        </div>
-      </div>
-    </header>
+    <ProfileHeader
+      :profile="profile"
+      :identity="identity"
+      active-tab="sponsors"
+      :can-edit="user?.handle === profile?.handle"
+      @update-profile="profile = $event"
+    />
 
-    <section class="flex flex-col gap-8">
-      <TabLinks
-        :aria-label="$t('about.sponsors.title')"
-        :links="profileTabs"
-        active-key="sponsors"
-      />
+    <section class="flex flex-col gap-8 mt-8">
       <div v-if="sponsorsStatus === 'pending'" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <SkeletonBlock v-for="i in 4" :key="i" class="h-20 rounded-lg" />
       </div>

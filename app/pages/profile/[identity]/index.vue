@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { updateProfile as updateProfileUtil } from '~/utils/atproto/profile'
-import type { CommandPaletteContextCommandInput } from '~/types/command-palette'
-import { getSafeHttpUrl } from '#shared/utils/url'
-
 const route = useRoute('profile-identity')
 const identity = computed(() => route.params.identity)
 
@@ -26,72 +22,8 @@ if (!profile.value || profileError.value?.statusCode === 404) {
 }
 
 const { user, pending: userPending } = useAtproto()
-const isEditing = ref(false)
-const displayNameInput = ref()
-const descriptionInput = ref()
-const websiteInput = ref()
-const isUpdateProfileActionPending = ref(false)
-
-watchEffect(() => {
-  if (isEditing.value) {
-    if (profile) {
-      displayNameInput.value = profile.value.displayName
-      descriptionInput.value = profile.value.description
-      websiteInput.value = profile.value.website
-    }
-  }
-})
-
-async function updateProfile() {
-  if (!user.value?.handle || !displayNameInput.value) {
-    return
-  }
-
-  isUpdateProfileActionPending.value = true
-  const currentProfile = profile.value
-
-  // optimistic update
-  profile.value = {
-    displayName: displayNameInput.value,
-    description: descriptionInput.value || undefined,
-    website: websiteInput.value || undefined,
-    handle: profile.value.handle,
-    recordExists: true,
-  }
-
-  try {
-    const result = await updateProfileUtil(identity.value, {
-      displayName: displayNameInput.value,
-      description: descriptionInput.value || undefined,
-      website: websiteInput.value || undefined,
-    })
-
-    if (result.success) {
-      isEditing.value = false
-    } else {
-      profile.value = currentProfile
-    }
-
-    isUpdateProfileActionPending.value = false
-  } catch (e) {
-    profile.value = currentProfile
-    isUpdateProfileActionPending.value = false
-  }
-}
 
 const { data: likes, status } = useProfileLikes(identity)
-const profileTabs = computed(() => [
-  {
-    key: 'likes',
-    label: $t('profile.likes'),
-    to: { name: 'profile-identity' as const, params: { identity: identity.value } },
-  },
-  {
-    key: 'sponsors',
-    label: $t('about.sponsors.title'),
-    to: `/profile/${identity.value}/sponsors`,
-  },
-])
 
 const showInviteSection = computed(() => {
   return (
@@ -107,51 +39,6 @@ const inviteUrl = computed(() => {
   const text = $t('profile.invite.compose_text', { handle: profile.value.handle })
   return `https://bsky.app/intent/compose?text=${encodeURIComponent(text)}`
 })
-const safeProfileWebsiteUrl = computed(() => getSafeHttpUrl(profile.value.website))
-
-useCommandPaletteContextCommands(
-  computed((): CommandPaletteContextCommandInput[] => {
-    const commands: CommandPaletteContextCommandInput[] = []
-
-    if (user.value?.handle === profile.value.handle && !isEditing.value) {
-      commands.push({
-        id: 'profile-edit',
-        group: 'actions',
-        label: $t('common.edit'),
-        keywords: [profile.value.handle ?? identity.value, $t('profile.display_name')],
-        iconClass: 'i-lucide:square-pen',
-        action: () => {
-          isEditing.value = true
-        },
-      })
-    }
-
-    if (safeProfileWebsiteUrl.value) {
-      commands.push({
-        id: 'profile-website',
-        group: 'links',
-        label: $t('profile.website'),
-        keywords: [profile.value.website ?? '', profile.value.handle ?? identity.value],
-        iconClass: 'i-lucide:link',
-        href: safeProfileWebsiteUrl.value,
-      })
-    }
-
-    if (showInviteSection.value) {
-      commands.push({
-        id: 'profile-share-invite',
-        group: 'actions',
-        label: $t('profile.invite.share_button'),
-        keywords: [profile.value.handle ?? identity.value, $t('profile.invite.message')],
-        iconClass: 'i-lucide:send',
-        href: inviteUrl.value,
-      })
-    }
-
-    return commands
-  }),
-)
-
 useSeoMeta({
   title: () => $t('profile.seo_title', { handle: identity.value }),
   description: () => $t('profile.seo_description', { handle: identity.value }),
@@ -173,79 +60,15 @@ defineOgImage(
 
 <template>
   <main class="container flex-1 flex flex-col py-8 sm:py-12 w-full">
-    <!-- Header -->
-    <header class="mb-8 pb-8 border-b border-border">
-      <!-- Editing Profile -->
-      <form v-if="isEditing" class="flex flex-col flex-wrap gap-4" @submit.prevent="updateProfile">
-        <label for="displayName" class="text-sm flex flex-col gap-2">
-          {{ $t('profile.display_name') }}
-          <input
-            required
-            name="displayName"
-            type="text"
-            class="w-full min-w-25 bg-bg-subtle border border-border rounded-md ps-3 pe-3 py-1.5 font-mono text-sm text-fg placeholder:text-fg-subtle transition-[border-color,outline-color] duration-300 hover:border-fg-subtle outline-2 outline-transparent focus:border-accent focus-visible:(outline-2 outline-accent/70)"
-            v-model="displayNameInput"
-          />
-        </label>
-        <label for="description" class="text-sm flex flex-col gap-2">
-          {{ $t('profile.description') }}
-          <input
-            name="description"
-            type="text"
-            :placeholder="$t('profile.no_description')"
-            v-model="descriptionInput"
-            class="w-full min-w-25 bg-bg-subtle border border-border rounded-md ps-3 pe-3 py-1.5 font-mono text-sm text-fg placeholder:text-fg-subtle transition-[border-color,outline-color] duration-300 hover:border-fg-subtle outline-2 outline-transparent focus:border-accent focus-visible:(outline-2 outline-accent/70)"
-          />
-        </label>
-        <label for="website" class="text-sm flex flex-col gap-2">
-          {{ $t('profile.website') }}
-          <input
-            name="website"
-            type="url"
-            :placeholder="$t('profile.website_placeholder')"
-            v-model="websiteInput"
-            class="w-full min-w-25 bg-bg-subtle border border-border rounded-md ps-3 pe-3 py-1.5 font-mono text-sm text-fg placeholder:text-fg-subtle transition-[border-color,outline-color] duration-300 hover:border-fg-subtle outline-2 outline-transparent focus:border-accent focus-visible:(outline-2 outline-accent/70)"
-          />
-        </label>
-        <div class="flex gap-4 items-center font-mono text-sm">
-          <h2>@{{ profile?.handle }}</h2>
-          <ButtonBase @click="isEditing = false" type="button">
-            {{ $t('common.cancel') }}
-          </ButtonBase>
-          <ButtonBase variant="primary" :disabled="isUpdateProfileActionPending" type="submit">
-            {{ $t('common.save') }}
-          </ButtonBase>
-        </div>
-      </form>
-
-      <!-- Display Profile -->
-      <div v-else class="flex flex-col flex-wrap gap-4">
-        <h1 v-if="profile.displayName" class="font-mono text-2xl sm:text-3xl font-medium">
-          {{ profile.displayName }}
-        </h1>
-        <p v-if="profile.description">{{ profile.description }}</p>
-        <div class="flex gap-4 items-center font-mono text-sm">
-          <h2>@{{ profile.handle ?? identity }}</h2>
-          <LinkBase
-            v-if="safeProfileWebsiteUrl"
-            :to="safeProfileWebsiteUrl"
-            classicon="i-lucide:link"
-          >
-            {{ profile.website }}
-          </LinkBase>
-          <ButtonBase
-            @click="isEditing = true"
-            :class="user?.handle === profile?.handle ? '' : 'invisible'"
-            class="hidden sm:inline-flex"
-          >
-            {{ $t('common.edit') }}
-          </ButtonBase>
-        </div>
-      </div>
-    </header>
+    <ProfileHeader
+      :profile="profile"
+      :identity="identity"
+      active-tab="likes"
+      :can-edit="user?.handle === profile?.handle"
+      @update-profile="profile = $event"
+    />
 
     <section class="flex flex-col gap-8">
-      <TabLinks :aria-label="$t('profile.likes')" :links="profileTabs" active-key="likes" />
       <div v-if="status === 'pending'" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <SkeletonBlock v-for="i in 4" :key="i" class="h-16 rounded-lg" />
       </div>
