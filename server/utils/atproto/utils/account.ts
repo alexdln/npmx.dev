@@ -4,12 +4,16 @@ import * as app from '#shared/types/lexicons/app'
 import { SLINGSHOT_HOST } from '#shared/utils/constants'
 import { Client } from '@atproto/lex'
 import { AtUri } from '@atproto/syntax'
+import { IdentityUtils } from './identity'
 
 const HEADERS = { 'User-Agent': 'npmx' }
 
 const ACCOUNT_NSID = net.atview.account.actor.$nsid
 
-const SUPPORTED_PROFILE_NSIDS = new Set([app.bsky.actor.profile.$nsid, net.atview.managed.profile.$nsid])
+const SUPPORTED_PROFILE_NSIDS = new Set([
+  app.bsky.actor.profile.$nsid,
+  net.atview.managed.profile.$nsid,
+])
 
 const CACHE_PREFIX = 'atproto-account:'
 const CACHE_ACCOUNT_KEY = (uri: string) => `${CACHE_PREFIX}${uri}`
@@ -23,6 +27,8 @@ export type PopulatedAccount = Omit<net.atview.account.actor.Main, 'actor'> & {
   actor: AccountActorRecord
   /** at-uri of the underlying profile record */
   actorUri: string
+  /** Primary handle from Slingshot identity resolution (`handle.invalid` omitted). */
+  handle?: string
 }
 
 /**
@@ -32,10 +38,12 @@ export type PopulatedAccount = Omit<net.atview.account.actor.Main, 'actor'> & {
 export class AccountUtils {
   private readonly cache: CacheAdapter
   private readonly slingshotClient: Client
+  private readonly identityUtils: IdentityUtils
 
   constructor() {
     this.cache = getCacheAdapter('generic')
     this.slingshotClient = new Client(`https://${SLINGSHOT_HOST}`, { headers: HEADERS })
+    this.identityUtils = new IdentityUtils()
   }
 
   /**
@@ -70,11 +78,20 @@ export class AccountUtils {
 
       if (!actorResponse.success) return undefined
 
+      let handle: string | undefined
+      try {
+        const miniDoc = await this.identityUtils.getMiniDoc(actorAtUri.host)
+        handle = miniDoc.handle === 'handle.invalid' ? undefined : miniDoc.handle
+      } catch {
+        handle = undefined
+      }
+
       const populated: PopulatedAccount = {
         ...account,
         uri: atUri.toString(),
         actor: actorResponse.body.value as AccountActorRecord,
         actorUri: actorAtUri.toString(),
+        handle,
       }
       await this.cache.set(cacheKey, populated)
       return populated

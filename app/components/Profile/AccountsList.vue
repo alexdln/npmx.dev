@@ -35,6 +35,7 @@ defineProps<{
       <p class="font-mono font-medium truncate">
         {{
           entry.account?.actor?.displayName ||
+          entry.account?.actor?.handle ||
           entry.account?.handle ||
           $t('profile.related_accounts.unknown')
         }}

@@ -99,7 +99,7 @@ useSeoMeta({
               </h2>
               <LinkBase
                 :to="`/profile/${identity}/roles`"
-                class="text-sm font-mono text-fg-muted decoration-none hover:text-accent w-fit"
+                class="text-sm lowercase font-mono text-fg-muted decoration-none hover:text-accent w-fit"
               >
                 ← {{ $t('profile.roles.back_to_list') }}
               </LinkBase>
