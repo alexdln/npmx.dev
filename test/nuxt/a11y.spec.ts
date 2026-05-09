@@ -1,9 +1,10 @@
 import type { ColumnConfig, FilterChip } from '#shared/types/preferences'
-import { mountSuspended } from '@nuxt/test-utils/runtime'
+import { mountSuspended, registerEndpoint } from '@nuxt/test-utils/runtime'
 import type { VueWrapper } from '@vue/test-utils'
 import 'axe-core'
 import type { AxeResults, RunOptions } from 'axe-core'
 import { afterEach, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest'
+import { createLikesLeaderboardEntry } from '~~/test/fixtures/likes-leaderboard'
 
 // axe-core is a UMD module that exposes itself as window.axe in the browser
 declare const axe: {
@@ -268,10 +269,12 @@ import SearchProviderToggleServer from '~/components/SearchProviderToggle.server
 import PackageTrendsChart from '~/components/Package/TrendsChart.vue'
 import FacetBarChart from '~/components/Compare/FacetBarChart.vue'
 import FacetScatterChart from '~/components/Compare/FacetScatterChart.vue'
+import PackageTimelineChart from '~/components/Package/TimelineChart.vue'
 import PackageLikeCard from '~/components/Package/LikeCard.vue'
 import SizeIncrease from '~/components/Package/SizeIncrease.vue'
 import SizeDecrease from '~/components/Package/SizeDecrease.vue'
 import Likes from '~/components/Package/Likes.vue'
+import LikesLeaderboardPage from '~/pages/leaderboard/likes.vue'
 import type { VueUiXyDatasetItem } from 'vue-data-ui'
 
 describe('component accessibility audits', () => {
@@ -683,6 +686,70 @@ describe('component accessibility audits', () => {
       const results = await runAxe(component)
       expect(results.violations).toEqual([])
     })
+
+    it('should have no accessibility violations with the top-liked badge visible', async () => {
+      registerEndpoint('/api/social/likes/lodash', () => ({
+        totalLikes: 42,
+        userHasLiked: false,
+        topLikedRank: 3,
+      }))
+
+      const component = await mountSuspended(Likes, {
+        props: { packageName: 'lodash' },
+      })
+
+      // Likes fetches client-side (`server: false`), so wait for the fetched badge
+      // state before running axe against the rendered variant.
+      await vi.waitFor(() => {
+        expect(component.text()).toContain('#3')
+      })
+
+      const results = await runAxe(component)
+      expect(results.violations).toEqual([])
+    })
+  })
+
+  describe('LikesLeaderboardPage', () => {
+    it('should have no accessibility violations when data is available', async () => {
+      clearNuxtData()
+      registerEndpoint('/api/leaderboard/likes', () => [
+        createLikesLeaderboardEntry('vue', {
+          rank: 1,
+          totalLikes: 120,
+          homepagePreviewUrl: 'https://images.example.com/vue-home.png',
+          homepagePreviewWidth: 1200,
+          homepagePreviewHeight: 630,
+        }),
+      ])
+
+      const component = await mountSuspended(LikesLeaderboardPage, {
+        route: '/leaderboard/likes',
+      })
+
+      await vi.waitFor(() => {
+        expect(component.text()).toContain('Likes Leaderboard')
+        expect(component.text()).toContain('vue')
+      })
+
+      const results = await runAxe(component)
+      expect(results.violations).toEqual([])
+    })
+
+    it('should have no accessibility violations when unavailable', async () => {
+      clearNuxtData()
+      registerEndpoint('/api/leaderboard/likes', () => [])
+
+      const component = await mountSuspended(LikesLeaderboardPage, {
+        route: '/leaderboard/likes',
+      })
+
+      await vi.waitFor(() => {
+        expect(component.text()).toContain('No likes leaderboard yet')
+      })
+
+      const results = await runAxe(component)
+      expect(results.violations).toEqual([])
+    })
   })
 
   describe('TagRadioButton', () => {
@@ -998,6 +1065,22 @@ describe('component accessibility audits', () => {
 
       const results = await runAxe(wrapper)
       expect(results.violations).toEqual([])
+    })
+
+    describe('PackageTimelineChart', () => {
+      it('should have no accessibility violations', async () => {
+        const wrapper = await mountSuspended(PackageTimelineChart, {
+          props: {
+            sizeCache: new Map(),
+            versionSubEvents: new Map(),
+            timelineEntries: [],
+            selectedVersion: null,
+            loading: false,
+          },
+        })
+        const results = await runAxe(wrapper)
+        expect(results.violations).toEqual([])
+      })
     })
 
     describe('FacetBarChart', () => {
