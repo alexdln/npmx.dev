@@ -356,6 +356,7 @@
     "website": "Website",
     "website_placeholder": "https://example.com",
     "likes": "Likes",
+    "tabs": "Profile tabs",
     "seo_title": "{handle} - npmx",
     "seo_description": "npmx profile by {handle}",
     "not_found": "Profile Not Found",
@@ -368,6 +369,17 @@
     "sponsors": {
       "title": "Sponsors",
       "no_sponsors": "No sponsors found"
+    },
+    "ecosystem": {
+      "title": "Ecosystem",
+      "empty": "No ecosystem accounts found"
+    },
+    "nested": {
+      "title": "Nested",
+      "empty": "No nested accounts found"
+    },
+    "related_accounts": {
+      "unknown": "Unknown account"
     }
   },
   "package": {

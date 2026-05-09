@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AccountEntry } from '~/components/Profile/AccountsList.vue'
+import type { ProfileAccountEntry } from '~/components/Profile/RelatedAccountsList.vue'
 
 const route = useRoute()
 const identity = computed(() => route.params.identity)
@@ -26,16 +26,16 @@ if (!profile.value || profileError.value?.statusCode === 404) {
 }
 
 const {
-  data: sponsors,
-  status: sponsorsStatus,
-  error: sponsorsError,
-} = await useFetch<AccountEntry[]>(() => `/api/social/profile/${identity.value}/sponsors`, {
+  data: nested,
+  status: nestedStatus,
+  error: nestedError,
+} = await useFetch<ProfileAccountEntry[]>(() => `/api/social/profile/${identity.value}/nested`, {
   default: () => [],
 })
 
 useSeoMeta({
-  title: () => `${identity.value} sponsors - npmx`,
-  description: () => `Sponsors supporting ${identity.value}`,
+  title: () => `${identity.value} nested - npmx`,
+  description: () => `Nested accounts for ${identity.value}`,
 })
 </script>
 
@@ -44,17 +44,17 @@ useSeoMeta({
     <ProfileHeader
       :profile="profile"
       :identity="identity"
-      active-tab="sponsors"
+      active-tab="nested"
       :can-edit="user?.handle === profile?.handle"
       @update-profile="profile = $event"
     />
 
     <section class="flex flex-col gap-8 mt-8">
       <ProfileAccountsList
-        :entries="sponsors"
-        :status="sponsorsStatus"
-        :error="sponsorsError"
-        :empty-label="$t('profile.sponsors.no_sponsors')"
+        :entries="nested"
+        :status="nestedStatus"
+        :error="nestedError"
+        :empty-label="$t('profile.nested.empty')"
       />
     </section>
   </main>

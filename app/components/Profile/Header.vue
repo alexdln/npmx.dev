@@ -7,7 +7,7 @@ const props = withDefaults(
   defineProps<{
     profile: NPMXProfile
     identity: string
-    activeTab: 'likes' | 'sponsors'
+    activeTab: 'likes' | 'sponsors' | 'ecosystem' | 'nested'
     canEdit?: boolean
   }>(),
   {
@@ -89,6 +89,16 @@ const profileTabs = computed(() => [
     key: 'sponsors',
     label: $t('profile.sponsors.title'),
     to: `/profile/${props.identity}/sponsors`,
+  },
+  {
+    key: 'ecosystem',
+    label: $t('profile.ecosystem.title'),
+    to: `/profile/${props.identity}/ecosystem`,
+  },
+  {
+    key: 'nested',
+    label: $t('profile.nested.title'),
+    to: `/profile/${props.identity}/nested`,
   },
 ])
 
@@ -194,5 +204,5 @@ defineExpose({
     </div>
   </header>
 
-  <TabLinks :aria-label="$t('profile.likes')" :links="profileTabs" :active-key="activeTab" />
+  <TabLinks :aria-label="$t('profile.tabs')" :links="profileTabs" :active-key="activeTab" />
 </template>

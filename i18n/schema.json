@@ -1107,6 +1107,42 @@
             },
             "no_sponsors": {
               "type": "string"
+            },
+            "section_nav": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "ecosystem": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "empty": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "nested": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "empty": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "related_accounts": {
+          "type": "object",
+          "properties": {
+            "unknown": {
+              "type": "string"
             }
           },
           "additionalProperties": false
