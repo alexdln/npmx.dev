@@ -175,6 +175,66 @@ const timelineLink = computed((): RouteLocationRaw | null => {
   }
 })
 
+const navLinks = computed(() => {
+  const links: {
+    key: 'main' | 'docs' | 'code' | 'diff' | 'timeline'
+    label: string
+    to: RouteLocationRaw
+    ariaKeyshortcuts?: string
+    title?: string
+    class?: string
+  }[] = []
+
+  if (mainLink.value) {
+    links.push({
+      key: 'main',
+      label: $t('package.links.main'),
+      to: mainLink.value,
+      ariaKeyshortcuts: 'm',
+      class: 'lowercase',
+    })
+  }
+
+  if (docsLink.value) {
+    links.push({
+      key: 'docs',
+      label: $t('package.links.docs'),
+      to: docsLink.value,
+      ariaKeyshortcuts: 'd',
+    })
+  }
+
+  if (codeLink.value) {
+    links.push({
+      key: 'code',
+      label: $t('package.links.code'),
+      to: codeLink.value,
+      ariaKeyshortcuts: '.',
+    })
+  }
+
+  if (diffLink.value) {
+    links.push({
+      key: 'diff',
+      label: $t('compare.compare_versions'),
+      to: diffLink.value,
+      ariaKeyshortcuts: 'f',
+      title: $t('compare.compare_versions_title'),
+    })
+  }
+
+  if (timelineLink.value) {
+    links.push({
+      key: 'timeline',
+      label: $t('package.links.timeline'),
+      to: timelineLink.value,
+      ariaKeyshortcuts: 't',
+    })
+  }
+
+  return links
+})
+
 useShortcuts({
   '.': () => codeLink.value,
   'm': () => mainLink.value,
@@ -300,60 +360,14 @@ useShortcuts({
         </div>
       </div>
       <!-- Docs + Code — inline on desktop, floating bottom bar on mobile -->
-      <nav
-        v-if="resolvedVersion"
+      <TabLinks
+        v-if="resolvedVersion && navLinks.length > 0"
         :aria-label="$t('package.navigation')"
-        class="flex gap-4 me-auto -mb-px max-w-full overflow-x-auto"
+        :links="navLinks"
+        :active-key="page"
         :style="navExtraOffsetStyle"
         :class="$style.packageNav"
-      >
-        <LinkBase
-          v-if="mainLink"
-          :to="mainLink"
-          aria-keyshortcuts="m"
-          class="decoration-none border-b-2 p-1 hover:border-accent/50 lowercase focus-visible:[outline-offset:-2px]!"
-          :class="page === 'main' ? 'border-accent text-accent!' : 'border-transparent'"
-        >
-          {{ $t('package.links.main') }}
-        </LinkBase>
-        <LinkBase
-          v-if="docsLink"
-          :to="docsLink"
-          aria-keyshortcuts="d"
-          class="decoration-none border-b-2 p-1 hover:border-accent/50 focus-visible:[outline-offset:-2px]!"
-          :class="page === 'docs' ? 'border-accent text-accent!' : 'border-transparent'"
-        >
-          {{ $t('package.links.docs') }}
-        </LinkBase>
-        <LinkBase
-          v-if="codeLink"
-          :to="codeLink"
-          aria-keyshortcuts="."
-          class="decoration-none border-b-2 p-1 hover:border-accent/50 focus-visible:[outline-offset:-2px]!"
-          :class="page === 'code' ? 'border-accent text-accent!' : 'border-transparent'"
-        >
-          {{ $t('package.links.code') }}
-        </LinkBase>
-        <LinkBase
-          v-if="diffLink"
-          :to="diffLink"
-          :title="$t('compare.compare_versions_title')"
-          aria-keyshortcuts="f"
-          class="decoration-none border-b-2 p-1 hover:border-accent/50 focus-visible:[outline-offset:-2px]!"
-          :class="page === 'diff' ? 'border-accent text-accent!' : 'border-transparent'"
-        >
-          {{ $t('compare.compare_versions') }}
-        </LinkBase>
-        <LinkBase
-          v-if="timelineLink"
-          :to="timelineLink"
-          aria-keyshortcuts="t"
-          class="decoration-none border-b-2 p-1 hover:border-accent/50 focus-visible:[outline-offset:-2px]!"
-          :class="page === 'timeline' ? 'border-accent text-accent!' : 'border-transparent'"
-        >
-          {{ $t('package.links.timeline') }}
-        </LinkBase>
-      </nav>
+      />
     </div>
   </div>
 </template>

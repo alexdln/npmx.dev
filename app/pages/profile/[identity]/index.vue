@@ -80,6 +80,13 @@ async function updateProfile() {
 }
 
 const { data: likes, status } = useProfileLikes(identity)
+const profileTabs = computed(() => [
+  {
+    key: 'likes',
+    label: `${$t('profile.likes')} (${likes.value?.records?.length ?? 0})`,
+    to: { name: 'profile-identity' as const, params: { identity: identity.value } },
+  },
+])
 
 const showInviteSection = computed(() => {
   return (
@@ -233,14 +240,7 @@ defineOgImage(
     </header>
 
     <section class="flex flex-col gap-8">
-      <h2
-        class="font-mono text-2xl sm:text-3xl font-medium min-w-0 break-words"
-        :title="$t('profile.likes')"
-        dir="ltr"
-      >
-        {{ $t('profile.likes') }}
-        <span v-if="likes">({{ likes.records?.length ?? 0 }})</span>
-      </h2>
+      <TabLinks :aria-label="$t('profile.likes')" :links="profileTabs" active-key="likes" />
       <div v-if="status === 'pending'" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <SkeletonBlock v-for="i in 4" :key="i" class="h-16 rounded-lg" />
       </div>
