@@ -145,7 +145,7 @@ defineExpose({
 </script>
 
 <template>
-  <header class="mb-8 pb-8 border-b border-border">
+  <header class="mb-8 pb-8">
     <form v-if="isEditing" class="flex flex-col flex-wrap gap-4" @submit.prevent="updateProfile">
       <label for="displayName" class="text-sm flex flex-col gap-2">
         {{ $t('profile.display_name') }}
@@ -210,4 +210,5 @@ defineExpose({
   </header>
 
   <TabLinks :aria-label="$t('profile.tabs')" :links="profileTabs" :active-key="activeTab" />
+  <span class="block h-px w-full bg-border" />
 </template>
