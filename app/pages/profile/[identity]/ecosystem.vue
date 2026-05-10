@@ -29,7 +29,7 @@ const {
   data: ecosystem,
   status: ecosystemStatus,
   error: ecosystemError,
-} = await useFetch<AccountEntry[]>(() => `/api/social/profile/${identity.value}/ecosystem`, {
+} = await useLazyFetch<AccountEntry[]>(() => `/api/social/profile/${identity.value}/ecosystem`, {
   default: () => [],
 })
 

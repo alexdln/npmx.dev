@@ -29,7 +29,7 @@ const {
   data: sponsors,
   status: sponsorsStatus,
   error: sponsorsError,
-} = await useFetch<AccountEntry[]>(() => `/api/social/profile/${identity.value}/sponsors`, {
+} = await useLazyFetch<AccountEntry[]>(() => `/api/social/profile/${identity.value}/sponsors`, {
   default: () => [],
 })
 

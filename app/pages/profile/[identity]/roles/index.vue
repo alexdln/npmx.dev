@@ -37,7 +37,7 @@ const {
   data: roles,
   status: rolesStatus,
   error: rolesError,
-} = await useFetch<RoleListItem[]>(() => `/api/social/profile/${identity.value}/roles`, {
+} = await useLazyFetch<RoleListItem[]>(() => `/api/social/profile/${identity.value}/roles`, {
   default: () => [],
 })
 

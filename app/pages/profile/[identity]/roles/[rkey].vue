@@ -42,15 +42,9 @@ const {
   data: role,
   error: roleError,
   status: roleStatus,
-} = await useFetch<RoleDetail>(() => `/api/social/profile/${identity.value}/roles/${rkey.value}`)
-
-if (import.meta.server && roleError.value?.statusCode === 404) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: $t('profile.roles.not_found'),
-    message: $t('profile.roles.not_found_message', { handle: identity.value }),
-  })
-}
+} = await useLazyFetch<RoleDetail>(
+  () => `/api/social/profile/${identity.value}/roles/${rkey.value}`,
+)
 
 const assignees = computed(() => {
   const list = role.value?.users.list

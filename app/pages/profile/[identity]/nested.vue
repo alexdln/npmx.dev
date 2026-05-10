@@ -29,7 +29,7 @@ const {
   data: nested,
   status: nestedStatus,
   error: nestedError,
-} = await useFetch<AccountEntry[]>(() => `/api/social/profile/${identity.value}/nested`, {
+} = await useLazyFetch<AccountEntry[]>(() => `/api/social/profile/${identity.value}/nested`, {
   default: () => [],
 })
 
