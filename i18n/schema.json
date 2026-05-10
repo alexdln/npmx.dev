@@ -1159,12 +1159,6 @@
             "seo_description": {
               "type": "string"
             },
-            "not_found": {
-              "type": "string"
-            },
-            "not_found_message": {
-              "type": "string"
-            },
             "detail_seo_fallback": {
               "type": "string"
             },

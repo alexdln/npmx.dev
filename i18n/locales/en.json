@@ -385,8 +385,6 @@
       "title": "Roles",
       "empty": "No roles defined",
       "seo_description": "Roles managed by {handle}",
-      "not_found": "Role not found",
-      "not_found_message": "This role does not exist or was removed.",
       "detail_seo_fallback": "Role for {handle} on npmx",
       "back_to_list": "All roles",
       "assignees": "Assignees",
