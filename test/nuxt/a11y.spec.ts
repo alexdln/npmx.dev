@@ -219,6 +219,9 @@ import {
   PackageVersions,
   PackageVulnerabilityTree,
   PaginationControls,
+  ProfileHeader,
+  ProfileAccountsList,
+  TabLinks,
   ProgressBar,
   ProvenanceBadge,
   Readme,
@@ -2206,6 +2209,72 @@ describe('component accessibility audits', () => {
           pageSize: 10,
           currentPage: 5,
           totalItems: 200,
+        },
+      })
+      const results = await runAxe(component)
+      expect(results.violations).toEqual([])
+    })
+  })
+
+  describe('ProfileHeader', () => {
+    it('should have no accessibility violations', async () => {
+      const mockProfile = {
+        handle: 'test',
+        displayName: 'Test',
+        description: 'Test description',
+        website: 'https://test.com',
+        recordExists: true,
+      }
+      const component = await mountSuspended(ProfileHeader, {
+        props: {
+          profile: mockProfile,
+          identity: 'test',
+          activeTab: 'likes',
+        },
+      })
+      const results = await runAxe(component)
+      expect(results.violations).toEqual([])
+    })
+  })
+
+  describe('ProfileAccountsList', () => {
+    it('should have no accessibility violations', async () => {
+      const mockAccounts = [
+        {
+          account: {
+            handle: 'test',
+            displayName: 'Test',
+            description: 'Test description',
+            website: 'https://test.com',
+          },
+        },
+      ]
+      const component = await mountSuspended(ProfileAccountsList, {
+        props: {
+          entries: mockAccounts,
+          status: 'success',
+          emptyLabel: 'No accounts found',
+        },
+      })
+
+      const results = await runAxe(component)
+      expect(results.violations).toEqual([])
+    })
+  })
+
+  describe('TabLinks', () => {
+    it('should have no accessibility violations', async () => {
+      const mockLinks = [
+        {
+          key: 'likes',
+          label: 'Likes',
+          to: '/profile/test/likes',
+        },
+      ]
+      const component = await mountSuspended(TabLinks, {
+        props: {
+          links: mockLinks,
+          activeKey: 'likes',
         },
       })
       const results = await runAxe(component)
