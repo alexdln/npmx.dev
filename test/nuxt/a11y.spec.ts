@@ -2268,7 +2268,7 @@ describe('component accessibility audits', () => {
         {
           key: 'likes',
           label: 'Likes',
-          to: '/profile/test/likes',
+          to: '/profile/test',
         },
       ]
       const component = await mountSuspended(TabLinks, {
