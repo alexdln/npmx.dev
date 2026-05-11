@@ -2,7 +2,7 @@
 import type { Theme as VueDataUiTheme } from 'vue-data-ui'
 import { VueUiXy, type VueUiXyConfig, type VueUiXyDatasetItem } from 'vue-data-ui/vue-ui-xy'
 import { useDebounceFn, useElementSize, useTimeoutFn } from '@vueuse/core'
-import { useCssVariables } from '~/composables/useColors'
+import { useColors } from '~/composables/useColors'
 import { OKLCH_NEUTRAL_FALLBACK, transparentizeOklch, lightenOklch } from '~/utils/colors'
 import { getFrameworkColor, isListedFramework } from '~/utils/frameworks'
 import { drawNpmxLogoAndTaglineWatermark } from '~/composables/useChartWatermark'
@@ -25,6 +25,7 @@ import {
 } from '~/utils/chart-data-prediction'
 import { applyBlocklistCorrection, getAnomaliesForPackages } from '~/utils/download-anomalies'
 import { copyAltTextForTrendLineChart, sanitise, loadFile, applyEllipsis } from '~/utils/charts'
+import { useChartTooltipPosition } from '~/composables/useChartTooltipPosition'
 
 import('vue-data-ui/style.css')
 
@@ -67,6 +68,8 @@ const resolvedMode = shallowRef<'light' | 'dark'>('light')
 const rootEl = shallowRef<HTMLElement | null>(null)
 const isZoomed = shallowRef(false)
 
+const chartRef = useTemplateRef('chartRef')
+
 function setIsZoom({ isZoom }: { isZoom: boolean }) {
   isZoomed.value = isZoom
 }
@@ -89,23 +92,7 @@ onMounted(async () => {
   loadMetric(selectedMetric.value)
 })
 
-const { colors } = useCssVariables(
-  [
-    '--bg',
-    '--fg',
-    '--bg-subtle',
-    '--bg-elevated',
-    '--fg-subtle',
-    '--fg-muted',
-    '--border',
-    '--border-subtle',
-  ],
-  {
-    element: rootEl,
-    watchHtmlAttributes: true,
-    watchResize: false,
-  },
-)
+const { colors } = useColors(rootEl)
 
 watch(
   () => colorMode.value,
@@ -1077,6 +1064,7 @@ const normalisedDataset = computed(() => {
   const lastDateMs = chartData.value.dates.at(-1) ?? 0
   const isAbsoluteMetric = selectedMetric.value === 'contributors'
 
+  // oxlint-disable-next-line oxc-no-map-spread
   return (chartData.value.dataset || []).map(d => {
     const series = applyDataPipeline(
       d.series.map(v => v ?? 0),
@@ -1384,6 +1372,10 @@ watch(
   { immediate: true },
 )
 
+const tooltipPosition = useChartTooltipPosition(chartRef)
+
+const keepZoomState = shallowRef(true)
+
 // VueUiXy chart component configuration
 const chartConfig = computed<VueUiXyConfig>(() => {
   return {
@@ -1517,6 +1509,9 @@ const chartConfig = computed<VueUiXyConfig>(() => {
       legend: { show: false, position: 'top' },
       tooltip: {
         teleportTo: props.inModal ? '#chart-modal' : undefined,
+        position: tooltipPosition.value,
+        offsetX: 24,
+        offsetY: isMultiPackageMode.value ? undefined : -24,
         borderColor: 'transparent',
         backdropFilter: false,
         backgroundColor: 'transparent',
@@ -1580,6 +1575,7 @@ const chartConfig = computed<VueUiXyConfig>(() => {
         maxWidth: isMobile.value ? 350 : 500,
         highlightColor: colors.value.bgElevated,
         useResetSlot: true,
+        keepState: keepZoomState.value,
         minimap: {
           show: true,
           lineColor: '#FAFAFA',
@@ -1630,6 +1626,28 @@ const isSparklineLayout = computed({
   set: (v: boolean) => {
     chartLayout.value = v ? 'split' : 'combined'
   },
+})
+
+const { start: resetZoomState } = useTimeoutFn(
+  () => {
+    keepZoomState.value = true
+  },
+  1000,
+  { immediate: false },
+)
+
+async function resetZoom() {
+  keepZoomState.value = false
+  await nextTick()
+  chartRef.value?.resetZoom?.()
+  resetZoomState()
+}
+
+onMounted(resetZoom)
+
+watch([selectedGranularity, startDate, endDate], async () => {
+  if (!isMounted.value) return
+  await resetZoom()
 })
 </script>
 
@@ -1929,6 +1947,7 @@ const isSparklineLayout = computed({
           :aria-labelledby="isMultiPackageMode ? 'combined-chart-layout-tab' : undefined"
         >
           <VueUiXy
+            ref="chartRef"
             :dataset="normalisedDataset"
             :config="chartConfig"
             :class="{
