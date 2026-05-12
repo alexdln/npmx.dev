@@ -50,6 +50,8 @@
     "@atproto/lex": "0.0.20",
     "@atproto/lex-password-session": "0.0.8",
     "@atproto/oauth-client-node": "^0.3.15",
+    "@atview/core": "./atview-core-0.0.1.tgz",
+    "@atview/vue": "./atview-vue-0.0.1.tgz",
     "@deno/doc": "jsr:^0.189.1",
     "@floating-ui/vue": "1.1.11",
     "@iconify-json/lucide": "1.2.98",

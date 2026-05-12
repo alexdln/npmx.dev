@@ -114,7 +114,7 @@ const postUrl = computed(() => {
     :href="postUrl ?? '#'"
     target="_blank"
     rel="noopener noreferrer"
-    class="not-prose block my-4 rounded-lg border border-border bg-bg-subtle p-4 sm:p-5 no-underline hover:border-border-hover transition-colors duration-200 relative group"
+    class="not-prose block my-4 rounded-lg border border-border bg-bg-subtle p-4 sm:p-5 no-underline! hover:border-border-hover transition-colors duration-200 relative group"
   >
     <!-- Bluesky icon -->
     <span
