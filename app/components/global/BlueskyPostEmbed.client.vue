@@ -37,7 +37,13 @@ interface BlueskyPost {
   uri: string
   author: PostAuthor
   record: { text: string; createdAt: string }
-  embed?: { $type: string; images?: EmbedImage[]; external?: EmbedExternal }
+  embed?: {
+    $type: string
+    images?: EmbedImage[]
+    external?: EmbedExternal
+    thumbnail?: string
+    aspectRatio?: { width: number; height: number }
+  }
   likeCount?: number
   replyCount?: number
   repostCount?: number
@@ -88,6 +94,7 @@ const { data: post, status } = useAsyncData(
 )
 
 const postUrl = computed(() => {
+  console.log('postValue', post.value)
   // Prefer the explicit URL prop if provided
   if (props.url) return props.url
 
@@ -178,6 +185,25 @@ const postUrl = computed(() => {
           <p v-if="post.embed.external.description" class="text-sm line-clamp-2 mt-1">
             {{ post.embed.external.description }}
           </p>
+        </div>
+      </div>
+    </template>
+
+    <!-- Embedded video -->
+    <template v-if="post.embed?.thumbnail">
+      <div class="relative block mb-3 p-0.5 bg-bg-muted rounded-lg">
+        <img
+          :src="post.embed.thumbnail"
+          alt=""
+          class="w-full rounded-lg object-cover"
+          :height="post.embed.aspectRatio?.height"
+          :width="post.embed.aspectRatio?.width"
+          loading="lazy"
+        />
+        <div
+          class="absolute inset-0 bg-bg/50 flex items-center justify-center text-fg text-sm font-medium"
+        >
+          Click to watch video on Bluesky
         </div>
       </div>
     </template>
