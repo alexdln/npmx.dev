@@ -1,5 +1,5 @@
 import { Agent, CredentialSession } from '@atproto/api'
-import { isStandardSiteMain, type StandardDocument } from '@atview/core'
+import { isStandardSiteDetailed, type StandardDocument } from '@atview/core'
 import * as site from '#shared/types/lexicons/site'
 
 import { getPdsEndpointFromPlcDoc } from '~~/server/utils/plc-pds-endpoint'
@@ -47,7 +47,7 @@ export default defineEventHandler(async event => {
   })
 
   const records = posts.data.records
-    .filter(record => isStandardSiteMain(record.value))
+    .filter(record => isStandardSiteDetailed(record.value))
     .map(record => {
       const value = record.value as StandardDocument
       return {
