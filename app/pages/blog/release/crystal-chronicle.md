@@ -4,8 +4,10 @@ authors:
     blueskyHandle: alexdln.com
   - name: Willow (GHOST)
     blueskyHandle: willow.sh
-  - name: Matias Capeletto
-    blueskyHandle: patak.cat
+  - name: James
+    blueskyHandle: 43081j.com
+  - name: Alec Lloyd Probert
+    blueskyHandle: graphieros.npmx.social
 title: 'npmx crystal chronicle'
 tags: ['OpenSource', 'Release']
 excerpt: '100 days, 100K visitors, npmx v11, and dozens of new features shaping the future of developer tooling'
@@ -36,12 +38,6 @@ When it comes to growth, one of the most important metrics is change rather than
 
 <BlueskyPostEmbed url="https://bsky.app/profile/graphieros.npmx.social/post/3mllmom2zfk2v" />
 
-### Scatter with selectable axis
-
-The community has always been a key part of npmx. And we’re incredibly excited to work together to create the perfect experience. In the last release, we added a package comparison chart with the scoring system. This chart, given the specific nature of any comparison, received a lot of feedback from the community. To make the experience more comprehensive and convenient, we’ve made it so you can now choose what and how you want to compare.
-
-<BlueskyPostEmbed url="https://bsky.app/profile/graphieros.npmx.social/post/3mjzlmesrts2f" />
-
 ### Module replacements v3
 
 Another important part of npmx collaborations is our connection with the community to optimize dependencies. Thanks to this close relationship, you will see even more, and even more detailed, suggestions from the community for dependency optimization. You can now also browse them all independently at [replacements.fyi](https://replacements.fyi/)
@@ -65,6 +61,12 @@ To make the ecosystem experience more convenient, you can now add the package ma
 And now, for example, when you follow links from pnpm, you’ll immediately get the expected commands for quick copying and getting started with the package.
 
 <BlueskyPostEmbed url="https://bsky.app/profile/pnpm.io/post/3mjhihoyjwc2w" />
+
+### Scatter with selectable axis
+
+The community has always been a key part of npmx. And we’re incredibly excited to work together to create the perfect experience. In the last release, we added a package comparison chart with the scoring system. This chart, given the specific nature of any comparison, received a lot of feedback from the community. To make the experience more comprehensive and convenient, we’ve made it so you can now choose what and how you want to compare.
+
+<BlueskyPostEmbed url="https://bsky.app/profile/graphieros.npmx.social/post/3mjzlmesrts2f" />
 
 ### And much more
 

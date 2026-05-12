@@ -94,7 +94,6 @@ const { data: post, status } = useAsyncData(
 )
 
 const postUrl = computed(() => {
-  console.log('postValue', post.value)
   // Prefer the explicit URL prop if provided
   if (props.url) return props.url
 
@@ -201,7 +200,7 @@ const postUrl = computed(() => {
           loading="lazy"
         />
         <div
-          class="absolute inset-0 bg-bg/50 flex items-center justify-center text-fg text-sm font-medium"
+          class="absolute inset-0 bg-bg/60 light:bg-bg/80 flex items-center justify-center text-fg font-medium"
         >
           Click to watch video on Bluesky
         </div>
