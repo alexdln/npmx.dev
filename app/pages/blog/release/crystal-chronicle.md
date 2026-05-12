@@ -20,7 +20,7 @@ draft: false
 
 # npmx 0.11 crystal chronicle
 
-Hard to believe we started [npmx](https://npmx.dev) 100 days ago, and now more than 100K monthly visitors are using the tool. By GitHub contributors, we’re [the fastest-growing emerging open source organizations](osscar.dev). It seems like a good moment for another release. We’re happy to share that npmx 0.11 is out! For many of us, it feels as though both the product and the community building it have always been there. But a few months ago, the idea of a new browser for [npmjs.com](https://npmjs.com/) wasn’t even on the table. This past month, npmx continued improving towards a beta milestone, focusing on performance, accessibility, and stability. But the number of new features added in npmx [0.9], [0.10], [0.11] isn’t slowing down. We’ll walk through them in the post.
+Hard to believe we started [npmx](https://npmx.dev) 100 days ago, and now more than 100K monthly visitors are using the tool. By GitHub contributors, we’re [the fastest-growing emerging open source organizations](osscar.dev). It seems like a good moment for another release. We’re happy to share that npmx 0.11 is out! For many of us, it feels as though both the product and the community building it have always been there. But a few months ago, the idea of a new browser for [npmjs.com](https://npmjs.com/) wasn’t even on the table. This past month, npmx continued improving towards a beta milestone, focusing on performance, accessibility, and stability. But the number of new features added in npmx [0.9](https://github.com/npmx-dev/npmx.dev/releases/tag/v0.9.0), [0.10](https://github.com/npmx-dev/npmx.dev/releases/tag/v0.10.0), and [0.11](https://github.com/npmx-dev/npmx.dev/releases/tag/v0.11.0) isn’t slowing down. We’ll walk through them in the post.
 
 Over the past months, we all felt empowered by seeing npmx take off and the reaction from the ecosystem. It makes a huge difference in our lives as maintainers to use tools we can fix and extend. We have a new shared commons where we can share ideas and implement features to improve how we work. Not only for ourselves, but for everyone else, too.
 
@@ -87,7 +87,7 @@ Speaking about the development of npmx, we can’t skip plans and the future. An
 
 ![image.png](/blog/team-edinburgh.jpg)
 
-We spoke about organising in-person meetups, to share ideas over pizza and drinks. We actually did a social before CityJS London in April, it was great fun to get together as a community, even if it was only a few of us due to the very last minute organising. We’re thinking of organising a meetup in London in June, one in Berlin before Local First conf in July, and even one in Paris sometime after Berlin.
+We spoke about organising in-person meetups, to share ideas over pizza and drinks. We actually did a social before CityJS London in April, it was great fun to get together as a community, even if it was only a few of us due to the very last minute organising. If all goes well, we may have meetups in London, Berlin, and Paris in the next months. Join the community if you'd like to participate, help or organise other events.
 
 <BlueskyPostEmbed url="https://bsky.app/profile/willow.sh/post/3mjmelcxnas2m" />
 
@@ -105,4 +105,4 @@ We’re also continuing to work on the community atmosphere in our discord. We�
 
 We continue to not only improve our registry browsing experience but also add completely new functionality to our everyday experience. And none of this would be possible without community. And if you want to help us improve the experience of developers, join us:
 
-[Site](https://npmx.dev/) • [Discord](https://chat.npmx.dev/) • [GitHub](https://repo.npmx.dev/) • [Bluesky](https://social.npmx.dev/)
+[Site](https://npmx.dev/) • [Builders Discord](https://build.npmx.dev/) • [GitHub](https://repo.npmx.dev/) • [Bluesky](https://social.npmx.dev/)
