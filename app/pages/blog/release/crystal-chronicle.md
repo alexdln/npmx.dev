@@ -30,7 +30,7 @@ We had many conversations, encouraged by npmx’s success, about what else we co
 
 ## What’s new?
 
-Together, we’ve become a truly large service, and to keep the user experience higher-quality and more predictable, we’ve switched to planned [milestone releases](https://github.com/orgs/npmx-dev/projects/1). Each milestone includes several [releases or hotfixes](https://github.com/npmx-dev/npmx.dev/releases), and each release is assembled separately. When a milestone is completed, we’ll share in our [blog](https://npmx.dev/blog) the most important changes in the project and the community.
+To keep a high-quality and predictable user experience, we’ve switched to planned [milestone releases](https://github.com/orgs/npmx-dev/projects/1). Each milestone includes several [releases or hotfixes](https://github.com/npmx-dev/npmx.dev/releases), and each release is assembled separately. When a milestone is completed, we’ll share in our [blog](https://npmx.dev/blog) the most important changes in the project and the community.
 
 ### Timeline tab
 
