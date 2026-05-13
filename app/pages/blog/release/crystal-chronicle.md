@@ -40,7 +40,7 @@ When it comes to growth, one of the most important metrics is change rather than
 
 ### Module replacements v3
 
-Another important part of npmx collaborations is our connection with the community to optimize dependencies. Thanks to this close relationship, you will see even more, and even more detailed, suggestions from the community for dependency optimization. You can now also browse them all independently at [replacements.fyi](https://replacements.fyi/)
+Another important part of npmx collaborations is our connection with the [e18e community](https://e18e.dev) . Thanks to this close relationship, you will see more detailed suggestions to optimize your dependencies as we switched to the new version of module replacements. They also now let you browse them all independently at [replacements.fyi](https://replacements.fyi/)
 
 <BlueskyPostEmbed url="https://bsky.app/profile/43081j.com/post/3mkietfufb22f" />
 
