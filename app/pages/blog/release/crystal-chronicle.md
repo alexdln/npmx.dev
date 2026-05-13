@@ -10,11 +10,11 @@ authors:
     blueskyHandle: graphieros.npmx.social
 title: 'npmx crystal chronicle'
 tags: ['OpenSource', 'Release']
-excerpt: '100 days, 100K visitors, npmx v11, and dozens of new features shaping the future of developer tooling'
+excerpt: 'npmx 0.11 is out! This past month, npmx continued improving towards a beta milestone, focusing on performance, accessibility, and stability'
 date: '2026-05-13'
 slug: 'release/crystal-chronicle'
 image: 'https://npmx.dev/blog/og/release-crystal-chronicle.png'
-description: '100 days, 100K visitors, npmx v11, and dozens of new features shaping the future of developer tooling'
+description: 'npmx 0.11 is out! This past month, npmx continued improving towards a beta milestone, focusing on performance, accessibility, and stability'
 draft: false
 ---
 
