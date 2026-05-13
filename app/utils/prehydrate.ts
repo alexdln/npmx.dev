@@ -39,6 +39,12 @@ export function initPreferencesOnPrehydrate() {
       document.documentElement.dataset.bgTheme = preferredBackgroundTheme
     }
 
+    // Apply foreground accent
+    const preferredForegroundTheme = settings.preferredForegroundTheme
+    if (preferredForegroundTheme) {
+      document.documentElement.dataset.fgTheme = preferredForegroundTheme
+    }
+
     let pm = 'npm'
 
     // Support package manager preference in query string (for example, ?pm=pnpm)
