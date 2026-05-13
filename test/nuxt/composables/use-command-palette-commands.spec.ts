@@ -168,6 +168,9 @@ describe('useCommandPaletteCommands', () => {
     expect(flatCommands.value.find(command => command.id === 'background-themes')?.badge).toBe(
       'Neutral',
     )
+    expect(flatCommands.value.find(command => command.id === 'foreground-themes')?.badge).toBe(
+      'Standard',
+    )
 
     wrapper.unmount()
   })
@@ -465,6 +468,22 @@ describe('useCommandPaletteCommands', () => {
       flatCommands.value.find(command => command.id === 'background-theme:neutral')?.active,
     ).toBe(true)
     expect(flatCommands.value.find(command => command.id === 'background-theme:stone')).toBeTruthy()
+
+    wrapper.unmount()
+  })
+
+  it('shows foreground theme commands on the foreground theme subpage', async () => {
+    const { wrapper, groupedCommands, flatCommands } = await captureCommandPalette({
+      view: 'foreground-themes',
+    })
+
+    expect(groupedCommands.value.map(group => group.id)).toEqual(['settings'])
+    expect(
+      flatCommands.value.find(command => command.id === 'foreground-theme:standard')?.active,
+    ).toBe(true)
+    expect(
+      flatCommands.value.find(command => command.id === 'foreground-theme:contrast'),
+    ).toBeTruthy()
 
     wrapper.unmount()
   })

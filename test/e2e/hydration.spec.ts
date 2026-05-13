@@ -72,6 +72,20 @@ test.describe('Hydration', () => {
     }
   })
 
+  // Default: null → test "contrast"
+  test.describe('foreground theme: contrast', () => {
+    for (const page of PAGES) {
+      test(`${page}`, async ({ page: pw, goto, hydrationErrors }) => {
+        await injectLocalStorage(pw, {
+          'npmx-settings': JSON.stringify({ preferredForegroundTheme: 'contrast' }),
+        })
+        await goto(page, { waitUntil: 'hydration' })
+
+        expect(hydrationErrors).toEqual([])
+      })
+    }
+  })
+
   // Default: "npm" → test "pnpm"
   test.describe('package manager: pnpm', () => {
     for (const page of PAGES) {

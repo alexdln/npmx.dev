@@ -231,6 +231,7 @@ import {
   SelectField,
   SettingsAccentColorPicker,
   SettingsBgThemePicker,
+  SettingsFgThemePicker,
   SettingsToggle,
   TagStatic,
   TagRadioButton,
@@ -2573,6 +2574,14 @@ describe('component accessibility audits', () => {
     })
   })
 
+  describe('SettingsFgThemePicker', () => {
+    it('should have no accessibility violations', async () => {
+      const component = await mountSuspended(SettingsFgThemePicker)
+      const results = await runAxe(component)
+      expect(results.violations).toEqual([])
+    })
+  })
+
   describe('TooltipBase', () => {
     it('should have no accessibility violations when hidden', async () => {
       const component = await mountSuspended(TooltipBase, {
@@ -4395,6 +4404,10 @@ describe('background theme accessibility', () => {
     {
       name: 'SettingsBgThemePicker',
       mount: () => mountSuspended(SettingsBgThemePicker),
+    },
+    {
+      name: 'SettingsFgThemePicker',
+      mount: () => mountSuspended(SettingsFgThemePicker),
     },
     {
       name: 'ProvenanceBadge',
