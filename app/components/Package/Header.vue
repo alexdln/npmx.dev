@@ -2,6 +2,7 @@
 import type { RouteLocationRaw } from 'vue-router'
 import type { CommandPaletteContextCommandInput } from '~/types/command-palette'
 import { SCROLL_TO_TOP_THRESHOLD } from '~/composables/useScrollToTop'
+import { usePackageChangelog } from '~/composables/usePackageChangelog'
 
 const props = defineProps<{
   pkg?: Pick<SlimPackument, 'name' | 'versions' | 'dist-tags'> | null
@@ -10,7 +11,7 @@ const props = defineProps<{
   latestVersion?: SlimVersion | null
   provenanceData?: ProvenanceDetails | null
   provenanceStatus?: string | null
-  page: 'main' | 'docs' | 'code' | 'diff' | 'timeline'
+  page: 'main' | 'docs' | 'code' | 'diff' | 'changelog' | 'timeline'
   versionUrlPattern: string
 }>()
 
@@ -162,22 +163,28 @@ const diffLink = computed((): RouteLocationRaw | null => {
   return diffRoute(props.pkg.name, props.resolvedVersion, props.latestVersion.version)
 })
 
+const { data: changelog } = usePackageChangelog(packageName, requestedVersion)
+
+const changelogLink = computed((): RouteLocationRaw | null => {
+  if (
+    // either changelog.value is available or current page is the changelog
+    !(changelog.value || props.page == 'changelog') ||
+    props.pkg == null ||
+    props.resolvedVersion == null
+  ) {
+    return null
+  }
+  return changelogRoute(props.pkg.name, props.resolvedVersion)
+})
+
 const timelineLink = computed((): RouteLocationRaw | null => {
   if (props.pkg == null || props.resolvedVersion == null) return null
-  const split = props.pkg.name.split('/')
-  return {
-    name: 'timeline',
-    params: {
-      org: split.length === 2 ? split[0] : undefined,
-      packageName: split.length === 2 ? split[1]! : split[0]!,
-      version: props.resolvedVersion,
-    },
-  }
+  return packageTimelineRoute(props.pkg.name, props.resolvedVersion)
 })
 
 const navLinks = computed(() => {
   const links: {
-    key: 'main' | 'docs' | 'code' | 'diff' | 'timeline'
+    key: string
     label: string
     to: RouteLocationRaw
     ariaKeyshortcuts?: string
@@ -223,6 +230,15 @@ const navLinks = computed(() => {
     })
   }
 
+  if (changelogLink.value) {
+    links.push({
+      key: 'changelog',
+      label: $t('package.links.changelog'),
+      to: changelogLink.value,
+      ariaKeyshortcuts: '-',
+    })
+  }
+
   if (timelineLink.value) {
     links.push({
       key: 'timeline',
@@ -241,6 +257,7 @@ useShortcuts({
   'd': () => docsLink.value,
   'c': () => props.pkg && { name: 'compare' as const, query: { packages: props.pkg.name } },
   'f': () => diffLink.value,
+  '-': () => changelogLink.value,
   't': () => timelineLink.value,
 })
 </script>
@@ -295,7 +312,7 @@ useShortcuts({
   </header>
   <div
     ref="header"
-    class="w-full bg-bg sticky top-14 z-10 border-b border-border pt-2"
+    class="w-full bg-bg sticky top-14 z-50 border-b border-border pt-2"
     :class="[$style.packageHeader]"
     data-testid="package-subheader"
   >
