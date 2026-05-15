@@ -7,7 +7,7 @@ const props = withDefaults(
   defineProps<{
     profile: NPMXProfile
     identity: string
-    activeTab: 'likes' | 'sponsors' | 'ecosystem' | 'nested' | 'roles'
+    activeTab: string
     canEdit?: boolean
   }>(),
   {
@@ -104,6 +104,11 @@ const profileTabs = computed(() => [
     key: 'roles',
     label: $t('profile.roles.title'),
     to: `/profile/${props.identity}/roles`,
+  },
+  {
+    key: 'known-accounts',
+    label: $t('profile.known_accounts.title'),
+    to: `/profile/${props.identity}/known-accounts`,
   },
 ])
 

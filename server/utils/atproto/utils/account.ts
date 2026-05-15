@@ -7,6 +7,7 @@ import { AtUri } from '@atproto/syntax'
 import { IdentityUtils } from './identity'
 
 const HEADERS = { 'User-Agent': 'npmx' }
+const LIST_LIMIT = 50
 
 const ACCOUNT_NSID = net.atview.account.actor.$nsid
 
@@ -17,6 +18,7 @@ const SUPPORTED_PROFILE_NSIDS = new Set([
 
 const CACHE_PREFIX = 'atproto-account:'
 const CACHE_ACCOUNT_KEY = (uri: string) => `${CACHE_PREFIX}${uri}`
+const CACHE_ACCOUNTS_LIST_KEY = (did: string) => `${CACHE_PREFIX}${did}:list`
 
 export type AccountActorRecord = app.bsky.actor.profile.Main | net.atview.managed.profile.Main
 
@@ -27,8 +29,7 @@ export type PopulatedAccount = Omit<net.atview.account.actor.Main, 'actor'> & {
   actor: AccountActorRecord
   /** at-uri of the underlying profile record */
   actorUri: string
-  /** Primary handle from Slingshot identity resolution (`handle.invalid` omitted). */
-  handle?: string
+  handle: string | undefined
 }
 
 /**
@@ -90,11 +91,15 @@ export class AccountUtils {
       if (!actorResponse.success) return undefined
 
       let handle: string | undefined
-      try {
-        const miniDoc = await this.identityUtils.getMiniDoc(actorAtUri.host)
-        handle = miniDoc.handle === 'handle.invalid' ? undefined : miniDoc.handle
-      } catch {
-        handle = undefined
+      console.log('actorAtUri', actorAtUri)
+
+      if (app.bsky.actor.profile.$nsid === actorAtUri.collection) {
+        try {
+          const miniDoc = await this.identityUtils.getMiniDoc(actorAtUri.host)
+          handle = miniDoc.handle === 'handle.invalid' ? undefined : miniDoc.handle
+        } catch {
+          handle = undefined
+        }
       }
 
       const populated: PopulatedAccount = {
@@ -124,6 +129,31 @@ export class AccountUtils {
     // todo: improve concurrency
     const populated = await Promise.all(urisFiltered.map(uri => this.populateAccount(uri)))
     return populated.filter(item => item !== undefined)
+  }
+
+  async invalidateAccountsCache(did: string): Promise<void> {
+    await this.cache.delete(CACHE_ACCOUNTS_LIST_KEY(did))
+  }
+
+  /**
+   * Lists all `net.atview.account.actor` records on `minidoc.did`, hydrated.
+   */
+  async getAccounts(
+    minidoc: blue.microcosm.identity.resolveMiniDoc.$OutputBody,
+  ): Promise<PopulatedAccount[]> {
+    const cacheKey = CACHE_ACCOUNTS_LIST_KEY(minidoc.did)
+    const cached = await this.cache.get<PopulatedAccount[]>(cacheKey)
+    if (cached) return cached
+
+    const client = new Client(minidoc.pds, { headers: HEADERS })
+    const response = await client.listRecords(ACCOUNT_NSID, {
+      limit: LIST_LIMIT,
+      repo: minidoc.did,
+    })
+
+    const populated = await this.populateAccounts(response.body.records.map(record => record.uri))
+    await this.cache.set(cacheKey, populated)
+    return populated
   }
 
   async findAccountByActor(repoDid: string, subject: string): Promise<string | undefined> {

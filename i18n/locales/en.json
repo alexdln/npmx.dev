@@ -372,6 +372,10 @@
       "share_button": "Share on Bluesky",
       "compose_text": "Hey {'@'}{handle}! Have you checked out npmx.dev yet? It's a browser for the npm registry that's fast, modern, and open-source.\nhttps://npmx.dev"
     },
+    "known_accounts": {
+      "title": "Known Accounts",
+      "empty": "No accounts found"
+    },
     "sponsors": {
       "title": "Sponsors",
       "no_sponsors": "No sponsors found"

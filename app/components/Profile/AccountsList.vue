@@ -5,6 +5,7 @@ export type AccountEntry = {
     handle?: string
     actor?: {
       handle?: string
+      name?: string
       displayName?: string
       description?: string
     }
@@ -39,6 +40,7 @@ defineProps<{
         <p class="font-mono font-medium truncate">
           {{
             entry.account?.actor?.displayName ||
+            entry.account?.actor?.name ||
             entry.account?.actor?.handle ||
             entry.account?.handle ||
             $t('profile.related_accounts.unknown')

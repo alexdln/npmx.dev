@@ -1120,6 +1120,18 @@
           },
           "additionalProperties": false
         },
+        "known_accounts": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "empty": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
         "sponsors": {
           "type": "object",
           "properties": {
