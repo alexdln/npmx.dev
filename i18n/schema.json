@@ -1306,6 +1306,9 @@
             "empty": {
               "type": "string"
             },
+            "create": {
+              "type": "string"
+            },
             "seo_description": {
               "type": "string"
             },
@@ -1322,9 +1325,6 @@
               "type": "string"
             },
             "add": {
-              "type": "string"
-            },
-            "create": {
               "type": "string"
             },
             "create_dialog": {
