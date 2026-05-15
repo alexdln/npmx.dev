@@ -29,9 +29,13 @@ const {
   data: nested,
   status: nestedStatus,
   error: nestedError,
+  refresh: refreshNested,
 } = await useLazyFetch<AccountEntry[]>(() => `/api/social/profile/${identity.value}/nested`, {
   default: () => [],
 })
+
+const canEdit = computed(() => user.value?.handle === profile.value?.handle)
+const addRelatedAccountDialogRef = useTemplateRef('addRelatedAccountDialogRef')
 
 useSeoMeta({
   title: () => `${identity.value} nested - npmx`,
@@ -50,6 +54,16 @@ useSeoMeta({
     />
 
     <section class="mt-8">
+      <div v-if="canEdit" class="flex justify-end mb-4">
+        <ButtonBase
+          variant="primary"
+          classicon="i-lucide:plus"
+          @click="addRelatedAccountDialogRef?.open"
+        >
+          {{ $t('profile.nested.add') }}
+        </ButtonBase>
+      </div>
+
       <ProfileAccountsList
         :entries="nested"
         :status="nestedStatus"
@@ -57,5 +71,14 @@ useSeoMeta({
         :empty-label="$t('profile.nested.empty')"
       />
     </section>
+
+    <ProfileAddRelatedAccountDialog
+      v-if="canEdit"
+      ref="addRelatedAccountDialogRef"
+      kind="nested"
+      :identity="identity"
+      :entries="nested"
+      @added="refreshNested"
+    />
   </main>
 </template>

@@ -59,11 +59,7 @@ useSeoMeta({
 
     <section class="mt-8">
       <div v-if="canEdit" class="flex justify-end mb-4">
-        <ButtonBase
-          variant="primary"
-          classicon="i-lucide:plus"
-          @click="addAccountDialogRef?.open()"
-        >
+        <ButtonBase variant="primary" classicon="i-lucide:plus" @click="addAccountDialogRef?.open">
           {{ $t('profile.known_accounts.add') }}
         </ButtonBase>
       </div>
@@ -80,7 +76,7 @@ useSeoMeta({
       v-if="canEdit"
       ref="addAccountDialogRef"
       :identity="identity"
-      @added="refreshAccounts()"
+      @added="refreshAccounts"
     />
   </main>
 </template>

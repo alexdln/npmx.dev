@@ -1175,25 +1175,9 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "title",
-                "description",
-                "handle_label",
-                "handle_placeholder",
-                "type_label",
-                "type_user",
-                "type_project",
-                "type_organisation",
-                "type_collective",
-                "submit",
-                "duplicate",
-                "not_found",
-                "self"
-              ],
               "additionalProperties": false
             }
           },
-          "required": ["title", "empty", "add", "add_dialog"],
           "additionalProperties": false
         },
         "sponsors": {
@@ -1204,6 +1188,33 @@
             },
             "no_sponsors": {
               "type": "string"
+            },
+            "add": {
+              "type": "string"
+            },
+            "add_dialog": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "add": {
+                  "type": "string"
+                },
+                "duplicate": {
+                  "type": "string"
+                },
+                "no_known_accounts": {
+                  "type": "string"
+                },
+                "all_added": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
             }
           },
           "additionalProperties": false
@@ -1242,18 +1253,9 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "title",
-                "description",
-                "add",
-                "duplicate",
-                "no_known_accounts",
-                "all_added"
-              ],
               "additionalProperties": false
             }
           },
-          "required": ["title", "empty", "add", "add_dialog"],
           "additionalProperties": false
         },
         "nested": {
@@ -1264,6 +1266,33 @@
             },
             "empty": {
               "type": "string"
+            },
+            "add": {
+              "type": "string"
+            },
+            "add_dialog": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "add": {
+                  "type": "string"
+                },
+                "duplicate": {
+                  "type": "string"
+                },
+                "no_known_accounts": {
+                  "type": "string"
+                },
+                "all_added": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
             }
           },
           "additionalProperties": false
@@ -1291,6 +1320,33 @@
             },
             "no_assignees": {
               "type": "string"
+            },
+            "add": {
+              "type": "string"
+            },
+            "add_dialog": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "add": {
+                  "type": "string"
+                },
+                "duplicate": {
+                  "type": "string"
+                },
+                "no_known_accounts": {
+                  "type": "string"
+                },
+                "all_added": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
             }
           },
           "additionalProperties": false

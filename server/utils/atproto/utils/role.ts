@@ -125,6 +125,14 @@ export class RoleUtils {
     rkey: string,
     accountUri: string,
   ): Promise<{ uri: string }> {
+    const role = await this.getRole(ownerMinidoc, rkey)
+    if (role.users.list.some(user => user.accountUri === accountUri)) {
+      throw createError({
+        statusCode: 409,
+        message: 'Role assignment already exists',
+      })
+    }
+
     const roleUri = `at://${ownerMinidoc.did}/${net.atview.managed.role.$nsid}/${rkey}`
 
     const record = net.atview.account.role.$build({

@@ -70,6 +70,14 @@ export class EcosystemUtils {
     accountUri: string,
     note?: string,
   ): Promise<{ uri: string }> {
+    const existing = await this.getEcosystem(ownerMinidoc)
+    if (existing.some(entry => entry.account?.uri === accountUri)) {
+      throw createError({
+        statusCode: 409,
+        message: 'Ecosystem connection already exists',
+      })
+    }
+
     const record = net.atview.account.ecosystem.$build({
       account: accountUri as AtUriString,
       createdAt: toDatetimeString(new Date()),

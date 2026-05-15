@@ -394,7 +394,16 @@
     },
     "sponsors": {
       "title": "Sponsors",
-      "no_sponsors": "No sponsors found"
+      "no_sponsors": "No sponsors found",
+      "add": "Add sponsor",
+      "add_dialog": {
+        "title": "Add sponsor",
+        "description": "Choose a known account to add as a sponsor.",
+        "add": "Add",
+        "duplicate": "This account is already listed as a sponsor.",
+        "no_known_accounts": "No known accounts yet. Add accounts on the Known Accounts tab first.",
+        "all_added": "All known accounts are already listed as sponsors."
+      }
     },
     "ecosystem": {
       "title": "Ecosystem",
@@ -411,7 +420,16 @@
     },
     "nested": {
       "title": "Nested",
-      "empty": "No nested accounts found"
+      "empty": "No nested accounts found",
+      "add": "Add nested account",
+      "add_dialog": {
+        "title": "Add nested account",
+        "description": "Choose a known account to add as a nested account.",
+        "add": "Add",
+        "duplicate": "This account is already listed as nested.",
+        "no_known_accounts": "No known accounts yet. Add accounts on the Known Accounts tab first.",
+        "all_added": "All known accounts are already listed as nested."
+      }
     },
     "roles": {
       "title": "Roles",
@@ -420,7 +438,16 @@
       "detail_seo_fallback": "Role for {handle} on npmx",
       "back_to_list": "All roles",
       "assignees": "Assignees",
-      "no_assignees": "No assignees yet"
+      "no_assignees": "No assignees yet",
+      "add": "Add assignee",
+      "add_dialog": {
+        "title": "Add assignee",
+        "description": "Choose a known account to assign to this role.",
+        "add": "Add",
+        "duplicate": "This account is already assigned to this role.",
+        "no_known_accounts": "No known accounts yet. Add accounts on the Known Accounts tab first.",
+        "all_added": "All known accounts are already assigned to this role."
+      }
     },
     "related_accounts": {
       "unknown": "Unknown account"

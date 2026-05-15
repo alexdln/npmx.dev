@@ -35,7 +35,7 @@ const {
 })
 
 const canEdit = computed(() => user.value?.handle === profile.value?.handle)
-const addEcosystemDialogRef = useTemplateRef('addEcosystemDialogRef')
+const addRelatedAccountDialogRef = useTemplateRef('addRelatedAccountDialogRef')
 
 useSeoMeta({
   title: () => `${identity.value} ecosystem - npmx`,
@@ -58,7 +58,7 @@ useSeoMeta({
         <ButtonBase
           variant="primary"
           classicon="i-lucide:plus"
-          @click="addEcosystemDialogRef?.open()"
+          @click="addRelatedAccountDialogRef?.open"
         >
           {{ $t('profile.ecosystem.add') }}
         </ButtonBase>
@@ -72,12 +72,13 @@ useSeoMeta({
       />
     </section>
 
-    <ProfileAddEcosystemAccountDialog
+    <ProfileAddRelatedAccountDialog
       v-if="canEdit"
-      ref="addEcosystemDialogRef"
+      ref="addRelatedAccountDialogRef"
+      kind="ecosystem"
       :identity="identity"
-      :ecosystem="ecosystem"
-      @added="refreshEcosystem()"
+      :entries="ecosystem"
+      @added="refreshEcosystem"
     />
   </main>
 </template>

@@ -67,6 +67,14 @@ export class SponsorUtils {
     accountUri: string,
     note?: string,
   ): Promise<{ uri: string }> {
+    const existing = await this.getSponsors(ownerMinidoc)
+    if (existing.some(entry => entry.account?.uri === accountUri)) {
+      throw createError({
+        statusCode: 409,
+        message: 'Sponsor connection already exists',
+      })
+    }
+
     const record = net.atview.account.sponsor.$build({
       account: accountUri as AtUriString,
       createdAt: toDatetimeString(new Date()),

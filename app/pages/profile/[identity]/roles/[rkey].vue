@@ -15,7 +15,7 @@ type RoleDetail = {
 
 const route = useRoute()
 const identity = computed(() => route.params.identity)
-const rkey = computed(() => route.params.rkey?.toString() ?? '')
+const rkey = computed(() => route.params.rkey?.toString() || '')
 const { user } = useAtproto()
 
 const { data: profile, error: profileError } = await useFetch<NPMXProfile>(
@@ -42,9 +42,13 @@ const {
   data: role,
   error: roleError,
   status: roleStatus,
+  refresh: refreshRole,
 } = await useLazyFetch<RoleDetail>(
   () => `/api/social/profile/${identity.value}/roles/${rkey.value}`,
 )
+
+const canEdit = computed(() => user.value?.handle === profile.value?.handle)
+const addRelatedAccountDialogRef = useTemplateRef('addRelatedAccountDialogRef')
 
 const assignees = computed(() => {
   const list = role.value?.users.list
@@ -105,9 +109,19 @@ useSeoMeta({
         </header>
 
         <div class="mt-8">
-          <h2 class="font-mono uppercase text-fg-muted mb-4">
-            {{ $t('profile.roles.assignees') }}
-          </h2>
+          <div class="flex items-center justify-between gap-4 mb-4">
+            <h2 class="font-mono uppercase text-fg-muted">
+              {{ $t('profile.roles.assignees') }}
+            </h2>
+            <ButtonBase
+              v-if="canEdit"
+              variant="primary"
+              classicon="i-lucide:plus"
+              @click="addRelatedAccountDialogRef?.open"
+            >
+              {{ $t('profile.roles.add') }}
+            </ButtonBase>
+          </div>
           <ProfileAccountsList
             :entries="assignees"
             :status="roleStatus"
@@ -117,5 +131,15 @@ useSeoMeta({
         </div>
       </template>
     </section>
+
+    <ProfileAddRelatedAccountDialog
+      v-if="canEdit"
+      ref="addRelatedAccountDialogRef"
+      kind="role"
+      :identity="identity"
+      :role-rkey="rkey"
+      :entries="assignees"
+      @added="refreshRole"
+    />
   </main>
 </template>

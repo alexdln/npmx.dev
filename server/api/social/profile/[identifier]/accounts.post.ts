@@ -20,10 +20,6 @@ export default eventHandlerWithOAuthSession(async (event, oAuthSession) => {
   }
 
   const ownerMinidoc = await new IdentityUtils().getMiniDoc(identifier)
-  if (ownerMinidoc.did !== loggedInDid) {
-    throw createError({ statusCode: 403, statusMessage: 'Forbidden' })
-  }
-
   const body = await readBody(event)
   const handle = body.handle?.replace(/^@/, '').trim()
 

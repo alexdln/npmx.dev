@@ -29,9 +29,13 @@ const {
   data: sponsors,
   status: sponsorsStatus,
   error: sponsorsError,
+  refresh: refreshSponsors,
 } = await useLazyFetch<AccountEntry[]>(() => `/api/social/profile/${identity.value}/sponsors`, {
   default: () => [],
 })
+
+const canEdit = computed(() => user.value?.handle === profile.value?.handle)
+const addRelatedAccountDialogRef = useTemplateRef('addRelatedAccountDialogRef')
 
 useSeoMeta({
   title: () => `${identity.value} sponsors - npmx`,
@@ -50,6 +54,16 @@ useSeoMeta({
     />
 
     <section class="mt-8">
+      <div v-if="canEdit" class="flex justify-end mb-4">
+        <ButtonBase
+          variant="primary"
+          classicon="i-lucide:plus"
+          @click="addRelatedAccountDialogRef?.open"
+        >
+          {{ $t('profile.sponsors.add') }}
+        </ButtonBase>
+      </div>
+
       <ProfileAccountsList
         :entries="sponsors"
         :status="sponsorsStatus"
@@ -57,5 +71,14 @@ useSeoMeta({
         :empty-label="$t('profile.sponsors.no_sponsors')"
       />
     </section>
+
+    <ProfileAddRelatedAccountDialog
+      v-if="canEdit"
+      ref="addRelatedAccountDialogRef"
+      kind="sponsors"
+      :identity="identity"
+      :entries="sponsors"
+      @added="refreshSponsors"
+    />
   </main>
 </template>

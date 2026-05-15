@@ -3,9 +3,13 @@ import type { FetchError } from 'ofetch'
 import type { AccountEntry } from '~/components/Profile/AccountsList.vue'
 import { handleAuthError } from '~/utils/atproto/helpers'
 
+export type RelatedAccountKind = 'ecosystem' | 'sponsors' | 'nested' | 'role'
+
 const props = defineProps<{
   identity: string
-  ecosystem: AccountEntry[] | null
+  kind: RelatedAccountKind
+  entries: AccountEntry[] | null
+  roleRkey?: string
 }>()
 
 const emit = defineEmits<{
@@ -13,7 +17,26 @@ const emit = defineEmits<{
 }>()
 
 const { user } = useAtproto()
-const modal = useModal('add-ecosystem-account-modal')
+
+const modalId = `add-related-account-modal-${props.kind}${props.roleRkey ? `-${props.roleRkey}` : ''}`
+const modal = useModal(modalId)
+
+const i18nPrefix = computed(() => `profile.${props.kind}` as const)
+
+const postUrl = computed(() => {
+  const base = `/api/social/profile/${props.identity}`
+  if (props.kind === 'ecosystem') return `${base}/ecosystem`
+  if (props.kind === 'sponsors') return `${base}/sponsors`
+  if (props.kind === 'nested') return `${base}/nested`
+  return `${base}/roles/${props.roleRkey}`
+})
+
+const duplicateMessages: Record<RelatedAccountKind, string> = {
+  ecosystem: 'Ecosystem connection already exists',
+  sponsors: 'Sponsor connection already exists',
+  nested: 'Nested connection already exists',
+  role: 'Role assignment already exists',
+}
 
 const {
   data: knownAccounts,
@@ -31,10 +54,10 @@ const {
 const addingAccountUri = ref<string | null>(null)
 const formError = ref<string | null>(null)
 
-const ecosystemAccountUris = computed(
+const existingAccountUris = computed(
   () =>
     new Set(
-      (props.ecosystem ?? [])
+      (props.entries ?? [])
         .map(entry => entry.account?.uri)
         .filter((uri): uri is string => Boolean(uri)),
     ),
@@ -42,7 +65,7 @@ const ecosystemAccountUris = computed(
 
 const availableAccounts = computed(() =>
   (knownAccounts.value ?? []).filter(
-    account => account.uri && !ecosystemAccountUris.value.has(account.uri),
+    account => account.uri && !existingAccountUris.value.has(account.uri),
   ),
 )
 
@@ -68,8 +91,8 @@ function close() {
 }
 
 function resolveFormError(statusCode?: number, message?: string): string {
-  if (statusCode === 409 || message === 'Ecosystem connection already exists') {
-    return $t('profile.ecosystem.add_dialog.duplicate')
+  if (statusCode === 409 || message === duplicateMessages[props.kind]) {
+    return $t(`${i18nPrefix.value}.add_dialog.duplicate`)
   }
   return $t('common.error')
 }
@@ -81,7 +104,7 @@ async function addAccount(accountUri: string) {
   formError.value = null
 
   try {
-    await $fetch(`/api/social/profile/${props.identity}/ecosystem`, {
+    await $fetch(postUrl.value, {
       method: 'POST',
       body: { accountUri },
     })
@@ -109,9 +132,9 @@ defineExpose({
 
 <template>
   <Modal
-    id="add-ecosystem-account-modal"
-    :modal-title="$t('profile.ecosystem.add_dialog.title')"
-    :modal-subtitle="$t('profile.ecosystem.add_dialog.description')"
+    :id="modalId"
+    :modal-title="$t(`${i18nPrefix}.add_dialog.title`)"
+    :modal-subtitle="$t(`${i18nPrefix}.add_dialog.description`)"
     class="sm:max-w-lg"
   >
     <div v-if="knownAccountsStatus === 'pending'" class="space-y-3">
@@ -126,14 +149,14 @@ defineExpose({
       v-else-if="!knownAccounts?.length"
       class="p-4 bg-bg-subtle border border-border rounded-lg text-fg-muted text-sm"
     >
-      {{ $t('profile.ecosystem.add_dialog.no_known_accounts') }}
+      {{ $t(`${i18nPrefix}.add_dialog.no_known_accounts`) }}
     </div>
 
     <div
       v-else-if="!availableAccounts.length"
       class="p-4 bg-bg-subtle border border-border rounded-lg text-fg-muted text-sm"
     >
-      {{ $t('profile.ecosystem.add_dialog.all_added') }}
+      {{ $t(`${i18nPrefix}.add_dialog.all_added`) }}
     </div>
 
     <ul v-else class="space-y-2 max-h-[min(24rem,60vh)] overflow-y-auto">
@@ -154,7 +177,7 @@ defineExpose({
           :disabled="addingAccountUri !== null"
           @click="addAccount(account.uri!)"
         >
-          {{ $t('profile.ecosystem.add_dialog.add') }}
+          {{ $t(`${i18nPrefix}.add_dialog.add`) }}
         </ButtonBase>
       </li>
     </ul>

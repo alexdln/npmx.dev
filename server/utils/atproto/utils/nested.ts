@@ -67,6 +67,14 @@ export class NestedUtils {
     accountUri: string,
     note?: string,
   ): Promise<{ uri: string }> {
+    const existing = await this.getNested(ownerMinidoc)
+    if (existing.some(entry => entry.account?.uri === accountUri)) {
+      throw createError({
+        statusCode: 409,
+        message: 'Nested connection already exists',
+      })
+    }
+
     const record = net.atview.account.nested.$build({
       account: accountUri as AtUriString,
       createdAt: toDatetimeString(new Date()),
