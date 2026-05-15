@@ -78,6 +78,15 @@ useSeoMeta({
       kind="ecosystem"
       :identity="identity"
       :entries="ecosystem"
+      :translations="{
+        title: $t('profile.ecosystem.add_dialog.title'),
+        description: $t('profile.ecosystem.add_dialog.description'),
+        add: $t('profile.ecosystem.add_dialog.add'),
+        duplicate: $t('profile.ecosystem.add_dialog.duplicate'),
+        noKnownAccounts: $t('profile.ecosystem.add_dialog.no_known_accounts'),
+        allAdded: $t('profile.ecosystem.add_dialog.all_added'),
+        unknownAccount: $t('profile.related_accounts.unknown'),
+      }"
       @added="refreshEcosystem"
     />
   </main>

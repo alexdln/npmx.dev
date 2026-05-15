@@ -3,13 +3,24 @@ import type { FetchError } from 'ofetch'
 import type { AccountEntry } from '~/components/Profile/AccountsList.vue'
 import { handleAuthError } from '~/utils/atproto/helpers'
 
-export type RelatedAccountKind = 'ecosystem' | 'sponsors' | 'nested' | 'role'
+type RelatedAccountKind = 'ecosystem' | 'sponsors' | 'nested' | 'role'
+
+type RelatedAccountDialogTranslations = {
+  title: string
+  description: string
+  add: string
+  duplicate: string
+  noKnownAccounts: string
+  allAdded: string
+  unknownAccount: string
+}
 
 const props = defineProps<{
   identity: string
   kind: RelatedAccountKind
   entries: AccountEntry[] | null
   roleRkey?: string
+  translations: RelatedAccountDialogTranslations
 }>()
 
 const emit = defineEmits<{
@@ -20,8 +31,6 @@ const { user } = useAtproto()
 
 const modalId = `add-related-account-modal-${props.kind}${props.roleRkey ? `-${props.roleRkey}` : ''}`
 const modal = useModal(modalId)
-
-const i18nPrefix = computed(() => `profile.${props.kind}` as const)
 
 const postUrl = computed(() => {
   const base = `/api/social/profile/${props.identity}`
@@ -75,7 +84,7 @@ function accountLabel(account: NonNullable<AccountEntry['account']>): string {
     account.actor?.name ||
     account.actor?.handle ||
     account.handle ||
-    $t('profile.related_accounts.unknown')
+    props.translations.unknownAccount
   )
 }
 
@@ -92,7 +101,7 @@ function close() {
 
 function resolveFormError(statusCode?: number, message?: string): string {
   if (statusCode === 409 || message === duplicateMessages[props.kind]) {
-    return $t(`${i18nPrefix.value}.add_dialog.duplicate`)
+    return props.translations.duplicate
   }
   return $t('common.error')
 }
@@ -133,8 +142,8 @@ defineExpose({
 <template>
   <Modal
     :id="modalId"
-    :modal-title="$t(`${i18nPrefix}.add_dialog.title`)"
-    :modal-subtitle="$t(`${i18nPrefix}.add_dialog.description`)"
+    :modal-title="translations.title"
+    :modal-subtitle="translations.description"
     class="sm:max-w-lg"
   >
     <div v-if="knownAccountsStatus === 'pending'" class="space-y-3">
@@ -149,14 +158,14 @@ defineExpose({
       v-else-if="!knownAccounts?.length"
       class="p-4 bg-bg-subtle border border-border rounded-lg text-fg-muted text-sm"
     >
-      {{ $t(`${i18nPrefix}.add_dialog.no_known_accounts`) }}
+      {{ translations.noKnownAccounts }}
     </div>
 
     <div
       v-else-if="!availableAccounts.length"
       class="p-4 bg-bg-subtle border border-border rounded-lg text-fg-muted text-sm"
     >
-      {{ $t(`${i18nPrefix}.add_dialog.all_added`) }}
+      {{ translations.allAdded }}
     </div>
 
     <ul v-else class="space-y-2 max-h-[min(24rem,60vh)] overflow-y-auto">
@@ -177,7 +186,7 @@ defineExpose({
           :disabled="addingAccountUri !== null"
           @click="addAccount(account.uri!)"
         >
-          {{ $t(`${i18nPrefix}.add_dialog.add`) }}
+          {{ translations.add }}
         </ButtonBase>
       </li>
     </ul>

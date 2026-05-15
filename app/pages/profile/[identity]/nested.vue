@@ -78,6 +78,15 @@ useSeoMeta({
       kind="nested"
       :identity="identity"
       :entries="nested"
+      :translations="{
+        title: $t('profile.nested.add_dialog.title'),
+        description: $t('profile.nested.add_dialog.description'),
+        add: $t('profile.nested.add_dialog.add'),
+        duplicate: $t('profile.nested.add_dialog.duplicate'),
+        noKnownAccounts: $t('profile.nested.add_dialog.no_known_accounts'),
+        allAdded: $t('profile.nested.add_dialog.all_added'),
+        unknownAccount: $t('profile.related_accounts.unknown'),
+      }"
       @added="refreshNested"
     />
   </main>

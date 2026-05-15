@@ -139,6 +139,15 @@ useSeoMeta({
       :identity="identity"
       :role-rkey="rkey"
       :entries="assignees"
+      :translations="{
+        title: $t('profile.roles.add_dialog.title'),
+        description: $t('profile.roles.add_dialog.description'),
+        add: $t('profile.roles.add_dialog.add'),
+        duplicate: $t('profile.roles.add_dialog.duplicate'),
+        noKnownAccounts: $t('profile.roles.add_dialog.no_known_accounts'),
+        allAdded: $t('profile.roles.add_dialog.all_added'),
+        unknownAccount: $t('profile.related_accounts.unknown'),
+      }"
       @added="refreshRole"
     />
   </main>

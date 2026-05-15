@@ -78,6 +78,15 @@ useSeoMeta({
       kind="sponsors"
       :identity="identity"
       :entries="sponsors"
+      :translations="{
+        title: $t('profile.sponsors.add_dialog.title'),
+        description: $t('profile.sponsors.add_dialog.description'),
+        add: $t('profile.sponsors.add_dialog.add'),
+        duplicate: $t('profile.sponsors.add_dialog.duplicate'),
+        noKnownAccounts: $t('profile.sponsors.add_dialog.no_known_accounts'),
+        allAdded: $t('profile.sponsors.add_dialog.all_added'),
+        unknownAccount: $t('profile.related_accounts.unknown'),
+      }"
       @added="refreshSponsors"
     />
   </main>
