@@ -117,7 +117,7 @@ async function addAccount(accountUri: string) {
       method: 'POST',
       body: { accountUri },
     })
-
+    await new Promise(resolve => setTimeout(resolve, 3000))
     emit('added')
   } catch (error) {
     const fetchError = error as FetchError<{ message?: string }>
