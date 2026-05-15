@@ -434,12 +434,25 @@
     "roles": {
       "title": "Roles",
       "empty": "No roles defined",
+      "create": "Create role",
       "seo_description": "Roles managed by {handle}",
       "detail_seo_fallback": "Role for {handle} on npmx",
       "back_to_list": "All roles",
       "assignees": "Assignees",
       "no_assignees": "No assignees yet",
       "add": "Add assignee",
+      "create_dialog": {
+        "title": "Create role",
+        "description": "Define a role you can assign to known accounts.",
+        "name_label": "Name",
+        "name_placeholder": "Maintainer",
+        "description_label": "Description",
+        "description_placeholder": "Optional short description",
+        "color_label": "Color",
+        "submit": "Create role",
+        "name_required": "Name is required.",
+        "invalid_color": "Enter a valid hex color (e.g. #6366f1)."
+      },
       "add_dialog": {
         "title": "Add assignee",
         "description": "Choose a known account to assign to this role.",

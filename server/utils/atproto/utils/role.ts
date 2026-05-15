@@ -116,6 +116,42 @@ export class RoleUtils {
   }
 
   /**
+   * Creates a `net.atview.managed.role` record on the OAuth user's repo.
+   */
+  async createRole(
+    writeClient: Client,
+    ownerMinidoc: blue.microcosm.identity.resolveMiniDoc.$OutputBody,
+    input: { name: string; description?: string; color?: string },
+  ): Promise<{ uri: string }> {
+    const name = input.name.trim()
+    if (!name) {
+      throw createError({ statusCode: 400, message: 'Role name not provided' })
+    }
+
+    const color = input.color?.trim()
+    if (color && !/^#([0-9A-F]{3}|[0-9A-F]{6})$/i.test(color)) {
+      throw createError({ statusCode: 400, message: 'Invalid role color' })
+    }
+
+    const description = input.description?.trim()
+
+    const record = net.atview.managed.role.$build({
+      name,
+      createdAt: toDatetimeString(new Date()),
+      ...(description ? { description } : {}),
+      ...(color ? { color } : {}),
+    })
+
+    const result = await writeClient.create(net.atview.managed.role, record)
+    if (!result?.uri) {
+      throw createError({ statusCode: 500, statusMessage: 'Failed to create role' })
+    }
+
+    await this.invalidateRolesCache(ownerMinidoc.did)
+    return { uri: result.uri }
+  }
+
+  /**
    * Creates a `net.atview.account.role` record on the owner's repo linking `accountUri`
    * to the managed role at `rkey`.
    */

@@ -72,6 +72,7 @@ export const NET_ATVIEW_ECOSYSTEM_WRITE_SCOPE = `repo:${net.atview.account.ecosy
 export const NET_ATVIEW_NESTED_WRITE_SCOPE = `repo:${net.atview.account.nested.$nsid}`
 export const NET_ATVIEW_SPONSOR_WRITE_SCOPE = `repo:${net.atview.account.sponsor.$nsid}`
 export const NET_ATVIEW_ACCOUNT_ROLE_WRITE_SCOPE = `repo:${net.atview.account.role.$nsid}`
+export const NET_ATVIEW_MANAGED_ROLE_WRITE_SCOPE = `repo:${net.atview.managed.role.$nsid}`
 export const NPMX_DEV_DID = 'did:plc:u5zp7npt5kpueado77kuihyz'
 export const TID_CLOCK_ID = 3
 

@@ -1324,6 +1324,45 @@
             "add": {
               "type": "string"
             },
+            "create": {
+              "type": "string"
+            },
+            "create_dialog": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "name_label": {
+                  "type": "string"
+                },
+                "name_placeholder": {
+                  "type": "string"
+                },
+                "description_label": {
+                  "type": "string"
+                },
+                "description_placeholder": {
+                  "type": "string"
+                },
+                "color_label": {
+                  "type": "string"
+                },
+                "submit": {
+                  "type": "string"
+                },
+                "name_required": {
+                  "type": "string"
+                },
+                "invalid_color": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
             "add_dialog": {
               "type": "object",
               "properties": {

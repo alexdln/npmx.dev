@@ -37,9 +37,18 @@ const {
   data: roles,
   status: rolesStatus,
   error: rolesError,
+  refresh: refreshRoles,
 } = await useLazyFetch<RoleListItem[]>(() => `/api/social/profile/${identity.value}/roles`, {
   default: () => [],
 })
+
+const canEdit = computed(() => user.value?.handle === profile.value?.handle)
+const addRoleDialogRef = useTemplateRef('addRoleDialogRef')
+
+async function onRoleCreated(uri: string) {
+  await refreshRoles()
+  await navigateTo(`/profile/${identity.value}/roles/${new AtUri(uri).rkey}`)
+}
 
 useSeoMeta({
   title: () => `${identity.value} roles - npmx`,
@@ -58,6 +67,12 @@ useSeoMeta({
     />
 
     <section class="mt-8">
+      <div v-if="canEdit" class="flex justify-end mb-4">
+        <ButtonBase variant="primary" classicon="i-lucide:plus" @click="addRoleDialogRef?.open">
+          {{ $t('profile.roles.create') }}
+        </ButtonBase>
+      </div>
+
       <div v-if="rolesStatus === 'pending'" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <SkeletonBlock v-for="i in 4" :key="i" class="h-20 rounded-lg" />
       </div>
@@ -93,5 +108,12 @@ useSeoMeta({
         {{ $t('profile.roles.empty') }}
       </div>
     </section>
+
+    <ProfileAddRoleDialog
+      v-if="canEdit"
+      ref="addRoleDialogRef"
+      :identity="identity"
+      @created="onRoleCreated"
+    />
   </main>
 </template>
