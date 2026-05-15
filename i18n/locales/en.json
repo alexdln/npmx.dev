@@ -398,7 +398,16 @@
     },
     "ecosystem": {
       "title": "Ecosystem",
-      "empty": "No ecosystem accounts found"
+      "empty": "No ecosystem accounts found",
+      "add": "Add to ecosystem",
+      "add_dialog": {
+        "title": "Add to ecosystem",
+        "description": "Choose a known account to add to your ecosystem.",
+        "add": "Add",
+        "duplicate": "This account is already in your ecosystem.",
+        "no_known_accounts": "No known accounts yet. Add accounts on the Known Accounts tab first.",
+        "all_added": "All known accounts are already in your ecosystem."
+      }
     },
     "nested": {
       "title": "Nested",

@@ -29,9 +29,13 @@ const {
   data: ecosystem,
   status: ecosystemStatus,
   error: ecosystemError,
+  refresh: refreshEcosystem,
 } = await useLazyFetch<AccountEntry[]>(() => `/api/social/profile/${identity.value}/ecosystem`, {
   default: () => [],
 })
+
+const canEdit = computed(() => user.value?.handle === profile.value?.handle)
+const addEcosystemDialogRef = useTemplateRef('addEcosystemDialogRef')
 
 useSeoMeta({
   title: () => `${identity.value} ecosystem - npmx`,
@@ -50,6 +54,16 @@ useSeoMeta({
     />
 
     <section class="mt-8">
+      <div v-if="canEdit" class="flex justify-end mb-4">
+        <ButtonBase
+          variant="primary"
+          classicon="i-lucide:plus"
+          @click="addEcosystemDialogRef?.open()"
+        >
+          {{ $t('profile.ecosystem.add') }}
+        </ButtonBase>
+      </div>
+
       <ProfileAccountsList
         :entries="ecosystem"
         :status="ecosystemStatus"
@@ -57,5 +71,13 @@ useSeoMeta({
         :empty-label="$t('profile.ecosystem.empty')"
       />
     </section>
+
+    <ProfileAddEcosystemAccountDialog
+      v-if="canEdit"
+      ref="addEcosystemDialogRef"
+      :identity="identity"
+      :ecosystem="ecosystem"
+      @added="refreshEcosystem()"
+    />
   </main>
 </template>

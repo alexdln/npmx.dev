@@ -1216,8 +1216,44 @@
             },
             "empty": {
               "type": "string"
+            },
+            "add": {
+              "type": "string"
+            },
+            "add_dialog": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "add": {
+                  "type": "string"
+                },
+                "duplicate": {
+                  "type": "string"
+                },
+                "no_known_accounts": {
+                  "type": "string"
+                },
+                "all_added": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "description",
+                "add",
+                "duplicate",
+                "no_known_accounts",
+                "all_added"
+              ],
+              "additionalProperties": false
             }
           },
+          "required": ["title", "empty", "add", "add_dialog"],
           "additionalProperties": false
         },
         "nested": {
