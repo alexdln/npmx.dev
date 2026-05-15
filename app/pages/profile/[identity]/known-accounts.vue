@@ -29,6 +29,7 @@ const {
   data: accounts,
   status: accountsStatus,
   error: accountsError,
+  refresh: refreshAccounts,
 } = await useLazyFetch<AccountEntry['account'][]>(
   () => `/api/social/profile/${identity.value}/accounts`,
   {
@@ -37,6 +38,8 @@ const {
 )
 
 const entries = computed<AccountEntry[]>(() => (accounts.value ?? []).map(account => ({ account })))
+const canEdit = computed(() => user.value?.handle === profile.value?.handle)
+const addAccountDialogRef = useTemplateRef('addAccountDialogRef')
 
 useSeoMeta({
   title: () => `${identity.value} accounts - npmx`,
@@ -55,12 +58,29 @@ useSeoMeta({
     />
 
     <section class="mt-8">
+      <div v-if="canEdit" class="flex justify-end mb-4">
+        <ButtonBase
+          variant="primary"
+          classicon="i-lucide:plus"
+          @click="addAccountDialogRef?.open()"
+        >
+          {{ $t('profile.known_accounts.add') }}
+        </ButtonBase>
+      </div>
+
       <ProfileAccountsList
         :entries="entries"
         :status="accountsStatus"
         :error="accountsError"
-        :empty-label="$t('profile.accounts.empty')"
+        :empty-label="$t('profile.known_accounts.empty')"
       />
     </section>
+
+    <ProfileAddKnownAccountDialog
+      v-if="canEdit"
+      ref="addAccountDialogRef"
+      :identity="identity"
+      @added="refreshAccounts()"
+    />
   </main>
 </template>

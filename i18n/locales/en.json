@@ -374,7 +374,23 @@
     },
     "known_accounts": {
       "title": "Known Accounts",
-      "empty": "No accounts found"
+      "empty": "No accounts found",
+      "add": "Add account",
+      "add_dialog": {
+        "title": "Add known account",
+        "description": "Link another AT Protocol account you operate or represent.",
+        "handle_label": "Handle",
+        "handle_placeholder": "user.bsky.social",
+        "type_label": "Account type",
+        "type_user": "User",
+        "type_project": "Project",
+        "type_organisation": "Organisation",
+        "type_collective": "Collective",
+        "submit": "Add account",
+        "duplicate": "This account is already in your list.",
+        "not_found": "No Bluesky profile was found for that handle.",
+        "self": "You cannot add your own account."
+      }
     },
     "sponsors": {
       "title": "Sponsors",

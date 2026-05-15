@@ -1128,8 +1128,72 @@
             },
             "empty": {
               "type": "string"
+            },
+            "add": {
+              "type": "string"
+            },
+            "add_dialog": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "handle_label": {
+                  "type": "string"
+                },
+                "handle_placeholder": {
+                  "type": "string"
+                },
+                "type_label": {
+                  "type": "string"
+                },
+                "type_user": {
+                  "type": "string"
+                },
+                "type_project": {
+                  "type": "string"
+                },
+                "type_organisation": {
+                  "type": "string"
+                },
+                "type_collective": {
+                  "type": "string"
+                },
+                "submit": {
+                  "type": "string"
+                },
+                "duplicate": {
+                  "type": "string"
+                },
+                "not_found": {
+                  "type": "string"
+                },
+                "self": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "description",
+                "handle_label",
+                "handle_placeholder",
+                "type_label",
+                "type_user",
+                "type_project",
+                "type_organisation",
+                "type_collective",
+                "submit",
+                "duplicate",
+                "not_found",
+                "self"
+              ],
+              "additionalProperties": false
             }
           },
+          "required": ["title", "empty", "add", "add_dialog"],
           "additionalProperties": false
         },
         "sponsors": {

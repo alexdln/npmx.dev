@@ -2,7 +2,8 @@ import * as blue from '#shared/types/lexicons/blue'
 import * as net from '#shared/types/lexicons/net'
 import * as app from '#shared/types/lexicons/app'
 import { SLINGSHOT_HOST } from '#shared/utils/constants'
-import { Client } from '@atproto/lex'
+import { Client, toDatetimeString } from '@atproto/lex'
+import type { AtUriString } from '@atproto/lex'
 import { AtUri } from '@atproto/syntax'
 import { IdentityUtils } from './identity'
 
@@ -91,7 +92,6 @@ export class AccountUtils {
       if (!actorResponse.success) return undefined
 
       let handle: string | undefined
-      console.log('actorAtUri', actorAtUri)
 
       if (app.bsky.actor.profile.$nsid === actorAtUri.collection) {
         try {
@@ -181,5 +181,37 @@ export class AccountUtils {
     rkey: string,
   ): Promise<PopulatedAccount | undefined> {
     return this.populateAccount(`at://${minidoc.did}/${ACCOUNT_NSID}/${rkey}`)
+  }
+
+  /**
+   * Creates a `net.atview.account.actor` record on the OAuth user's repo.
+   */
+  async createAccount(
+    writeClient: Client,
+    ownerMinidoc: blue.microcosm.identity.resolveMiniDoc.$OutputBody,
+    actorUri: string,
+    type: net.atview.account.actor.Main['type'] = 'user',
+  ): Promise<{ uri: string }> {
+    const existing = await this.findAccountByActor(ownerMinidoc.did, actorUri)
+    if (existing) {
+      throw createError({
+        statusCode: 409,
+        message: 'Account already exists',
+      })
+    }
+
+    const record = net.atview.account.actor.$build({
+      actor: actorUri as AtUriString,
+      createdAt: toDatetimeString(new Date()),
+      type,
+    })
+
+    const result = await writeClient.create(net.atview.account.actor, record)
+    if (!result?.uri) {
+      throw createError({ statusCode: 500, statusMessage: 'Failed to create account' })
+    }
+
+    await this.invalidateAccountsCache(ownerMinidoc.did)
+    return { uri: result.uri }
   }
 }

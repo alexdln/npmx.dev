@@ -11,6 +11,7 @@ import { getOAuthLock } from '#server/utils/atproto/lock'
 import { useOAuthStorage } from '#server/utils/atproto/storage'
 import {
   LIKES_SCOPE,
+  NET_ATVIEW_ACCOUNT_ACTOR_WRITE_SCOPE,
   NET_ATVIEW_ACCOUNT_ROLE_WRITE_SCOPE,
   NET_ATVIEW_ECOSYSTEM_WRITE_SCOPE,
   NET_ATVIEW_NESTED_WRITE_SCOPE,
@@ -22,7 +23,7 @@ import type { UserServerSession } from '#shared/types/userSession'
 import { clientUri } from '#oauth/config'
 
 // TODO: If you add writing a new record you will need to add a scope for it
-export const scope = `atproto ${LIKES_SCOPE} ${PROFILE_SCOPE} ${NET_ATVIEW_ECOSYSTEM_WRITE_SCOPE} ${NET_ATVIEW_NESTED_WRITE_SCOPE} ${NET_ATVIEW_SPONSOR_WRITE_SCOPE} ${NET_ATVIEW_ACCOUNT_ROLE_WRITE_SCOPE}`
+export const scope = `atproto ${LIKES_SCOPE} ${PROFILE_SCOPE} ${NET_ATVIEW_ACCOUNT_ACTOR_WRITE_SCOPE} ${NET_ATVIEW_ECOSYSTEM_WRITE_SCOPE} ${NET_ATVIEW_NESTED_WRITE_SCOPE} ${NET_ATVIEW_SPONSOR_WRITE_SCOPE} ${NET_ATVIEW_ACCOUNT_ROLE_WRITE_SCOPE}`
 
 /**
  * Resolves a did to a handle via DoH or via the http website calls

@@ -67,6 +67,7 @@ export const PACKAGE_SUBJECT_REF = (packageName: string) =>
 export const LIKES_SCOPE = `repo:${dev.npmx.feed.like.$nsid}`
 export const PROFILE_SCOPE = `repo:${dev.npmx.actor.profile.$nsid}`
 /** OAuth scopes for writing npmx profile connection lists (ecosystem, nested, sponsors, role assignments). */
+export const NET_ATVIEW_ACCOUNT_ACTOR_WRITE_SCOPE = `repo:${net.atview.account.actor.$nsid}`
 export const NET_ATVIEW_ECOSYSTEM_WRITE_SCOPE = `repo:${net.atview.account.ecosystem.$nsid}`
 export const NET_ATVIEW_NESTED_WRITE_SCOPE = `repo:${net.atview.account.nested.$nsid}`
 export const NET_ATVIEW_SPONSOR_WRITE_SCOPE = `repo:${net.atview.account.sponsor.$nsid}`
