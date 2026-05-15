@@ -1,6 +1,7 @@
 import type * as blue from '#shared/types/lexicons/blue'
 import * as net from '#shared/types/lexicons/net'
-import { Client } from '@atproto/lex'
+import { Client, toDatetimeString } from '@atproto/lex'
+import type { AtUriString } from '@atproto/lex'
 import { AccountUtils, type PopulatedAccount } from './account'
 
 const HEADERS = { 'User-Agent': 'npmx' }
@@ -20,6 +21,10 @@ export class NestedUtils {
   constructor() {
     this.cache = getCacheAdapter('generic')
     this.accountUtils = new AccountUtils()
+  }
+
+  async invalidateNestedCache(did: string): Promise<void> {
+    await this.cache.delete(CACHE_NESTED_KEY(did))
   }
 
   /**
@@ -54,5 +59,26 @@ export class NestedUtils {
 
     await this.cache.set(cacheKey, entries)
     return entries
+  }
+
+  async createNestedConnection(
+    writeClient: Client,
+    ownerMinidoc: blue.microcosm.identity.resolveMiniDoc.$OutputBody,
+    accountUri: string,
+    note?: string,
+  ): Promise<{ uri: string }> {
+    const record = net.atview.account.nested.$build({
+      account: accountUri as AtUriString,
+      createdAt: toDatetimeString(new Date()),
+      ...(note ? { note } : {}),
+    })
+
+    const result = await writeClient.create(net.atview.account.nested, record)
+    if (!result?.uri) {
+      throw createError({ statusCode: 500, statusMessage: 'Failed to create nested connection' })
+    }
+
+    await this.invalidateNestedCache(ownerMinidoc.did)
+    return { uri: result.uri }
   }
 }

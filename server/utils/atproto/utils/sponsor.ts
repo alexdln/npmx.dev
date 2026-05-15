@@ -1,6 +1,7 @@
 import type * as blue from '#shared/types/lexicons/blue'
 import * as net from '#shared/types/lexicons/net'
-import { Client } from '@atproto/lex'
+import { Client, toDatetimeString } from '@atproto/lex'
+import type { AtUriString } from '@atproto/lex'
 import { AccountUtils, type PopulatedAccount } from './account'
 
 const HEADERS = { 'User-Agent': 'npmx' }
@@ -20,6 +21,10 @@ export class SponsorUtils {
   constructor() {
     this.cache = getCacheAdapter('generic')
     this.accountUtils = new AccountUtils()
+  }
+
+  async invalidateSponsorsCache(did: string): Promise<void> {
+    await this.cache.delete(CACHE_SPONSORS_KEY(did))
   }
 
   /**
@@ -54,5 +59,26 @@ export class SponsorUtils {
 
     await this.cache.set(cacheKey, entries)
     return entries
+  }
+
+  async createSponsorConnection(
+    writeClient: Client,
+    ownerMinidoc: blue.microcosm.identity.resolveMiniDoc.$OutputBody,
+    accountUri: string,
+    note?: string,
+  ): Promise<{ uri: string }> {
+    const record = net.atview.account.sponsor.$build({
+      account: accountUri as AtUriString,
+      createdAt: toDatetimeString(new Date()),
+      ...(note ? { note } : {}),
+    })
+
+    const result = await writeClient.create(net.atview.account.sponsor, record)
+    if (!result?.uri) {
+      throw createError({ statusCode: 500, statusMessage: 'Failed to create sponsor connection' })
+    }
+
+    await this.invalidateSponsorsCache(ownerMinidoc.did)
+    return { uri: result.uri }
   }
 }

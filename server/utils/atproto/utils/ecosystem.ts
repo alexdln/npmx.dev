@@ -1,6 +1,7 @@
 import type * as blue from '#shared/types/lexicons/blue'
 import * as net from '#shared/types/lexicons/net'
-import { Client } from '@atproto/lex'
+import { Client, toDatetimeString } from '@atproto/lex'
+import type { AtUriString } from '@atproto/lex'
 import { AccountUtils, type PopulatedAccount } from './account'
 
 const HEADERS = { 'User-Agent': 'npmx' }
@@ -20,6 +21,10 @@ export class EcosystemUtils {
   constructor() {
     this.cache = getCacheAdapter('generic')
     this.accountUtils = new AccountUtils()
+  }
+
+  async invalidateEcosystemCache(did: string): Promise<void> {
+    await this.cache.delete(CACHE_ECOSYSTEM_KEY(did))
   }
 
   /**
@@ -54,5 +59,29 @@ export class EcosystemUtils {
 
     await this.cache.set(cacheKey, entries)
     return entries
+  }
+
+  /**
+   * Creates an ecosystem link on the OAuth user's repo to `accountUri`.
+   */
+  async createEcosystemConnection(
+    writeClient: Client,
+    ownerMinidoc: blue.microcosm.identity.resolveMiniDoc.$OutputBody,
+    accountUri: string,
+    note?: string,
+  ): Promise<{ uri: string }> {
+    const record = net.atview.account.ecosystem.$build({
+      account: accountUri as AtUriString,
+      createdAt: toDatetimeString(new Date()),
+      ...(note ? { note } : {}),
+    })
+
+    const result = await writeClient.create(net.atview.account.ecosystem, record)
+    if (!result?.uri) {
+      throw createError({ statusCode: 500, statusMessage: 'Failed to create ecosystem connection' })
+    }
+
+    await this.invalidateEcosystemCache(ownerMinidoc.did)
+    return { uri: result.uri }
   }
 }

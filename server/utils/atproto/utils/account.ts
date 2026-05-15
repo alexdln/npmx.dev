@@ -38,11 +38,22 @@ export type PopulatedAccount = Omit<net.atview.account.actor.Main, 'actor'> & {
 export class AccountUtils {
   private readonly cache: CacheAdapter
   private readonly slingshotClient: Client
+  private readonly constellation: Constellation
   private readonly identityUtils: IdentityUtils
 
   constructor() {
     this.cache = getCacheAdapter('generic')
     this.slingshotClient = new Client(`https://${SLINGSHOT_HOST}`, { headers: HEADERS })
+    this.constellation = new Constellation(
+      async <T = unknown>(
+        url: string,
+        options: Parameters<typeof $fetch>[1] = {},
+        _ttl?: number,
+      ): Promise<CachedFetchResult<T>> => {
+        const data = (await $fetch<T>(url, options)) as T
+        return { data, isStale: false, cachedAt: null }
+      },
+    )
     this.identityUtils = new IdentityUtils()
   }
 
@@ -113,6 +124,23 @@ export class AccountUtils {
     // todo: improve concurrency
     const populated = await Promise.all(urisFiltered.map(uri => this.populateAccount(uri)))
     return populated.filter(item => item !== undefined)
+  }
+
+  async findAccountByActor(repoDid: string, subject: string): Promise<string | undefined> {
+    const { data } = await this.constellation.getBackLinks(
+      subject,
+      ACCOUNT_NSID,
+      'actor',
+      1,
+      undefined,
+      undefined,
+      [[repoDid]],
+    )
+
+    const backlink = data.records[0]
+    if (!backlink || backlink.collection !== ACCOUNT_NSID) return undefined
+
+    return `at://${backlink.did}/${backlink.collection}/${backlink.rkey}`
   }
 
   /**

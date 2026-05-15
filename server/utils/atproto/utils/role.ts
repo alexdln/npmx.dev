@@ -1,7 +1,8 @@
 import * as blue from '#shared/types/lexicons/blue'
 import * as net from '#shared/types/lexicons/net'
 import { SLINGSHOT_HOST } from '#shared/utils/constants'
-import { Client, isAtUriString } from '@atproto/lex'
+import { Client, isAtUriString, toDatetimeString } from '@atproto/lex'
+import type { AtUriString } from '@atproto/lex'
 import type { Backlink } from '#shared/utils/constellation'
 import { AccountUtils, type PopulatedAccount } from './account'
 
@@ -56,6 +57,10 @@ export class RoleUtils {
     )
   }
 
+  async invalidateRolesCache(did: string): Promise<void> {
+    await this.cache.delete(CACHE_ROLES_KEY(did))
+  }
+
   /**
    * Lists role definitions managed by `minidoc.did`.
    */
@@ -108,6 +113,33 @@ export class RoleUtils {
         list: populatedUsers,
       },
     }
+  }
+
+  /**
+   * Creates a `net.atview.account.role` record on the owner's repo linking `accountUri`
+   * to the managed role at `rkey`.
+   */
+  async createRoleAssignment(
+    writeClient: Client,
+    ownerMinidoc: blue.microcosm.identity.resolveMiniDoc.$OutputBody,
+    rkey: string,
+    accountUri: string,
+  ): Promise<{ uri: string }> {
+    const roleUri = `at://${ownerMinidoc.did}/${net.atview.managed.role.$nsid}/${rkey}`
+
+    const record = net.atview.account.role.$build({
+      role: roleUri as AtUriString,
+      account: accountUri as AtUriString,
+      createdAt: toDatetimeString(new Date()),
+    })
+
+    const result = await writeClient.create(net.atview.account.role, record)
+    if (!result?.uri) {
+      throw createError({ statusCode: 500, statusMessage: 'Failed to create role assignment' })
+    }
+
+    await this.invalidateRolesCache(ownerMinidoc.did)
+    return { uri: result.uri }
   }
 
   /**
