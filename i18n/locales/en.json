@@ -1185,6 +1185,7 @@
     "team": {
       "title": "Team",
       "governance": "Governance",
+      "maintainers": "Maintainers",
       "role_steward": "steward",
       "role_maintainer": "maintainer",
       "sponsor": "sponsor",

@@ -3559,6 +3559,9 @@
             "governance": {
               "type": "string"
             },
+            "maintainers": {
+              "type": "string"
+            },
             "role_steward": {
               "type": "string"
             },
