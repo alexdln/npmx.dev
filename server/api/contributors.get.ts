@@ -111,10 +111,10 @@ async function fetchSponsorable(token: string, logins: string[]): Promise<Set<st
 }
 
 function getRoleInfo(login: string, teams: TeamMembers): { role: Role; order: number } {
-  if (teams.steward.has(login)) return { role: 'steward', order: 3 }
-  if (teams.core.has(login)) return { role: 'core', order: 2 }
-  if (teams.maintainer.has(login)) return { role: 'maintainer', order: 1 }
-  return { role: 'contributor', order: 0 }
+  if (teams.steward.has(login)) return { role: 'steward', order: 0 }
+  if (teams.core.has(login)) return { role: 'core', order: 1 }
+  if (teams.maintainer.has(login)) return { role: 'maintainer', order: 2 }
+  return { role: 'contributor', order: 3 }
 }
 
 export default defineCachedEventHandler(

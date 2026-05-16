@@ -9,6 +9,7 @@ const roleLabels = computed(
   () =>
     ({
       steward: $t('about.team.role_steward'),
+      core: $t('about.team.role_core'),
       maintainer: $t('about.team.role_maintainer'),
     }) as Partial<Record<Role, string>>,
 )

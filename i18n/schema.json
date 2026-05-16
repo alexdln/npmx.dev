@@ -3562,6 +3562,9 @@
             "maintainers": {
               "type": "string"
             },
+            "role_core": {
+              "type": "string"
+            },
             "role_steward": {
               "type": "string"
             },
