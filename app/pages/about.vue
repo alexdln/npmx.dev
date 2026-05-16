@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Role } from '#server/api/contributors.get'
 import { SPONSORS } from '~/assets/logos/sponsors'
 import { OSS_PARTNERS } from '~/assets/logos/oss-partners'
 
