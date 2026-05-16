@@ -248,7 +248,7 @@ const communityContributors = computed(
                       :alt="`${contributor.login}'s avatar`"
                       width="48"
                       height="48"
-                      class="w-12 h-12 rounded-md ring-1 ring-transparent group-hover:ring-accent transition-all duration-200 ease-out will-change-transform"
+                      class="w-12 h-12 rounded-md ring-1 ring-transparent group-hover:ring-accent transition-all duration-200 ease-out"
                       loading="lazy"
                     />
                   </a>
