@@ -283,7 +283,7 @@ export default defineNuxtConfig({
       {
         name: 'Geist Mono',
         provider: 'local',
-        weight: [400, 500],
+        weights: [400, 500],
         global: true,
       },
       {
