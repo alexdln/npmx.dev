@@ -277,27 +277,13 @@ export default defineNuxtConfig({
       {
         name: 'Geist',
         provider: 'local',
-        weight: 400,
-        preload: true,
-        global: true,
-      },
-      {
-        name: 'Geist',
-        provider: 'local',
-        weights: [500, 600],
+        weights: [400, 500, 600],
         global: true,
       },
       {
         name: 'Geist Mono',
         provider: 'local',
-        weight: 400,
-        preload: true,
-        global: true,
-      },
-      {
-        name: 'Geist Mono',
-        provider: 'local',
-        weight: 500,
+        weight: [400, 500],
         global: true,
       },
       {
