@@ -284,13 +284,7 @@ export default defineNuxtConfig({
       {
         name: 'Geist',
         provider: 'local',
-        weight: 500,
-        global: true,
-      },
-      {
-        name: 'Geist',
-        provider: 'local',
-        weight: 600,
+        weights: [500, 600],
         global: true,
       },
       {
