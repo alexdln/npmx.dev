@@ -276,14 +276,34 @@ export default defineNuxtConfig({
     families: [
       {
         name: 'Geist',
-        weights: ['400', '500', '600'],
+        src: '/fonts/Geist-Regular.ttf',
+        weight: 400,
+        preload: true,
+        global: true,
+      },
+      {
+        name: 'Geist',
+        src: '/fonts/Geist-Medium.ttf',
+        weight: 500,
+        global: true,
+      },
+      {
+        name: 'Geist',
+        src: '/fonts/Geist-SemiBold.ttf',
+        weight: 600,
+        global: true,
+      },
+      {
+        name: 'Geist Mono',
+        src: '/fonts/GeistMono-Regular.ttf',
+        weight: 400,
         preload: true,
         global: true,
       },
       {
         name: 'Geist Mono',
-        weights: ['400', '500'],
-        preload: true,
+        src: '/fonts/GeistMono-Medium.ttf',
+        weight: 500,
         global: true,
       },
       {
