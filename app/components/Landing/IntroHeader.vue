@@ -55,16 +55,17 @@ onPrehydrate(el => {
   }
 
   const currentActiveNoodles = activeNoodles.filter(noodle => {
-    const todayDate = new Date()
-    const todayDateRaw = `${todayDate.getFullYear()}-${todayDate.getMonth() + 1}-${todayDate.getDate()}`
+    if (!noodle.date) return false
 
-    const noodleDateFrom = new Date(noodle.date!)
-    if (!noodle.dateTo) {
-      const noodleDateFromRaw = `${noodleDateFrom.getFullYear()}-${noodleDateFrom.getMonth() + 1}-${noodleDateFrom.getDate()}`
-      return todayDateRaw === noodleDateFromRaw
-    }
-    const noodleDateTo = new Date(noodle.dateTo!)
-    return todayDate >= noodleDateFrom && todayDate <= noodleDateTo
+    const today = new Intl.DateTimeFormat('en-CA', {
+      timeZone: noodle.timezone !== 'auto' ? noodle.timezone : undefined,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(new Date())
+
+    if (!noodle.dateTo) return today === noodle.date
+    return today >= noodle.date && today <= noodle.dateTo
   })
 
   if (!currentActiveNoodles.length) return
