@@ -1,8 +1,13 @@
 import type { Page } from '@playwright/test'
-import type { Noodle } from '../../app/components/Noodle'
 import { expect, test } from './test-utils'
 
-type MockNoodle = Partial<Omit<Noodle, 'logo'>>
+type MockNoodle = {
+  key: string
+  date?: string
+  dateTo?: string
+  timezone?: string
+  tagline?: boolean
+}
 
 type MockNoodlesOptions = {
   active?: MockNoodle[]
