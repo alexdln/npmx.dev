@@ -2,9 +2,11 @@ import type { Page } from '@playwright/test'
 import type { Noodle } from '../../app/components/Noodle'
 import { expect, test } from './test-utils'
 
+type MockNoodle = Partial<Omit<Noodle, 'logo'>>
+
 type MockNoodlesOptions = {
-  active?: Noodle[]
-  permanent?: Noodle[]
+  active?: MockNoodle[]
+  permanent?: MockNoodle[]
 }
 
 function htmlAttrEncode(value: string) {
@@ -19,15 +21,21 @@ async function mockNoodles(page: Page, options: MockNoodlesOptions = {}) {
     url => new URL(url).pathname === '/',
     async route => {
       const response = await route.fetch()
-      const body = (await response.text())
-        .replace(
-          /data-active-noodles="[^"]*"/,
-          `data-active-noodles="${htmlAttrEncode(activeJson)}"`,
-        )
-        .replace(
-          /data-permanent-noodles="[^"]*"/,
-          `data-permanent-noodles="${htmlAttrEncode(permanentJson)}"`,
-        )
+      const original = await response.text()
+
+      const activeRegex = /data-active-noodles="[^"]*"/
+      const permanentRegex = /data-permanent-noodles="[^"]*"/
+
+      if (!activeRegex.test(original)) {
+        throw new Error('mockNoodles: `data-active-noodles` marker not found in response HTML')
+      }
+      if (!permanentRegex.test(original)) {
+        throw new Error('mockNoodles: `data-permanent-noodles` marker not found in response HTML')
+      }
+
+      const body = original
+        .replace(activeRegex, `data-active-noodles="${htmlAttrEncode(activeJson)}"`)
+        .replace(permanentRegex, `data-permanent-noodles="${htmlAttrEncode(permanentJson)}"`)
 
       await route.fulfill({ response, body })
     },
@@ -50,8 +58,8 @@ test.describe('LandingIntroHeader onPrehydrate noodle', () => {
       goto,
     }) => {
       await mockNoodles(page, {
-        active: [{ key: 'noodle', date: '2099-06-12', logo: '' }],
-        permanent: [{ key: 'kawaii', tagline: false, logo: '' }],
+        active: [{ key: 'noodle', date: '2099-06-12' }],
+        permanent: [{ key: 'kawaii', tagline: false }],
       })
 
       await goto('/', { waitUntil: 'hydration' })
@@ -69,7 +77,7 @@ test.describe('LandingIntroHeader onPrehydrate noodle', () => {
       goto,
     }) => {
       await mockNoodles(page, {
-        permanent: [{ key: 'kawaii', tagline: false, logo: '' }],
+        permanent: [{ key: 'kawaii', tagline: false }],
         active: [],
       })
 
@@ -84,7 +92,7 @@ test.describe('LandingIntroHeader onPrehydrate noodle', () => {
   test.describe('active noodles', () => {
     test('exact date match → noodle visible, tagline visible', async ({ page, goto }) => {
       await mockNoodles(page, {
-        active: [{ key: 'nodejs', date: TEST_DATE, timezone: 'UTC', logo: '' }],
+        active: [{ key: 'nodejs', date: TEST_DATE, timezone: 'UTC' }],
       })
 
       await goto('/', { waitUntil: 'hydration' })
@@ -96,9 +104,7 @@ test.describe('LandingIntroHeader onPrehydrate noodle', () => {
 
     test('current date inside [date, dateTo] range → noodle visible', async ({ page, goto }) => {
       await mockNoodles(page, {
-        active: [
-          { key: 'nodejs', date: '2099-06-14', dateTo: '2099-06-16', timezone: 'UTC', logo: '' },
-        ],
+        active: [{ key: 'nodejs', date: '2099-06-14', dateTo: '2099-06-16', timezone: 'UTC' }],
       })
 
       await goto('/', { waitUntil: 'hydration' })
@@ -116,7 +122,7 @@ test.describe('LandingIntroHeader onPrehydrate noodle', () => {
       // 2099-06-15T22:00Z is 2099-06-16 07:00 in Asia/Tokyo (UTC+9)
       await page.clock.setFixedTime(new Date('2099-06-15T22:00:00Z'))
       await mockNoodles(page, {
-        active: [{ key: 'nodejs', date: '2099-06-16', timezone: 'Asia/Tokyo', logo: '' }],
+        active: [{ key: 'nodejs', date: '2099-06-16', timezone: 'Asia/Tokyo' }],
       })
 
       await goto('/', { waitUntil: 'hydration' })
@@ -137,7 +143,7 @@ test.describe('LandingIntroHeader onPrehydrate noodle — non-UTC browser timezo
     // 2099-06-15T05:00Z is 2099-06-14 22:00 in America/Los_Angeles (UTC-7 DST)
     await page.clock.setFixedTime(new Date('2099-06-15T05:00:00Z'))
     await mockNoodles(page, {
-      active: [{ key: 'nodejs', date: '2099-06-14', timezone: 'auto', logo: '' }],
+      active: [{ key: 'nodejs', date: '2099-06-14', timezone: 'auto' }],
     })
 
     await goto('/', { waitUntil: 'hydration' })
