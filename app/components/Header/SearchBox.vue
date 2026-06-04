@@ -32,15 +32,19 @@ function clearSearch() {
 const inputRef = useTemplateRef('inputRef')
 function handleFocus() {
   isSearchFocused.value = true
-  inputRef.value?.focus()
   emit('focus')
 }
 function handleBlur() {
   isSearchFocused.value = false
-  inputRef.value?.blur()
   emit('blur')
 }
-defineExpose({ focus: handleFocus, blur: handleBlur })
+function focus() {
+  inputRef.value?.focus()
+}
+function blur() {
+  inputRef.value?.blur()
+}
+defineExpose({ focus, blur })
 </script>
 <template>
   <search v-if="showSearchBar" :class="'flex-1 sm:max-w-md ' + inputClass">
