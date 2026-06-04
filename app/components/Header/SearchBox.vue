@@ -30,10 +30,17 @@ function clearSearch() {
 
 // Expose focus method for parent components
 const inputRef = useTemplateRef('inputRef')
-function focus() {
+function handleFocus() {
+  isSearchFocused.value = true
   inputRef.value?.focus()
+  emit('focus')
 }
-defineExpose({ focus })
+function handleBlur() {
+  isSearchFocused.value = false
+  inputRef.value?.blur()
+  emit('blur')
+}
+defineExpose({ focus: handleFocus, blur: handleBlur })
 </script>
 <template>
   <search v-if="showSearchBar" :class="'flex-1 sm:max-w-md ' + inputClass">
@@ -60,8 +67,8 @@ defineExpose({ focus })
             :placeholder="$t('search.placeholder')"
             no-correct
             class="w-full min-w-25 ps-7 pe-8"
-            @focus="isSearchFocused = true"
-            @blur="isSearchFocused = false"
+            @focus="handleFocus"
+            @blur="handleBlur"
             size="sm"
             ariaKeyshortcuts="/"
           />
