@@ -20,7 +20,8 @@ watch(
     hls.loadSource(src)
     hls.attachMedia(video)
     hls.on(Hls.Events.ERROR, err => {
-      console.log(err)
+      // oxlint-disable-next-line no-console
+      console.log('video player failed', err)
     })
   },
   { immediate: true, flush: 'post' },
