@@ -149,6 +149,11 @@ const communityContributors = computed(
           <h2 class="text-lg text-fg uppercase tracking-wider mb-4">
             {{ $t('about.sponsors.title') }}
           </h2>
+          <p class="text-fg-muted text-sm leading-relaxed mb-4">
+            <LinkBase to="/sponsors" no-new-tab-icon>
+              {{ $t('sponsors_page.cta') }}
+            </LinkBase>
+          </p>
           <AboutLogoList
             :list="SPONSORS"
             class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4 grid-flow-row-dense"
