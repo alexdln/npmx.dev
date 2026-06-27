@@ -1306,12 +1306,12 @@
       "silver": {
         "name": "Silver",
         "price": "$500/month",
-        "description": "We display your logo on the sponsors and about pages."
+        "description": "We display your logo on the sponsors and about pages, and announce you on our socials."
       },
       "gold": {
         "name": "Gold",
         "price": "$1,000/month",
-        "description": "Everything in Silver, plus we display your name in the footer on every page."
+        "description": "Everything in Silver, plus we display your name in the footer on every page and announce you in the next release."
       },
       "platinum": {
         "name": "Platinum",
