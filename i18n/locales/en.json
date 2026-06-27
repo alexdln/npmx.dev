@@ -1285,7 +1285,6 @@
       "description": "npmx is not only about improving developer experience and closing critical everyday gaps. In our first six months, we have already become the default source for thousands of teams and a huge number of developers. You get not only a more stable tool for your teams, but also visibility in front of a constantly growing audience.",
       "cards": {
         "visitors": {
-          "title": "200000+",
           "description": "monthly visitors"
         },
         "community": {
@@ -1300,11 +1299,6 @@
           "title": "default source",
           "description": "pnpm made npmx the default source"
         }
-      },
-      "bullets": {
-        "traffic": "npmx now has more than 200,000 monthly visitors, after filtering artificial traffic.",
-        "community": "We have one of the fastest-growing communities in the ecosystem.",
-        "visibility": "Charts at conferences, talks, and articles rely on our data; many packages and ecosystems are switching links to npmx; pnpm has made npmx the default source."
       }
     },
     "tiers": {

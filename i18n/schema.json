@@ -3859,9 +3859,6 @@
                 "visitors": {
                   "type": "object",
                   "properties": {
-                    "title": {
-                      "type": "string"
-                    },
                     "description": {
                       "type": "string"
                     }
@@ -3903,21 +3900,6 @@
                     }
                   },
                   "additionalProperties": false
-                }
-              },
-              "additionalProperties": false
-            },
-            "bullets": {
-              "type": "object",
-              "properties": {
-                "traffic": {
-                  "type": "string"
-                },
-                "community": {
-                  "type": "string"
-                },
-                "visibility": {
-                  "type": "string"
                 }
               },
               "additionalProperties": false

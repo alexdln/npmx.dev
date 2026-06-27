@@ -326,8 +326,8 @@ export function useCommandPaletteGlobalCommands() {
       {
         id: 'sponsors',
         group: 'npmx',
-        label: t('sponsors.title'),
-        keywords: [t('sponsors.title')],
+        label: t('sponsors_page.title'),
+        keywords: [t('sponsors_page.title')],
         iconClass: 'i-lucide:heart',
         active: route.name === 'sponsors',
         activeLabel: activeLabel(route.name === 'sponsors', t('command_palette.here')),
