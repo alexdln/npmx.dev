@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { SPONSORS } from '~/assets/logos/sponsors'
+
 const silverBenefits = computed(() => [
   $t('sponsors_page.tiers.silver.benefit_1'),
   $t('sponsors_page.tiers.silver.benefit_2'),
@@ -34,8 +36,8 @@ defineOgImage(
 </script>
 
 <template>
-  <main class="container flex-1 py-12 sm:py-16 overflow-x-hidden">
-    <article class="max-w-3xl mx-auto">
+  <main class="container flex-1 py-12 sm:py-16">
+    <article>
       <header class="mb-12">
         <div class="flex items-baseline justify-between gap-4 mb-4">
           <h1 class="font-mono text-3xl sm:text-4xl font-medium">
@@ -48,8 +50,8 @@ defineOgImage(
         </p>
       </header>
 
-      <section class="space-y-12">
-        <div>
+      <section class="space-y-12" :class="$style.grid">
+        <div :class="$style.intro">
           <h2 class="text-lg text-fg uppercase tracking-wider mb-4">
             {{ $t('sponsors_page.what_we_do.title') }}
           </h2>
@@ -58,155 +60,183 @@ defineOgImage(
           </p>
         </div>
 
-        <div>
+        <aside :class="$style.sponsors">
           <h2 class="text-lg text-fg uppercase tracking-wider mb-4">
-            {{ $t('sponsors_page.what_this_means_for_you.title') }}
+            {{ $t('about.sponsors.title') }}
           </h2>
-          <p class="text-fg-muted leading-relaxed mb-4">
-            {{ $t('sponsors_page.what_this_means_for_you.description') }}
-          </p>
-          <div class="grid gap-4 sm:grid-cols-12">
-            <section class="border border-border bg-bg-elevated rounded-lg p-5 sm:col-span-7">
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <p class="font-mono text-2xl text-fg uppercase tracking-wider mb-2">250+</p>
-                  <p class="text-fg-muted text-sm leading-relaxed m-0">
-                    {{ $t('sponsors_page.what_this_means_for_you.cards.people.contributors') }}
-                  </p>
+          <h3 class="block text-sm text-fg uppercase tracking-wider mb-3">
+            {{ $t('about.sponsors.gold') }}
+          </h3>
+          <AboutLogoList
+            :list="SPONSORS.gold"
+            class="grid gap-3 grid-cols-[repeat(auto-fill,minmax(160px,1fr))] lg:grid-cols-1"
+          />
+          <h3 class="block text-sm text-fg uppercase tracking-wider mb-3 mt-6">
+            {{ $t('about.sponsors.silver') }}
+          </h3>
+          <AboutLogoList
+            :list="SPONSORS.silver"
+            class="grid gap-3 grid-cols-[repeat(auto-fill,minmax(160px,1fr))] lg:grid-cols-1"
+          />
+        </aside>
+
+        <div :class="$style.content">
+          <div>
+            <h2 class="text-lg text-fg uppercase tracking-wider mb-4">
+              {{ $t('sponsors_page.what_this_means_for_you.title') }}
+            </h2>
+            <p class="text-fg-muted leading-relaxed mb-4">
+              {{ $t('sponsors_page.what_this_means_for_you.description') }}
+            </p>
+            <div class="grid gap-4 sm:grid-cols-12">
+              <section class="border border-border bg-bg-elevated rounded-lg p-5 sm:col-span-7">
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <p class="font-mono text-2xl text-fg uppercase tracking-wider mb-2">250+</p>
+                    <p class="text-fg-muted text-sm leading-relaxed m-0">
+                      {{ $t('sponsors_page.what_this_means_for_you.cards.people.contributors') }}
+                    </p>
+                  </div>
+                  <div>
+                    <p class="font-mono text-2xl text-fg uppercase tracking-wider mb-2">700+</p>
+                    <p class="text-fg-muted text-sm leading-relaxed m-0">
+                      {{
+                        $t('sponsors_page.what_this_means_for_you.cards.people.community_members')
+                      }}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p class="font-mono text-2xl text-fg uppercase tracking-wider mb-2">700+</p>
-                  <p class="text-fg-muted text-sm leading-relaxed m-0">
-                    {{ $t('sponsors_page.what_this_means_for_you.cards.people.community_members') }}
-                  </p>
-                </div>
-              </div>
-            </section>
-            <section class="border border-border rounded-lg p-5 bg-bg-subtle sm:col-span-5">
-              <p class="font-mono text-2xl text-fg uppercase tracking-wider mb-2">200000+</p>
-              <p class="text-fg-muted text-sm leading-relaxed m-0">
-                {{ $t('sponsors_page.what_this_means_for_you.cards.visitors.description') }}
-              </p>
-            </section>
-            <section class="border border-border rounded-lg p-5 bg-bg-subtle sm:col-span-4">
-              <p class="font-mono text-2xl text-fg uppercase tracking-wider mb-2">3400+</p>
-              <p class="text-fg-muted text-sm leading-relaxed m-0">Stars</p>
-            </section>
-            <section class="border border-border rounded-lg p-5 bg-bg-subtle sm:col-span-8">
-              <p class="font-mono text-2xl text-fg uppercase tracking-wider mb-2">
-                {{ $t('sponsors_page.what_this_means_for_you.cards.community.title') }}
-              </p>
-              <p class="text-fg-muted text-sm leading-relaxed m-0">
-                {{ $t('sponsors_page.what_this_means_for_you.cards.community.description') }}
-              </p>
-            </section>
-            <section class="border border-border rounded-lg p-5 bg-bg-subtle sm:col-span-6">
-              <p class="font-mono text-2xl text-fg uppercase tracking-wider mb-2">
-                {{ $t('sponsors_page.what_this_means_for_you.cards.adoption.title') }}
-              </p>
-              <p class="text-fg-muted text-sm leading-relaxed m-0">
-                {{ $t('sponsors_page.what_this_means_for_you.cards.adoption.description') }}
-              </p>
-            </section>
-            <section class="border border-border rounded-lg p-5 bg-bg-subtle sm:col-span-6">
-              <p class="font-mono text-2xl text-fg uppercase tracking-wider mb-2">
-                {{ $t('sponsors_page.what_this_means_for_you.cards.default_source.title') }}
-              </p>
-              <p class="text-fg-muted text-sm leading-relaxed m-0">
-                {{ $t('sponsors_page.what_this_means_for_you.cards.default_source.description') }}
-              </p>
-            </section>
+              </section>
+              <section class="border border-border rounded-lg p-5 bg-bg-subtle sm:col-span-5">
+                <p class="font-mono text-2xl text-fg uppercase tracking-wider mb-2">200000+</p>
+                <p class="text-fg-muted text-sm leading-relaxed m-0">
+                  {{ $t('sponsors_page.what_this_means_for_you.cards.visitors.description') }}
+                </p>
+              </section>
+              <section class="border border-border rounded-lg p-5 bg-bg-subtle sm:col-span-4">
+                <p class="font-mono text-2xl text-fg uppercase tracking-wider mb-2">3400+</p>
+                <p class="text-fg-muted text-sm leading-relaxed m-0">Stars</p>
+              </section>
+              <section class="border border-border rounded-lg p-5 bg-bg-subtle sm:col-span-8">
+                <p class="font-mono text-2xl text-fg uppercase tracking-wider mb-2">
+                  {{ $t('sponsors_page.what_this_means_for_you.cards.community.title') }}
+                </p>
+                <p class="text-fg-muted text-sm leading-relaxed m-0">
+                  {{ $t('sponsors_page.what_this_means_for_you.cards.community.description') }}
+                </p>
+              </section>
+              <section class="border border-border rounded-lg p-5 bg-bg-subtle sm:col-span-6">
+                <p class="font-mono text-2xl text-fg uppercase tracking-wider mb-2">
+                  {{ $t('sponsors_page.what_this_means_for_you.cards.adoption.title') }}
+                </p>
+                <p class="text-fg-muted text-sm leading-relaxed m-0">
+                  {{ $t('sponsors_page.what_this_means_for_you.cards.adoption.description') }}
+                </p>
+              </section>
+              <section class="border border-border rounded-lg p-5 bg-bg-subtle sm:col-span-6">
+                <p class="font-mono text-2xl text-fg uppercase tracking-wider mb-2">
+                  {{ $t('sponsors_page.what_this_means_for_you.cards.default_source.title') }}
+                </p>
+                <p class="text-fg-muted text-sm leading-relaxed m-0">
+                  {{ $t('sponsors_page.what_this_means_for_you.cards.default_source.description') }}
+                </p>
+              </section>
+            </div>
           </div>
-        </div>
 
-        <div>
-          <h2 class="text-lg text-fg uppercase tracking-wider mb-4">
-            {{ $t('sponsors_page.what_support_means.title') }}
-          </h2>
-          <p class="text-fg-muted leading-relaxed">
-            {{ $t('sponsors_page.what_support_means.description') }}
-          </p>
-        </div>
+          <div class="mt-6">
+            <h2 class="text-lg text-fg uppercase tracking-wider mb-4">
+              {{ $t('sponsors_page.what_support_means.title') }}
+            </h2>
+            <p class="text-fg-muted leading-relaxed">
+              {{ $t('sponsors_page.what_support_means.description') }}
+            </p>
+          </div>
 
-        <div>
-          <h2 class="text-lg text-fg uppercase tracking-wider mb-4">
-            {{ $t('sponsors_page.tiers.title') }}
-          </h2>
+          <div class="mt-6">
+            <h2 class="text-lg text-fg uppercase tracking-wider mb-4">
+              {{ $t('sponsors_page.tiers.title') }}
+            </h2>
 
-          <div class="grid gap-4 sm:grid-cols-2">
-            <div class="border border-border rounded-xl p-5 bg-bg-subtle">
-              <div class="flex items-center justify-between gap-3 mb-2">
-                <h3 class="font-mono text-base text-fg uppercase tracking-wider">
-                  {{ $t('sponsors_page.tiers.silver.name') }}
-                </h3>
-                <span class="i-lucide:coins size-4 text-fg-subtle" aria-hidden="true" />
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div class="border border-border rounded-xl p-5 bg-bg-subtle">
+                <div class="flex items-center justify-between gap-3 mb-2">
+                  <h3 class="font-mono text-base text-fg uppercase tracking-wider">
+                    {{ $t('sponsors_page.tiers.silver.name') }}
+                  </h3>
+                  <span class="i-lucide:coins size-4 text-fg-subtle" aria-hidden="true" />
+                </div>
+                <p class="text-sm text-fg-subtle mb-3 font-mono">
+                  {{ $t('sponsors_page.tiers.silver.price') }}
+                </p>
+                <ul class="space-y-2 text-fg-muted list-none p-0">
+                  <li
+                    v-for="benefit in silverBenefits"
+                    :key="benefit"
+                    class="flex items-start gap-3"
+                  >
+                    <span
+                      class="i-lucide:check size-4 text-accent shrink-0 mt-1"
+                      aria-hidden="true"
+                    />
+                    <span>{{ benefit }}</span>
+                  </li>
+                </ul>
               </div>
-              <p class="text-sm text-fg-subtle mb-3 font-mono">
-                {{ $t('sponsors_page.tiers.silver.price') }}
-              </p>
-              <ul class="space-y-2 text-fg-muted list-none p-0">
-                <li v-for="benefit in silverBenefits" :key="benefit" class="flex items-start gap-3">
-                  <span
-                    class="i-lucide:check size-4 text-accent shrink-0 mt-1"
-                    aria-hidden="true"
-                  />
-                  <span>{{ benefit }}</span>
-                </li>
-              </ul>
-            </div>
 
-            <div
-              class="border border-accent/45 rounded-xl p-5 bg-linear-to-br from-accent/8 to-bg-subtle/40 relative overflow-hidden"
-            >
-              <div class="flex items-center justify-between gap-3 mb-2 relative">
-                <h3 class="font-mono text-base text-fg uppercase tracking-wider">
-                  {{ $t('sponsors_page.tiers.gold.name') }}
-                </h3>
-                <span class="i-lucide:medal size-4 text-accent" aria-hidden="true" />
+              <div
+                class="border border-accent/45 rounded-xl p-5 bg-linear-to-br from-accent/8 to-bg-subtle/40 relative overflow-hidden"
+              >
+                <div class="flex items-center justify-between gap-3 mb-2 relative">
+                  <h3 class="font-mono text-base text-fg uppercase tracking-wider">
+                    {{ $t('sponsors_page.tiers.gold.name') }}
+                  </h3>
+                  <span class="i-lucide:medal size-4 text-accent" aria-hidden="true" />
+                </div>
+                <p class="text-sm text-fg-subtle mb-3 font-mono">
+                  {{ $t('sponsors_page.tiers.gold.price') }}
+                </p>
+                <p class="text-fg-muted leading-relaxed mb-3">
+                  {{ $t('sponsors_page.tiers.gold.description') }}
+                </p>
+                <ul class="space-y-2 text-fg-muted list-none p-0">
+                  <li v-for="benefit in goldBenefits" :key="benefit" class="flex items-start gap-3">
+                    <span
+                      class="i-lucide:check size-4 text-accent shrink-0 mt-1"
+                      aria-hidden="true"
+                    />
+                    <span>{{ benefit }}</span>
+                  </li>
+                </ul>
               </div>
-              <p class="text-sm text-fg-subtle mb-3 font-mono">
-                {{ $t('sponsors_page.tiers.gold.price') }}
-              </p>
-              <p class="text-fg-muted leading-relaxed mb-3">
-                {{ $t('sponsors_page.tiers.gold.description') }}
-              </p>
-              <ul class="space-y-2 text-fg-muted list-none p-0">
-                <li v-for="benefit in goldBenefits" :key="benefit" class="flex items-start gap-3">
-                  <span
-                    class="i-lucide:check size-4 text-accent shrink-0 mt-1"
-                    aria-hidden="true"
-                  />
-                  <span>{{ benefit }}</span>
-                </li>
-              </ul>
-            </div>
 
-            <div class="border border-border rounded-xl p-5 bg-bg-muted sm:col-span-2">
-              <div class="flex items-center justify-between gap-3 mb-2">
-                <h3 class="font-mono text-base text-fg uppercase tracking-wider">
-                  {{ $t('sponsors_page.tiers.platinum.name') }}
-                </h3>
-                <span class="i-lucide:crown size-4 text-fg-subtle" aria-hidden="true" />
+              <div class="border border-border rounded-xl p-5 bg-bg-muted sm:col-span-2">
+                <div class="flex items-center justify-between gap-3 mb-2">
+                  <h3 class="font-mono text-base text-fg uppercase tracking-wider">
+                    {{ $t('sponsors_page.tiers.platinum.name') }}
+                  </h3>
+                  <span class="i-lucide:crown size-4 text-fg-subtle" aria-hidden="true" />
+                </div>
+                <p class="text-sm text-fg-subtle mb-3 font-mono">
+                  {{ $t('sponsors_page.tiers.platinum.price') }}
+                </p>
+                <p class="text-fg-muted leading-relaxed mb-3">
+                  {{ $t('sponsors_page.tiers.platinum.description') }}
+                </p>
+                <ul class="space-y-2 text-fg-muted list-none p-0">
+                  <li
+                    v-for="benefit in platinumBenefits"
+                    :key="benefit"
+                    class="flex items-start gap-3"
+                  >
+                    <span
+                      class="i-lucide:check size-4 text-accent shrink-0 mt-1"
+                      aria-hidden="true"
+                    />
+                    <span>{{ benefit }}</span>
+                  </li>
+                </ul>
               </div>
-              <p class="text-sm text-fg-subtle mb-3 font-mono">
-                {{ $t('sponsors_page.tiers.platinum.price') }}
-              </p>
-              <p class="text-fg-muted leading-relaxed mb-3">
-                {{ $t('sponsors_page.tiers.platinum.description') }}
-              </p>
-              <ul class="space-y-2 text-fg-muted list-none p-0">
-                <li
-                  v-for="benefit in platinumBenefits"
-                  :key="benefit"
-                  class="flex items-start gap-3"
-                >
-                  <span
-                    class="i-lucide:check size-4 text-accent shrink-0 mt-1"
-                    aria-hidden="true"
-                  />
-                  <span>{{ benefit }}</span>
-                </li>
-              </ul>
             </div>
           </div>
         </div>
@@ -214,3 +244,40 @@ defineOgImage(
     </article>
   </main>
 </template>
+
+<style module>
+.grid {
+  display: grid;
+  column-gap: 2rem;
+  row-gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'intro'
+    'sponsors'
+    'content';
+}
+
+@media (min-width: 64rem) {
+  .grid {
+    grid-template-columns: 1fr 20rem;
+    grid-template-areas: 'intro sponsors' 'content sponsors';
+  }
+}
+
+.grid > * {
+  min-width: 0;
+}
+
+.intro {
+  grid-area: intro;
+}
+
+.sponsors {
+  grid-area: sponsors;
+  align-self: start;
+}
+
+.content {
+  grid-area: content;
+}
+</style>
