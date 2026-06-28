@@ -3856,6 +3856,18 @@
             "cards": {
               "type": "object",
               "properties": {
+                "people": {
+                  "type": "object",
+                  "properties": {
+                    "contributors": {
+                      "type": "string"
+                    },
+                    "community_members": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
                 "visitors": {
                   "type": "object",
                   "properties": {
@@ -3922,7 +3934,10 @@
                 "price": {
                   "type": "string"
                 },
-                "description": {
+                "benefit_1": {
+                  "type": "string"
+                },
+                "benefit_2": {
                   "type": "string"
                 }
               },
@@ -3938,6 +3953,12 @@
                   "type": "string"
                 },
                 "description": {
+                  "type": "string"
+                },
+                "benefit_1": {
+                  "type": "string"
+                },
+                "benefit_2": {
                   "type": "string"
                 }
               },

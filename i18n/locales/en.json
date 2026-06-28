@@ -1282,8 +1282,12 @@
     "cta": "See sponsorship tiers",
     "what_this_means_for_you": {
       "title": "What this means for you",
-      "description": "npmx is not only about improving developer experience and closing critical everyday gaps. In our first six months, we have already become the default source for thousands of teams and a huge number of developers. You get not only a more stable tool for your teams, but also visibility in front of a constantly growing audience.",
+      "description": "npmx is not only about improving developer experience and closing critical everyday gaps. In our first six months, we have already become the default source for thousands of teams and a huge number of developers. You get not only a more stable tool for your teams, but also visibility in front of a constantly growing audience of top-tier engineers.",
       "cards": {
+        "people": {
+          "contributors": "contributors",
+          "community_members": "community members"
+        },
         "visitors": {
           "description": "monthly visitors"
         },
@@ -1297,7 +1301,7 @@
         },
         "default_source": {
           "title": "default source",
-          "description": "pnpm made npmx the default source"
+          "description": "pnpm made npmx the default source, many packages have been configured to link to npmx"
         }
       }
     },
@@ -1306,12 +1310,15 @@
       "silver": {
         "name": "Silver",
         "price": "$500/month",
-        "description": "We display your logo on the sponsors and about pages, and announce you on our socials."
+        "benefit_1": "We display your logo on the sponsors and about pages.",
+        "benefit_2": "We announce you on our socials."
       },
       "gold": {
         "name": "Gold",
         "price": "$1,000/month",
-        "description": "Everything in Silver, plus we display your name in the footer on every page and announce you in the next release."
+        "description": "Everything in Silver, plus:",
+        "benefit_1": "We display your name in the footer on every page.",
+        "benefit_2": "We announce you in the next release."
       },
       "platinum": {
         "name": "Platinum",
