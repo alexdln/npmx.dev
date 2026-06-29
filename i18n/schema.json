@@ -3934,25 +3934,16 @@
             "title": {
               "type": "string"
             },
+            "per_month": {
+              "type": "string"
+            },
+            "custom": {
+              "type": "string"
+            },
             "silver": {
               "type": "object",
               "properties": {
                 "name": {
-                  "type": "string"
-                },
-                "price": {
-                  "type": "string"
-                },
-                "benefit_1": {
-                  "type": "string"
-                },
-                "benefit_2": {
-                  "type": "string"
-                },
-                "benefit_3": {
-                  "type": "string"
-                },
-                "benefit_4": {
                   "type": "string"
                 }
               },
@@ -3963,15 +3954,6 @@
               "properties": {
                 "name": {
                   "type": "string"
-                },
-                "price": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "benefit_1": {
-                  "type": "string"
                 }
               },
               "additionalProperties": false
@@ -3980,18 +3962,6 @@
               "type": "object",
               "properties": {
                 "name": {
-                  "type": "string"
-                },
-                "price": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "benefit_1": {
-                  "type": "string"
-                },
-                "benefit_2": {
                   "type": "string"
                 }
               },

@@ -1,19 +1,21 @@
 <script setup lang="ts">
 import { SPONSORS } from '~/assets/logos/sponsors'
 
-const silverBenefits = computed(() => [
-  $t('sponsors_page.tiers.silver.benefit_1'),
-  $t('sponsors_page.tiers.silver.benefit_2'),
-  $t('sponsors_page.tiers.silver.benefit_3'),
-  $t('sponsors_page.tiers.silver.benefit_4'),
-])
+const SPONSORSHIP_TIER_PRICES = {
+  silver: 500,
+  gold: 1000,
+} as const
 
-const goldBenefits = computed(() => [$t('sponsors_page.tiers.gold.benefit_1')])
+const { t } = useI18n()
+const currencyFormatter = useNumberFormatter({
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+})
 
-const platinumBenefits = computed(() => [
-  $t('sponsors_page.tiers.platinum.benefit_1'),
-  $t('sponsors_page.tiers.platinum.benefit_2'),
-])
+function formatTierPrice(amount: number) {
+  return `${currencyFormatter.value.format(amount)}${t('sponsors_page.tiers.per_month')}`
+}
 
 useSeoMeta({
   title: () => `${$t('sponsors_page.title')} - npmx`,
@@ -154,66 +156,44 @@ defineOgImage(
             {{ $t('sponsors_page.tiers.title') }}
           </h2>
 
-          <div class="border border-border rounded-xl p-5 bg-bg-subtle">
+          <div class="border border-fg/80 rounded-xl p-5 bg-bg-muted">
             <div class="flex items-center justify-between gap-3 mb-2">
               <h3 class="font-mono text-base text-fg uppercase tracking-wider">
                 {{ $t('sponsors_page.tiers.silver.name') }}
               </h3>
               <span class="i-lucide:coins size-4 text-fg-subtle" aria-hidden="true" />
             </div>
-            <p class="text-sm text-fg-subtle mb-3 font-mono">
-              {{ $t('sponsors_page.tiers.silver.price') }}
+            <p class="text-sm text-fg-subtle font-mono">
+              {{ formatTierPrice(SPONSORSHIP_TIER_PRICES.silver) }}
             </p>
-            <ul class="space-y-2 text-fg-muted list-none p-0">
-              <li v-for="benefit in silverBenefits" :key="benefit" class="flex items-start gap-3">
-                <span class="i-lucide:check size-4 text-accent shrink-0 mt-1" aria-hidden="true" />
-                <span>{{ benefit }}</span>
-              </li>
-            </ul>
           </div>
 
           <div
-            class="border border-accent/45 rounded-xl p-5 bg-linear-to-br from-accent/8 to-bg-subtle/40 relative overflow-hidden mt-4"
+            class="border border-badge-yellow/80 rounded-xl p-5 bg-linear-to-br from-badge-yellow/8 to-bg-subtle/40 relative overflow-hidden mt-4"
           >
             <div class="flex items-center justify-between gap-3 mb-2 relative">
               <h3 class="font-mono text-base text-fg uppercase tracking-wider">
                 {{ $t('sponsors_page.tiers.gold.name') }}
               </h3>
-              <span class="i-lucide:medal size-4 text-accent" aria-hidden="true" />
+              <span class="i-lucide:medal size-4 text-badge-yellow" aria-hidden="true" />
             </div>
-            <p class="text-sm text-fg-subtle mb-3 font-mono">
-              {{ $t('sponsors_page.tiers.gold.price') }}
+            <p class="text-sm text-fg-subtle font-mono">
+              {{ formatTierPrice(SPONSORSHIP_TIER_PRICES.gold) }}
             </p>
-            <p class="text-fg-muted leading-relaxed mb-3">
-              {{ $t('sponsors_page.tiers.gold.description') }}
-            </p>
-            <ul class="space-y-2 text-fg-muted list-none p-0">
-              <li v-for="benefit in goldBenefits" :key="benefit" class="flex items-start gap-3">
-                <span class="i-lucide:check size-4 text-accent shrink-0 mt-1" aria-hidden="true" />
-                <span>{{ benefit }}</span>
-              </li>
-            </ul>
           </div>
 
-          <div class="border border-border rounded-xl p-5 bg-bg-muted mt-4">
+          <div
+            class="border border-badge-blue/80 rounded-xl p-5 bg-linear-to-br from-badge-blue/8 to-bg-subtle/40 relative overflow-hidden mt-4"
+          >
             <div class="flex items-center justify-between gap-3 mb-2">
               <h3 class="font-mono text-base text-fg uppercase tracking-wider">
                 {{ $t('sponsors_page.tiers.platinum.name') }}
               </h3>
-              <span class="i-lucide:crown size-4 text-fg-subtle" aria-hidden="true" />
+              <span class="i-lucide:crown size-4 text-badge-blue" aria-hidden="true" />
             </div>
-            <p class="text-sm text-fg-subtle mb-3 font-mono">
-              {{ $t('sponsors_page.tiers.platinum.price') }}
+            <p class="text-sm text-fg-subtle font-mono">
+              {{ $t('sponsors_page.tiers.custom') }}
             </p>
-            <p class="text-fg-muted leading-relaxed mb-3">
-              {{ $t('sponsors_page.tiers.platinum.description') }}
-            </p>
-            <ul class="space-y-2 text-fg-muted list-none p-0">
-              <li v-for="benefit in platinumBenefits" :key="benefit" class="flex items-start gap-3">
-                <span class="i-lucide:check size-4 text-accent shrink-0 mt-1" aria-hidden="true" />
-                <span>{{ benefit }}</span>
-              </li>
-            </ul>
           </div>
         </div>
       </section>

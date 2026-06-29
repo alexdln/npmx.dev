@@ -1280,7 +1280,7 @@
     },
     "what_support_means": {
       "title": "What support means",
-      "description": "Our plans keep growing, along with our desire to share what we've built and learn from others. Your support helps the project, talks, community, and ecosystem, and most importantly enables us to join larger events and plan more ambitious work."
+      "description": "Our plans and connections keep growing, along with our desire to share what we've built and learn from others. Your support helps fund the project, external talks, conferences, and the broader ecosystem, and, most importantly, enables us to keep growing our community."
     },
     "cta": "See sponsorship tiers",
     "what_this_means_for_you": {
@@ -1310,26 +1310,16 @@
     },
     "tiers": {
       "title": "Sponsorship tiers",
+      "per_month": "/month",
+      "custom": "Custom",
       "silver": {
-        "name": "Silver",
-        "price": "$500/month",
-        "benefit_1": "We display your logo on the sponsors and about pages in the appropriate category.",
-        "benefit_2": "We display your name in the footer on every page.",
-        "benefit_3": "We announce you on our socials.",
-        "benefit_4": "We display your logo at npmx meetups and talks related to npmx, where event organizers allow it."
+        "name": "Silver"
       },
       "gold": {
-        "name": "Gold",
-        "price": "$1,000/month",
-        "description": "Everything in Silver, plus:",
-        "benefit_1": "We announce you in the next release."
+        "name": "Gold"
       },
       "platinum": {
-        "name": "Platinum",
-        "price": "Custom",
-        "description": "Everything in Gold, plus:",
-        "benefit_1": "We publish a dedicated article when sponsorship begins, plus follow-up articles after 6 and 12 months. We're also happy to help you write an article for your own blog and share any info you need.",
-        "benefit_2": "Let's talk."
+        "name": "Platinum"
       }
     }
   },
