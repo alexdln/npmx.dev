@@ -3948,6 +3948,12 @@
                 },
                 "benefit_2": {
                   "type": "string"
+                },
+                "benefit_3": {
+                  "type": "string"
+                },
+                "benefit_4": {
+                  "type": "string"
                 }
               },
               "additionalProperties": false
@@ -3965,9 +3971,6 @@
                   "type": "string"
                 },
                 "benefit_1": {
-                  "type": "string"
-                },
-                "benefit_2": {
                   "type": "string"
                 }
               },
