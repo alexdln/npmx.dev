@@ -1283,6 +1283,7 @@
       "description": "Our plans and connections keep growing, along with our desire to share what we've built and learn from others. Your support helps fund the project, external talks, conferences, and the broader ecosystem, and, most importantly, enables us to keep growing our community."
     },
     "cta": "See sponsorship tiers",
+    "community_growth_footnote": "* According to {link} Q1 2026 research.",
     "what_this_means_for_you": {
       "title": "What this means for you",
       "description": "npmx is not only about improving developer experience and closing critical everyday gaps. In our first six months, we have already become the default source for thousands of teams and a huge number of developers. You get not only a more stable tool for your teams, but also visibility in front of a constantly growing audience of top-tier engineers.",
@@ -1292,7 +1293,10 @@
           "community_members": "community members"
         },
         "visitors": {
-          "description": "monthly visitors"
+          "description": "unique monthly visitors"
+        },
+        "stars": {
+          "title": "stars"
         },
         "community": {
           "title": "fast-growing",

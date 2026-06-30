@@ -3853,6 +3853,9 @@
         "cta": {
           "type": "string"
         },
+        "community_growth_footnote": {
+          "type": "string"
+        },
         "what_this_means_for_you": {
           "type": "object",
           "properties": {
@@ -3881,6 +3884,15 @@
                   "type": "object",
                   "properties": {
                     "description": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "stars": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
                       "type": "string"
                     }
                   },

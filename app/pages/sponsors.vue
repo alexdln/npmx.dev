@@ -113,14 +113,17 @@ defineOgImage(
             </section>
             <section class="border border-border rounded-lg p-5 bg-bg-subtle sm:col-span-4">
               <p class="font-mono text-2xl text-fg uppercase tracking-wider mb-2">3400+</p>
-              <p class="text-fg-muted text-sm leading-relaxed m-0">Stars</p>
+              <p class="text-fg-muted text-sm leading-relaxed m-0">
+                {{ $t('sponsors_page.what_this_means_for_you.cards.stars.title') }}
+              </p>
             </section>
             <section class="border border-border rounded-lg p-5 bg-bg-subtle sm:col-span-8">
               <p class="font-mono text-2xl text-fg uppercase tracking-wider mb-2">
                 {{ $t('sponsors_page.what_this_means_for_you.cards.community.title') }}
               </p>
               <p class="text-fg-muted text-sm leading-relaxed m-0">
-                {{ $t('sponsors_page.what_this_means_for_you.cards.community.description') }}
+                {{ $t('sponsors_page.what_this_means_for_you.cards.community.description')
+                }}<sup>*</sup>
               </p>
             </section>
             <section class="border border-border rounded-lg p-5 bg-bg-subtle sm:col-span-6">
@@ -198,6 +201,14 @@ defineOgImage(
         </div>
       </section>
     </div>
+
+    <p class="text-fg-subtle text-xs leading-relaxed mt-12">
+      <i18n-t keypath="sponsors_page.community_growth_footnote" tag="span" scope="global">
+        <template #link>
+          <LinkBase to="https://osscar.dev/"> OSSCAR </LinkBase>
+        </template>
+      </i18n-t>
+    </p>
   </main>
 </template>
 
