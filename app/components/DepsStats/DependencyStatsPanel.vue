@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { RouteLocationRaw } from 'vue-router'
+import type { InstallSizeResult } from '#shared/types/install-size'
 import { packageRoute, packageStatsRoute } from '~/utils/router'
 
 const props = defineProps<{
@@ -17,6 +18,36 @@ const { getFacetValues, isFacetLoading, isColumnLoading, status } =
 const { facetLabels } = useFacetSelection()
 
 const resolvedVersion = computed(() => pkg.value?.['dist-tags']?.latest ?? null)
+
+const { data: moduleReplacement } = useModuleReplacement(() => props.packageName)
+const { data: licenseChangeData } = useLicenseChanges(() => props.packageName, resolvedVersion)
+
+const { data: installSize, execute: fetchInstallSize } = useLazyFetch<InstallSizeResult | null>(
+  () => {
+    const version = resolvedVersion.value
+    if (!version) return ''
+    return `/api/registry/install-size/${props.packageName}/v/${version}`
+  },
+  {
+    server: false,
+    immediate: false,
+  },
+)
+
+watch(
+  resolvedVersion,
+  version => {
+    if (version) fetchInstallSize()
+  },
+  { immediate: true },
+)
+
+const { diff: sizeDiff } = useInstallSizeDiff(
+  () => props.packageName,
+  resolvedVersion,
+  pkg,
+  installSize,
+)
 
 const statsLink = computed((): RouteLocationRaw | null => {
   if (!resolvedVersion.value) return null
@@ -72,6 +103,29 @@ function formatFacetValue(value: FacetValue): string {
   </header>
 
   <div class="relative flex-1 overflow-y-auto">
+    <div class="px-4 pt-4 space-y-3">
+      <LicenseChangeWarning :change="licenseChangeData?.change ?? null" />
+      <PackageReplacement
+        v-if="moduleReplacement"
+        :mapping="moduleReplacement.mapping"
+        :replacement="moduleReplacement.replacement"
+      />
+      <PackageSizeIncrease v-if="sizeDiff?.direction === 'increase'" :diff="sizeDiff" />
+      <PackageSizeDecrease v-else-if="sizeDiff?.direction === 'decrease'" :diff="sizeDiff" />
+      <ClientOnly>
+        <PackageVulnerabilityTree
+          v-if="resolvedVersion"
+          :package-name="packageName"
+          :version="resolvedVersion"
+        />
+        <PackageDeprecatedTree
+          v-if="resolvedVersion"
+          :package-name="packageName"
+          :version="resolvedVersion"
+        />
+      </ClientOnly>
+    </div>
+
     <section class="px-4 py-6">
       <h3 class="text-fg-muted mb-2 uppercase text-sm">
         {{ $t('package.stats.main_information') }}
