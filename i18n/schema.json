@@ -718,15 +718,6 @@
           },
           "additionalProperties": false
         },
-        "workspace": {
-          "type": "object",
-          "properties": {
-            "section": {
-              "type": "string"
-            }
-          },
-          "additionalProperties": false
-        },
         "dependencies": {
           "type": "object",
           "properties": {

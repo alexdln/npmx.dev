@@ -238,9 +238,6 @@
       "clear": "Clear",
       "invalid_package_json": "Invalid package.json"
     },
-    "workspace": {
-      "section": "Dependencies"
-    },
     "dependencies": {
       "title": "Dependencies",
       "count": "No deps | 1 dep | {count} deps",
