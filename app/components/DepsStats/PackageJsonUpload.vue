@@ -10,6 +10,7 @@ const props = defineProps<{
 }>()
 
 const inputRef = useTemplateRef<HTMLInputElement>('inputRef')
+const inputId = useId()
 const isDragging = shallowRef(false)
 
 async function readFile(file: File) {
@@ -38,8 +39,8 @@ function clearSelection() {
 </script>
 
 <template>
-  <label
-    class="rounded-lg border border-dashed px-4 py-2 transition-colors h-20 flex items-center justify-center"
+  <div
+    class="relative rounded-lg border border-dashed px-4 py-2 transition-colors h-20 flex items-center justify-center"
     :class="
       isDragging
         ? 'border-accent bg-accent/5'
@@ -52,25 +53,32 @@ function clearSelection() {
     @dragleave.prevent="isDragging = false"
     @drop.prevent="onDrop"
   >
-    <span class="sr-only">{{ $t('deps_stats.upload.label') }}</span>
     <input
+      :id="inputId"
       ref="inputRef"
       type="file"
       accept=".json,application/json"
-      class="block w-full text-sm font-mono text-fg-muted file:me-3 file:py-1.5 file:px-3 file:rounded-md file:border file:border-border file:bg-bg-subtle file:text-fg file:font-mono file:text-sm file:cursor-pointer hover:file:border-border-hover hover:file:bg-bg-muted transition-colors"
+      class="sr-only"
       @change="onFileChange"
-      hidden
     />
+    <label :for="inputId" class="absolute inset-0 cursor-pointer">
+      <span class="sr-only">{{ $t('deps_stats.upload.label') }}</span>
+    </label>
     <div
       v-if="fileName"
-      class="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+      class="relative z-10 flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2 pointer-events-none"
     >
       <p class="text-sm font-mono text-fg-muted">{{ fileName }}</p>
-      <ButtonBase size="md" :aria-label="$t('deps_stats.upload.clear')" @click="clearSelection">
+      <ButtonBase
+        size="md"
+        class="pointer-events-auto"
+        :aria-label="$t('deps_stats.upload.clear')"
+        @click="clearSelection"
+      >
         {{ $t('deps_stats.upload.clear') }}
       </ButtonBase>
     </div>
-    <div v-else>
+    <div v-else class="relative z-10 pointer-events-none text-center">
       <p class="text-sm text-fg-subtle">
         {{ $t('deps_stats.upload.hint') }}
       </p>
@@ -78,5 +86,5 @@ function clearSelection() {
         {{ error }}
       </p>
     </div>
-  </label>
+  </div>
 </template>
