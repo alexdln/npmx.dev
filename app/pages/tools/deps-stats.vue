@@ -93,7 +93,7 @@ defineOgImage(
         />
         <DepsStatsDependencyStats
           :dependency="selectedDependency"
-          class="[@media(min-height:600px)]:h-[calc(100vh-15rem)]"
+          class="[@media(min-height:600px)_and_(min-width:1023px)]:h-[calc(100vh-15rem)]"
         />
       </div>
     </section>

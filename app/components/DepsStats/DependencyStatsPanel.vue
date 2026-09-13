@@ -162,8 +162,9 @@ function formatFacetValue(value: FacetValue): string {
           :package-names="[packageName]"
           :package-name="packageName"
           :version="resolvedVersion ?? undefined"
-          show-facet-selector
           default-range="52-weeks"
+          hide-controls
+          compact-x-axis-labels
         />
       </section>
 
@@ -171,7 +172,7 @@ function formatFacetValue(value: FacetValue): string {
         <h3 class="text-fg-muted mb-4 uppercase text-sm">
           {{ $t('package.stats.version_distribution') }}
         </h3>
-        <PackageVersionDistribution class="font-mono" :package-name="packageName" />
+        <PackageVersionDistribution class="font-mono" :package-name="packageName" hide-controls />
       </section>
     </div>
   </div>

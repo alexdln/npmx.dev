@@ -54,10 +54,14 @@ const props = withDefaults(
     showFacetSelector?: boolean
     permalink?: boolean
     defaultRange?: 'auto' | '52-weeks'
+    hideControls?: boolean
+    compactXAxisLabels?: boolean
   }>(),
   {
     defaultRange: 'auto',
     permalink: false,
+    hideControls: false,
+    compactXAxisLabels: false,
   },
 )
 
@@ -1087,6 +1091,9 @@ const chartHeight = computed(() => {
   if (isMobile.value) {
     return 950
   }
+  if (props.hideControls) {
+    return 460
+  }
   return showCorrectionControls.value && props.inModal ? 494 : 600
 })
 
@@ -1143,6 +1150,7 @@ const chartConfig = computed<VueUiXyConfig>(() => {
     t: $t,
     compactNumberFormatter: compactNumberFormatter.value,
     tooltipPosition: tooltipPosition.value,
+    compactXAxisLabels: props.compactXAxisLabels,
   })
 
   return {
@@ -1239,6 +1247,7 @@ const chartConfig = computed<VueUiXyConfig>(() => {
         },
       },
       zoom: {
+        show: !props.hideControls,
         autoFit: true,
         highlightColor: colors.value.bgElevated,
         useResetSlot: true,
@@ -1422,7 +1431,7 @@ const copyEmbedUrl = () => copyEmbed(embedUrl.value)
       </TabList>
     </TabRoot>
 
-    <div class="w-full mb-4 flex flex-col gap-3">
+    <div class="w-full mb-4 flex flex-col gap-3" v-if="!hideControls">
       <div class="grid grid-cols-2 sm:flex sm:flex-row gap-3 sm:gap-2 sm:items-end">
         <SelectField
           v-if="showFacetSelector"
@@ -1968,7 +1977,7 @@ const copyEmbedUrl = () => copyEmbed(embedUrl.value)
     </div>
 
     <!-- Chart embedding -->
-    <div v-if="isDownloadsMetric && !!chartData.dataset">
+    <div v-if="isDownloadsMetric && !!chartData.dataset && !hideControls">
       <div class="flex flex-col gap-2">
         <button
           type="button"
