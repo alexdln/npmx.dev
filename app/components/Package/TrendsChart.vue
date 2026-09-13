@@ -59,9 +59,6 @@ const props = withDefaults(
   }>(),
   {
     defaultRange: 'auto',
-    permalink: false,
-    hideControls: false,
-    compactXAxisLabels: false,
   },
 )
 

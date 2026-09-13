@@ -445,17 +445,9 @@ export function buildTrendsChartConfig(
               useUTC: true,
               options: getTrendsDatetimeFormatterOptions(options.selectedGranularity),
             },
-            ...(options.compactXAxisLabels
-              ? {
-                  showOnlyFirstAndLast: true,
-                }
-              : {
-                  showOnlyAtModulo: options.dates.length > XAXIS_LABELS_MOD_THRESHOLD,
-                  modulo: Math.max(
-                    1,
-                    Math.round(options.dates.length / XAXIS_LABELS_MOD_THRESHOLD),
-                  ),
-                }),
+            showOnlyFirstAndLast: true,
+            showOnlyAtModulo: options.dates.length > XAXIS_LABELS_MOD_THRESHOLD,
+            modulo: Math.max(1, Math.round(options.dates.length / XAXIS_LABELS_MOD_THRESHOLD)),
           },
           yAxis: {
             formatter: ({ value }: { value: number }) => {
