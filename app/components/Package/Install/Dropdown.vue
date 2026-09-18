@@ -54,8 +54,35 @@ const hasExtra = computed(
     !!props.createPackageInfo,
 )
 
+const appSettings = useSettings()
+
 const isOpen = shallowRef(false)
 const panelId = useId()
+
+onPrehydrate(() => {
+  const settings = JSON.parse(localStorage.getItem('npmx-settings') || '{}')
+  if (settings?.installCommandsExpanded) {
+    document.documentElement.dataset.installExpanded = 'true'
+  }
+})
+
+onMounted(() => {
+  if (document?.documentElement) {
+    isOpen.value = document.documentElement.dataset.installExpanded === 'true'
+  }
+})
+
+function toggle() {
+  isOpen.value = !isOpen.value
+
+  appSettings.settings.value.installCommandsExpanded = isOpen.value
+
+  if (isOpen.value) {
+    document.documentElement.dataset.installExpanded = 'true'
+  } else {
+    delete document.documentElement.dataset.installExpanded
+  }
+}
 </script>
 
 <template>
@@ -69,7 +96,6 @@ const panelId = useId()
 
     <div
       class="w-full bg-bg-subtle border border-border rounded-lg transition-colors duration-200 relative"
-      :class="isOpen ? 'border-border-hover' : 'hover:border-border-hover'"
     >
       <div class="flex items-stretch max-lg:flex-col lg:flex-row-reverse">
         <div
@@ -95,7 +121,7 @@ const panelId = useId()
                 ? $t('package.get_started.collapse_commands')
                 : $t('package.get_started.expand_commands')
             "
-            @click="isOpen = !isOpen"
+            @click="toggle"
           >
             <span
               class="i-lucide:chevron-down w-3.5 h-3.5 transition-transform duration-200"
@@ -131,6 +157,7 @@ const panelId = useId()
       <div
         v-if="hasExtra"
         :id="panelId"
+        data-install-panel
         class="grid overflow-hidden transition-[grid-template-rows] duration-250 ease-out"
         :class="isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
         :inert="!isOpen"
