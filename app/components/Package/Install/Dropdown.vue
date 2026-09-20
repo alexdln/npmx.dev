@@ -71,8 +71,8 @@ onPrehydrate(() => {
 })
 
 onMounted(() => {
-  if (document.documentElement.dataset.installExpanded === 'true') {
-    isOpen.value = true
+  if (document.documentElement) {
+    isOpen.value = document.documentElement.dataset.installExpanded === 'true'
   }
   console.log('onMounted', document.documentElement.dataset.installExpanded, isOpen.value)
 })
