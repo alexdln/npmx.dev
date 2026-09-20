@@ -137,7 +137,7 @@ function copyCreateCommand() {
     <ButtonBase
       type="button"
       :class="['shrink-0', copyButtonClass]"
-      :aria-label="$t('command_palette.package_actions.copy_run')"
+      :aria-label="$t('package.get_started.copy_dev_command')"
       :classicon="devInstallCopied ? 'i-lucide:check' : 'i-lucide:copy'"
       @click.stop="copyDevInstallCommand"
     />
@@ -215,7 +215,7 @@ function copyCreateCommand() {
     <ButtonBase
       type="button"
       :class="['shrink-0', copyButtonClass]"
-      :aria-label="$t('command_palette.package_actions.copy_run')"
+      :aria-label="$t('package.run.copy_command')"
       :classicon="runCopied ? 'i-lucide:check' : 'i-lucide:copy'"
       @click.stop="copyRunCommand(executableInfo?.primaryCommand)"
     />
@@ -246,7 +246,7 @@ function copyCreateCommand() {
     <ButtonBase
       type="button"
       :class="['shrink-0', copyButtonClass]"
-      :aria-label="$t('command_palette.package_actions.copy_run')"
+      :aria-label="$t('package.create.copy_command')"
       :classicon="createCopied ? 'i-lucide:check' : 'i-lucide:copy'"
       @click.stop="copyCreateCommand"
     />
