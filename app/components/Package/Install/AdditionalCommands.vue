@@ -145,13 +145,18 @@ function copyCreateCommand() {
       <p class="text-xs text-fg-subtle mb-0.5 select-none">
         {{ $t('package.get_started.dev_dependency_hint') }}
       </p>
-      <code class="font-mono text-sm min-w-0 block truncate tracking-tight" dir="ltr"
+      <code
+        class="font-mono text-sm min-w-0 block truncate tracking-tight"
+        dir="ltr"
+        v-for="pm in packageManagers"
+        :key="pm.id"
+        :data-pm-additional-cmd="pm.id"
         ><span class="text-fg-subtle select-none">${{ ' ' }}</span
         ><span
-          v-for="(part, i) in getDevInstallPartsForPM(selectedPm)"
+          v-for="(part, i) in getDevInstallPartsForPM(pm.id)"
           :key="i"
           :class="
-            i === getDevInstallPartsForPM(selectedPm).length - 1
+            i === getDevInstallPartsForPM(pm.id).length - 1
               ? 'text-fg font-medium'
               : 'text-fg-muted'
           "
@@ -179,13 +184,18 @@ function copyCreateCommand() {
         {{ $t('package.get_started.types_label') }}
       </p>
       <div class="flex items-center gap-2 min-w-0">
-        <code class="font-mono text-sm min-w-0 truncate tracking-tight" dir="ltr"
+        <code
+          class="font-mono text-sm min-w-0 truncate tracking-tight"
+          dir="ltr"
+          v-for="pm in packageManagers"
+          :key="pm.id"
+          :data-pm-additional-cmd="pm.id"
           ><span class="text-fg-subtle select-none">${{ ' ' }}</span
           ><span
-            v-for="(part, i) in getTypesInstallPartsForPM(selectedPm)"
+            v-for="(part, i) in getTypesInstallPartsForPM(pm.id)"
             :key="i"
             :class="
-              i === getTypesInstallPartsForPM(selectedPm).length - 1
+              i === getTypesInstallPartsForPM(pm.id).length - 1
                 ? 'text-fg font-medium'
                 : 'text-fg-muted'
             "
@@ -221,13 +231,18 @@ function copyCreateCommand() {
     />
     <div class="min-w-0 flex-1">
       <p class="text-xs text-fg-subtle mb-0.5 select-none">{{ $t('package.run.locally') }}</p>
-      <code class="font-mono text-sm min-w-0 block truncate tracking-tight" dir="ltr"
+      <code
+        class="font-mono text-sm min-w-0 block truncate tracking-tight"
+        dir="ltr"
+        v-for="pm in packageManagers"
+        :key="pm.id"
+        :data-pm-additional-cmd="pm.id"
         ><span class="text-fg-subtle select-none">${{ ' ' }}</span
         ><span
-          v-for="(part, i) in getRunPartsForPM(selectedPm, executableInfo?.primaryCommand)"
+          v-for="(part, i) in getRunPartsForPM(pm.id, executableInfo?.primaryCommand)"
           :key="i"
           :class="
-            i === getRunPartsForPM(selectedPm, executableInfo?.primaryCommand).length - 1
+            i === getRunPartsForPM(pm.id, executableInfo?.primaryCommand).length - 1
               ? 'text-fg font-medium'
               : 'text-fg-muted'
           "
@@ -267,15 +282,18 @@ function copyCreateCommand() {
           </NuxtLink>
         </TooltipApp>
       </div>
-      <code class="font-mono text-sm min-w-0 block truncate tracking-tight" dir="ltr"
+      <code
+        class="font-mono text-sm min-w-0 block truncate tracking-tight"
+        dir="ltr"
+        v-for="pm in packageManagers"
+        :key="pm.id"
+        :data-pm-additional-cmd="pm.id"
         ><span class="text-fg-subtle select-none">${{ ' ' }}</span
         ><span
-          v-for="(part, i) in getCreatePartsForPM(selectedPm)"
+          v-for="(part, i) in getCreatePartsForPM(pm.id)"
           :key="i"
           :class="
-            i === getCreatePartsForPM(selectedPm).length - 1
-              ? 'text-fg font-medium'
-              : 'text-fg-muted'
+            i === getCreatePartsForPM(pm.id).length - 1 ? 'text-fg font-medium' : 'text-fg-muted'
           "
           >{{ i > 0 ? ' ' : '' }}{{ part }}</span
         ></code
@@ -283,3 +301,24 @@ function copyCreateCommand() {
     </div>
   </div>
 </template>
+<style>
+/* Hide all variants by default when preference is set */
+:root[data-pm] [data-pm-additional-cmd] {
+  display: none;
+}
+
+/* Show only the matching package manager command */
+:root[data-pm='npm'] [data-pm-additional-cmd='npm'],
+:root[data-pm='pnpm'] [data-pm-additional-cmd='pnpm'],
+:root[data-pm='yarn'] [data-pm-additional-cmd='yarn'],
+:root[data-pm='bun'] [data-pm-additional-cmd='bun'],
+:root[data-pm='deno'] [data-pm-additional-cmd='deno'],
+:root[data-pm='vlt'] [data-pm-additional-cmd='vlt'] {
+  display: inline;
+}
+
+/* Fallback: when no data-pm is set (SSR initial), show npm as default */
+:root:not([data-pm]) [data-pm-additional-cmd]:not([data-pm-additional-cmd='npm']) {
+  display: none;
+}
+</style>

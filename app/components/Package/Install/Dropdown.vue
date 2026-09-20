@@ -37,15 +37,6 @@ async function copyInstallCommandWithAnnounce() {
   }
 }
 
-const installParts = computed(() =>
-  getInstallCommandParts({
-    packageName: props.packageName,
-    packageManager: selectedPM.value,
-    version: props.installVersionOverride ?? props.requestedVersion,
-    jsrInfo: props.jsrInfo,
-  }),
-)
-
 const hasExtra = computed(
   () =>
     !!props.devDependencySuggestion?.recommended ||
@@ -140,18 +131,27 @@ onPrehydrate(el => {
             :classicon="copied ? 'i-lucide:check' : 'i-lucide:copy'"
             @click.stop="copyInstallCommandWithAnnounce"
           />
-          <div class="flex flex-1 items-center gap-3 min-w-0">
-            <span class="text-fg-subtle font-mono text-sm select-none shrink-0">$</span>
+          <div class="flex-1 min-w-0">
+            <span class="text-fg-subtle font-mono text-sm select-none shrink-0">$ </span>
             <code
               class="font-mono text-sm min-w-0 flex-1 truncate tracking-tight cursor-text select-text"
               dir="ltr"
-              ><span
-                v-for="(part, i) in installParts"
-                :key="i"
-                :class="i === installParts.length - 1 ? 'text-fg font-medium' : 'text-fg-muted'"
-                >{{ i > 0 ? ' ' : '' }}{{ part }}</span
-              ></code
+              v-for="pm in packageManagers"
+              :key="pm.id"
+              :data-pm-cmd="pm.id"
             >
+              <span
+                v-for="(part, i) in getInstallCommandParts({
+                  packageName: props.packageName,
+                  packageManager: pm.id,
+                  version: props.installVersionOverride ?? props.requestedVersion,
+                  jsrInfo: props.jsrInfo,
+                })"
+                :key="i"
+                class="text-fg-muted last:(text-fg font-medium)"
+                >{{ i > 0 ? ' ' : '' }}{{ part }}</span
+              >
+            </code>
           </div>
         </div>
       </div>
@@ -185,3 +185,24 @@ onPrehydrate(el => {
     </div>
   </section>
 </template>
+<style>
+/* Hide all variants by default when preference is set */
+:root[data-pm] [data-pm-cmd] {
+  display: none;
+}
+
+/* Show only the matching package manager command */
+:root[data-pm='npm'] [data-pm-cmd='npm'],
+:root[data-pm='pnpm'] [data-pm-cmd='pnpm'],
+:root[data-pm='yarn'] [data-pm-cmd='yarn'],
+:root[data-pm='bun'] [data-pm-cmd='bun'],
+:root[data-pm='deno'] [data-pm-cmd='deno'],
+:root[data-pm='vlt'] [data-pm-cmd='vlt'] {
+  display: inline;
+}
+
+/* Fallback: when no data-pm is set (SSR initial), show npm as default */
+:root:not([data-pm]) [data-pm-cmd]:not([data-pm-cmd='npm']) {
+  display: none;
+}
+</style>
