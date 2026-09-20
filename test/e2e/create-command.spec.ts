@@ -22,7 +22,7 @@ test.describe('Create Command', () => {
 
       const createCommandSection = page.locator('[data-testid="create-command"]').first()
       await expect(createCommandSection).toBeVisible()
-      const activePm = page.locator('[data-pm]').first().getAttribute('data-pm')
+      const activePm = await page.locator('[data-pm]').first().getAttribute('data-pm')
       const commandRow = createCommandSection.locator(`[data-pm-additional-cmd="${activePm}"]`)
       await expect(commandRow).toBeVisible()
       await expect(commandRow).toContainText(/create vite/i)
@@ -42,7 +42,7 @@ test.describe('Create Command', () => {
 
       const createCommandSection = page.locator('[data-testid="create-command"]').first()
       await expect(createCommandSection).toBeVisible()
-      const activePm = page.locator('[data-pm]').first().getAttribute('data-pm')
+      const activePm = await page.locator('[data-pm]').first().getAttribute('data-pm')
       const commandRow = createCommandSection.locator(`[data-pm-additional-cmd="${activePm}"]`)
       await expect(commandRow).toBeVisible()
       await expect(commandRow).toContainText(/create next-app/i)
@@ -63,7 +63,7 @@ test.describe('Create Command', () => {
       // nuxt has create-nuxt package, so command is "npm create nuxt"
       const createCommandSection = page.locator('[data-testid="create-command"]').first()
       await expect(createCommandSection).toBeVisible()
-      const activePm = page.locator('[data-pm]').first().getAttribute('data-pm')
+      const activePm = await page.locator('[data-pm]').first().getAttribute('data-pm')
       const commandRow = createCommandSection.locator(`[data-pm-additional-cmd="${activePm}"]`)
       await expect(commandRow).toBeVisible()
       await expect(commandRow).toContainText(/create nuxt/i)
