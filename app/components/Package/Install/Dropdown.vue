@@ -55,32 +55,30 @@ const hasExtra = computed(
 )
 
 const appSettings = useSettings()
-
-const isOpen = shallowRef(false)
 const panelId = useId()
+const isOpen = shallowRef(false)
 
 onPrehydrate(() => {
   const settings = JSON.parse(localStorage.getItem('npmx-settings') || '{}')
   if (settings?.installCommandsExpanded) {
-    document.documentElement.dataset.installExpanded = 'true'
+    document.documentElement.setAttribute('data-install-expanded', 'true')
   }
 })
 
 onMounted(() => {
-  if (document?.documentElement) {
-    isOpen.value = document.documentElement.dataset.installExpanded === 'true'
+  if (appSettings.settings.value.installCommandsExpanded) {
+    isOpen.value = true
   }
 })
 
 function toggle() {
-  isOpen.value = !isOpen.value
+  appSettings.settings.value.installCommandsExpanded =
+    !appSettings.settings.value.installCommandsExpanded
 
-  appSettings.settings.value.installCommandsExpanded = isOpen.value
-
-  if (isOpen.value) {
-    document.documentElement.dataset.installExpanded = 'true'
+  if (appSettings.settings.value.installCommandsExpanded) {
+    document.documentElement.setAttribute('data-install-expanded', 'true')
   } else {
-    delete document.documentElement.dataset.installExpanded
+    document.documentElement.removeAttribute('data-install-expanded')
   }
 }
 </script>
@@ -125,8 +123,7 @@ function toggle() {
             @click="toggle"
           >
             <span
-              class="i-lucide:chevron-down w-3.5 h-3.5 transition-transform duration-200"
-              :class="{ 'rotate-180': isOpen }"
+              class="i-lucide:chevron-down w-3.5 h-3.5 transition-transform duration-200 [:root[data-install-expanded=true]_&]:rotate-180"
               aria-hidden="true"
             />
           </button>
@@ -162,14 +159,12 @@ function toggle() {
         v-if="hasExtra"
         :id="panelId"
         data-install-panel
-        class="grid overflow-hidden transition-[grid-template-rows] duration-250 ease-out"
-        :class="isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
+        class="grid overflow-hidden transition-[grid-template-rows] duration-250 ease-out grid-rows-[0fr] [:root[data-install-expanded=true]_&]:grid-rows-[1fr]"
         :inert="!isOpen"
       >
         <div class="min-h-0">
           <div
-            class="border-t border-border-subtle divide-y divide-border-subtle transition-opacity duration-200"
-            :class="isOpen ? 'opacity-100 delay-100' : 'opacity-0'"
+            class="border-t border-border-subtle divide-y divide-border-subtle transition-opacity duration-200 [:root[data-install-expanded=true]_&]:opacity-100 [:root[data-install-expanded=false]_&]:opacity-0"
           >
             <PackageInstallAdditionalCommands
               :package-name="packageName"

@@ -64,15 +64,15 @@ test.describe('Create Command', () => {
       page,
       goto,
     }) => {
-      await goto('/package/is-odd', { waitUntil: 'domcontentloaded' })
+      await goto('/package/is-odd', { waitUntil: 'hydration' })
 
       // Wait for package to load
       await expect(page.locator('h1').filter({ hasText: 'is-odd' })).toBeVisible()
 
-      // Neither the create command nor the panel toggle should exist
-      // (is-odd has no dev suggestion, types, executable, or create-* package)
+      // is-odd has a @types package, so the panel still exists and expands,
+      // but it must not contain a create command (no create-is-odd package)
+      await expandAdditionalCommands(page)
       await expect(page.locator('[data-testid="create-command"]').first()).not.toBeVisible()
-      await expect(page.locator('[data-testid="install-commands-toggle"]')).not.toBeVisible()
     })
   })
 
