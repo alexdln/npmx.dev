@@ -58,25 +58,6 @@ const appSettings = useSettings()
 const panelId = useId()
 const isOpen = shallowRef(false)
 
-onPrehydrate(() => {
-  const settings = JSON.parse(localStorage.getItem('npmx-settings') || '{}')
-  if (settings?.installCommandsExpanded) {
-    document.documentElement.setAttribute('data-install-expanded', 'true')
-  }
-  console.log(
-    'onPrehydrate',
-    settings?.installCommandsExpanded,
-    document.documentElement.dataset.installExpanded,
-  )
-})
-
-onMounted(() => {
-  if (document.documentElement) {
-    isOpen.value = document.documentElement.dataset.installExpanded === 'true'
-  }
-  console.log('onMounted', document.documentElement.dataset.installExpanded, isOpen.value)
-})
-
 function toggle() {
   appSettings.settings.value.installCommandsExpanded =
     !appSettings.settings.value.installCommandsExpanded
@@ -96,27 +77,19 @@ function toggle() {
   )
 }
 
-watch(isOpen, newVal => {
-  console.log('watch isOpen', newVal)
+onMounted(() => {
+  if (document.documentElement) {
+    isOpen.value = document.documentElement.dataset.installExpanded === 'true'
+  }
+  console.log('onMounted', document.documentElement.dataset.installExpanded, isOpen.value)
 })
 
-watch(installParts, newVal => {
-  console.log('watch installParts', newVal)
+onPrehydrate(() => {
+  const settings = JSON.parse(localStorage.getItem('npmx-settings') || '{}')
+  if (settings?.installCommandsExpanded) {
+    document.documentElement.setAttribute('data-install-expanded', 'true')
+  }
 })
-
-watch(
-  () => appSettings.settings.value.installCommandsExpanded,
-  newVal => {
-    console.log('watch installCommandsExpanded', newVal)
-  },
-)
-
-watch(
-  () => selectedPM.value,
-  newVal => {
-    console.log('watch selectedPM', newVal)
-  },
-)
 </script>
 
 <template>
