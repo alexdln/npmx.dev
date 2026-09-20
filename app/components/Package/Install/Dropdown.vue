@@ -56,7 +56,7 @@ const hasExtra = computed(
 
 const appSettings = useSettings()
 const panelId = useId()
-const isOpen = shallowRef(false)
+const isOpen = shallowRef(appSettings.settings.value.installCommandsExpanded)
 
 onPrehydrate(() => {
   const settings = JSON.parse(localStorage.getItem('npmx-settings') || '{}')
