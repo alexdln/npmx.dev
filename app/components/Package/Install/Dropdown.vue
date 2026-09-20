@@ -66,7 +66,7 @@ onPrehydrate(() => {
 })
 
 onMounted(() => {
-  if (appSettings.settings.value.installCommandsExpanded) {
+  if (document.documentElement.dataset.installExpanded === 'true') {
     isOpen.value = true
   }
 })
