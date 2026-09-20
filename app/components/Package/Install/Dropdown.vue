@@ -67,7 +67,6 @@ onPrehydrate(() => {
     'onPrehydrate',
     settings?.installCommandsExpanded,
     document.documentElement.dataset.installExpanded,
-    isOpen.value,
   )
 })
 
