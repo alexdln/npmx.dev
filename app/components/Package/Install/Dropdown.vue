@@ -63,12 +63,19 @@ onPrehydrate(() => {
   if (settings?.installCommandsExpanded) {
     document.documentElement.setAttribute('data-install-expanded', 'true')
   }
+  console.log(
+    'onPrehydrate',
+    settings?.installCommandsExpanded,
+    document.documentElement.dataset.installExpanded,
+    isOpen.value,
+  )
 })
 
 onMounted(() => {
   if (document.documentElement.dataset.installExpanded === 'true') {
     isOpen.value = true
   }
+  console.log('onMounted', document.documentElement.dataset.installExpanded, isOpen.value)
 })
 
 function toggle() {
@@ -82,7 +89,35 @@ function toggle() {
     document.documentElement.removeAttribute('data-install-expanded')
     isOpen.value = false
   }
+  console.log(
+    'toggle',
+    appSettings.settings.value.installCommandsExpanded,
+    document.documentElement.dataset.installExpanded,
+    isOpen.value,
+  )
 }
+
+watch(isOpen, newVal => {
+  console.log('watch isOpen', newVal)
+})
+
+watch(installParts, newVal => {
+  console.log('watch installParts', newVal)
+})
+
+watch(
+  () => appSettings.settings.value.installCommandsExpanded,
+  newVal => {
+    console.log('watch installCommandsExpanded', newVal)
+  },
+)
+
+watch(
+  () => selectedPM.value,
+  newVal => {
+    console.log('watch selectedPM', newVal)
+  },
+)
 </script>
 
 <template>
