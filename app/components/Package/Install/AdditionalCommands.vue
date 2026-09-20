@@ -129,11 +129,15 @@ function copyCreateCommand() {
 
 <template>
   <!-- Suggested dev dependency install command -->
-  <div v-if="devDependencySuggestion.recommended" class="flex items-center gap-3 px-2.5 py-2.5">
+  <div
+    v-if="devDependencySuggestion.recommended"
+    class="flex items-center gap-3 px-2.5 py-2.5"
+    data-testid="dev-install-command"
+  >
     <ButtonBase
       type="button"
       :class="['shrink-0', copyButtonClass]"
-      :aria-label="$t('package.get_started.copy_dev_command')"
+      :aria-label="$t('command_palette.package_actions.copy_run')"
       :classicon="devInstallCopied ? 'i-lucide:check' : 'i-lucide:copy'"
       @click.stop="copyDevInstallCommand"
     />
@@ -158,11 +162,15 @@ function copyCreateCommand() {
   </div>
 
   <!-- @types package install -->
-  <div v-if="typesPackageName && showTypes" class="flex items-center gap-3 px-2.5 py-2.5">
+  <div
+    v-if="typesPackageName && showTypes"
+    class="flex items-center gap-3 px-2.5 py-2.5"
+    data-testid="types-install-command"
+  >
     <ButtonBase
       type="button"
       :class="['shrink-0', copyButtonClass]"
-      :aria-label="$t('package.get_started.copy_dev_command')"
+      :aria-label="$t('command_palette.package_actions.copy_run')"
       :classicon="typesInstallCopied ? 'i-lucide:check' : 'i-lucide:copy'"
       @click.stop="copyTypesInstallCommand"
     />
@@ -199,11 +207,15 @@ function copyCreateCommand() {
   </div>
 
   <!-- Run command (only if package has executables) -->
-  <div v-if="executableInfo?.hasExecutable" class="flex items-center gap-3 px-2.5 py-2.5">
+  <div
+    v-if="executableInfo?.hasExecutable"
+    class="flex items-center gap-3 px-2.5 py-2.5"
+    data-testid="run-command"
+  >
     <ButtonBase
       type="button"
       :class="['shrink-0', copyButtonClass]"
-      :aria-label="$t('package.run.copy_command')"
+      :aria-label="$t('command_palette.package_actions.copy_run')"
       :classicon="runCopied ? 'i-lucide:check' : 'i-lucide:copy'"
       @click.stop="copyRunCommand(executableInfo?.primaryCommand)"
     />
@@ -226,11 +238,15 @@ function copyCreateCommand() {
   </div>
 
   <!-- Create command (for packages with associated create-* package) -->
-  <div v-if="createPackageInfo" class="flex items-center gap-3 px-2.5 py-2.5">
+  <div
+    v-if="createPackageInfo"
+    class="flex items-center gap-3 px-2.5 py-2.5"
+    data-testid="create-command"
+  >
     <ButtonBase
       type="button"
       :class="['shrink-0', copyButtonClass]"
-      :aria-label="$t('package.create.copy_command')"
+      :aria-label="$t('command_palette.package_actions.copy_run')"
       :classicon="createCopied ? 'i-lucide:check' : 'i-lucide:copy'"
       @click.stop="copyCreateCommand"
     />

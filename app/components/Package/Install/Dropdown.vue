@@ -113,6 +113,7 @@ function toggle() {
           <button
             v-if="hasExtra"
             type="button"
+            data-testid="install-commands-toggle"
             class="flex items-center justify-center cursor-pointer size-8 rounded-md text-fg-subtle transition-all duration-150 hover:bg-bg-elevated hover:text-fg active:scale-90 focus-visible:outline-2 focus-visible:outline-accent/70"
             :aria-expanded="isOpen"
             :aria-controls="panelId"
@@ -130,7 +131,10 @@ function toggle() {
             />
           </button>
         </div>
-        <div class="flex flex-1 items-center gap-3 min-w-0 px-2.5 py-2.5">
+        <div
+          class="flex flex-1 items-center gap-3 min-w-0 px-2.5 py-2.5"
+          data-testid="install-command"
+        >
           <ButtonBase
             type="button"
             class="shrink-0 text-fg-muted bg-bg-subtle/80 border-border transition-all duration-150 hover:scale-105 active:scale-90 select-none"
