@@ -56,11 +56,8 @@ const hasExtra = computed(
 
 const appSettings = useSettings()
 const panelId = useId()
-const isOpen = shallowRef(
-  typeof window !== 'undefined'
-    ? document.documentElement.dataset.installExpanded === 'true'
-    : appSettings.settings.value.installCommandsExpanded,
-)
+console.log('isOpen 1', appSettings.settings.value.installCommandsExpanded)
+const isOpen = shallowRef(appSettings.settings.value.installCommandsExpanded)
 
 onPrehydrate(() => {
   const settings = JSON.parse(localStorage.getItem('npmx-settings') || '{}')
@@ -76,7 +73,8 @@ onPrehydrate(() => {
 })
 
 onMounted(() => {
-  if (document.documentElement.dataset.installExpanded === 'true') {
+  console.log('onMounted 1', isOpen.value, appSettings.settings.value.installCommandsExpanded)
+  if (appSettings.settings.value.installCommandsExpanded) {
     isOpen.value = true
   } else {
     isOpen.value = false
@@ -108,28 +106,6 @@ watch(
   newVal => {
     isOpen.value = newVal
     document.documentElement.setAttribute('data-install-expanded', newVal ? 'true' : 'false')
-  },
-)
-
-watch(isOpen, newVal => {
-  console.log('watch isOpen', newVal)
-})
-
-watch(installParts, newVal => {
-  console.log('watch installParts', newVal)
-})
-
-watch(
-  () => appSettings.settings.value.installCommandsExpanded,
-  newVal => {
-    console.log('watch installCommandsExpanded', newVal)
-  },
-)
-
-watch(
-  () => selectedPM.value,
-  newVal => {
-    console.log('watch selectedPM', newVal)
   },
 )
 </script>
