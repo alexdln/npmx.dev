@@ -124,7 +124,7 @@ onPrehydrate(el => {
             @click="toggle"
           >
             <span
-              class="i-lucide:chevron-down w-3.5 h-3.5 transition-transform duration-200 [:root[data-install-expanded=true]_&]:rotate-180"
+              class="i-lucide:chevron-down w-3.5 h-3.5 transition-transform duration-200 [section[data-install-expanded=true]_&]:rotate-180"
               aria-hidden="true"
             />
           </button>
@@ -160,12 +160,12 @@ onPrehydrate(el => {
         v-if="hasExtra"
         :id="panelId"
         data-install-panel
-        class="grid overflow-hidden transition-[grid-template-rows] duration-250 ease-out grid-rows-[0fr] [:root[data-install-expanded=true]_&]:grid-rows-[1fr]"
+        class="grid overflow-hidden transition-[grid-template-rows] duration-250 ease-out grid-rows-[0fr] [section[data-install-expanded=true]_&]:grid-rows-[1fr]"
         :inert="!isOpen"
       >
         <div class="min-h-0">
           <div
-            class="border-t border-border-subtle divide-y divide-border-subtle transition-opacity duration-200 [:root[data-install-expanded=true]_&]:opacity-100 [:root[data-install-expanded=false]_&]:opacity-0"
+            class="border-t border-border-subtle divide-y divide-border-subtle transition-opacity duration-200 [section[data-install-expanded=true]_&]:opacity-100 [section[data-install-expanded=false]_&]:opacity-0"
           >
             <PackageInstallAdditionalCommands
               :package-name="packageName"

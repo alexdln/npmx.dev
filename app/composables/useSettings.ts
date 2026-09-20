@@ -353,12 +353,6 @@ export function useInstallCommandsExpanded() {
   const { settings } = useSettings()
   const installCommandsExpanded = computed(() => settings.value.installCommandsExpanded)
 
-  if (import.meta.client) {
-    watch(installCommandsExpanded, value => {
-      document.documentElement.setAttribute('data-install-expanded', value ? 'true' : 'false')
-    })
-  }
-
   function toggleInstallCommandsExpanded() {
     settings.value.installCommandsExpanded = !settings.value.installCommandsExpanded
   }

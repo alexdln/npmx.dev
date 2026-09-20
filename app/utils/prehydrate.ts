@@ -88,10 +88,5 @@ export function initPreferencesOnPrehydrate() {
     if (settings.codeLigatures === false) {
       document.documentElement.dataset.codeLigatures = 'false'
     }
-
-    // Install commands panel (default: collapsed)
-    if (settings.installCommandsExpanded) {
-      document.documentElement.dataset.installExpanded = 'true'
-    }
   })
 }
