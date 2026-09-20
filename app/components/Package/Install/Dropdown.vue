@@ -77,12 +77,12 @@ onPrehydrate(el => {
       panel.setAttribute('inert', 'true')
     }
   }
-  document.documentElement.setAttribute('data-install-expanded', isExpanded ? 'true' : 'false')
+  el.dataset.installExpanded = isExpanded ? 'true' : 'false'
 })
 </script>
 
 <template>
-  <section class="scroll-mt-20" :data-panel-id="panelId">
+  <section class="scroll-mt-20" :data-panel-id="panelId" :data-install-expanded="isOpen">
     <h2 :id="headingId" class="sr-only">{{ $t('package.get_started.title') }}</h2>
 
     <PackageSecurityDowngradeAlert
