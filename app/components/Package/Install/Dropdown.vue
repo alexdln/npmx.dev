@@ -56,7 +56,11 @@ const hasExtra = computed(
 
 const appSettings = useSettings()
 const panelId = useId()
-const isOpen = shallowRef(appSettings.settings.value.installCommandsExpanded)
+const isOpen = shallowRef(
+  typeof window !== 'undefined'
+    ? document.documentElement.dataset.installExpanded === 'true'
+    : appSettings.settings.value.installCommandsExpanded,
+)
 
 onPrehydrate(() => {
   const settings = JSON.parse(localStorage.getItem('npmx-settings') || '{}')
@@ -97,6 +101,13 @@ function toggle() {
     isOpen.value,
   )
 }
+
+watch(
+  () => appSettings.settings.value.installCommandsExpanded,
+  newVal => {
+    isOpen.value = newVal
+  },
+)
 
 watch(isOpen, newVal => {
   console.log('watch isOpen', newVal)
