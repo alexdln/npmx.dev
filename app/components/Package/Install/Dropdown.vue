@@ -71,8 +71,10 @@ onPrehydrate(() => {
 })
 
 onMounted(() => {
-  if (document.documentElement) {
-    isOpen.value = document.documentElement.dataset.installExpanded === 'true'
+  if (document.documentElement.dataset.installExpanded === 'true') {
+    isOpen.value = true
+  } else {
+    isOpen.value = false
   }
   console.log('onMounted', document.documentElement.dataset.installExpanded, isOpen.value)
 })
@@ -149,6 +151,13 @@ watch(
             type="button"
             data-testid="install-commands-toggle"
             class="flex items-center justify-center cursor-pointer size-8 rounded-md text-fg-subtle transition-all duration-150 hover:bg-bg-elevated hover:text-fg active:scale-90 focus-visible:outline-2 focus-visible:outline-accent/70"
+            :aria-expanded="isOpen"
+            :aria-controls="panelId"
+            :aria-label="
+              isOpen
+                ? $t('package.get_started.collapse_commands')
+                : $t('package.get_started.expand_commands')
+            "
             @click="toggle"
           >
             <span
@@ -189,6 +198,7 @@ watch(
         :id="panelId"
         data-install-panel
         class="grid overflow-hidden transition-[grid-template-rows] duration-250 ease-out grid-rows-[0fr] [:root[data-install-expanded=true]_&]:grid-rows-[1fr]"
+        :inert="!isOpen"
       >
         <div class="min-h-0">
           <div
