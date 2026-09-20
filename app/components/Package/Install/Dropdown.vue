@@ -77,8 +77,10 @@ function toggle() {
 
   if (appSettings.settings.value.installCommandsExpanded) {
     document.documentElement.setAttribute('data-install-expanded', 'true')
+    isOpen.value = true
   } else {
     document.documentElement.removeAttribute('data-install-expanded')
+    isOpen.value = false
   }
 }
 </script>
