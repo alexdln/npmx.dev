@@ -54,64 +54,35 @@ const hasExtra = computed(
     !!props.createPackageInfo,
 )
 
-const appSettings = useSettings()
 const panelId = useId()
-console.log('isOpen 1', appSettings.settings.value.installCommandsExpanded)
-const isOpen = shallowRef(appSettings.settings.value.installCommandsExpanded)
+const { installCommandsExpanded: isOpen, toggleInstallCommandsExpanded: toggle } =
+  useInstallCommandsExpanded()
 
-onPrehydrate(() => {
+onPrehydrate(el => {
   const settings = JSON.parse(localStorage.getItem('npmx-settings') || '{}')
-  document.documentElement.setAttribute(
-    'data-install-expanded',
-    settings?.installCommandsExpanded ? 'true' : 'false',
-  )
-  console.log(
-    'onPrehydrate',
-    settings?.installCommandsExpanded,
-    document.documentElement.dataset.installExpanded,
-  )
-})
-
-onMounted(() => {
-  console.log('onMounted 1', isOpen.value, appSettings.settings.value.installCommandsExpanded)
-  if (appSettings.settings.value.installCommandsExpanded) {
-    isOpen.value = true
-  } else {
-    isOpen.value = false
+  const isExpanded = settings?.installCommandsExpanded
+  const control = el.querySelector<HTMLButtonElement>(`#${el.dataset.panelId}-toggle`)
+  if (control) {
+    const label =
+      (isExpanded ? control.dataset.labelExpanded : control.dataset.labelCollapsed) || ''
+    control.setAttribute('aria-expanded', isExpanded ? 'true' : 'false')
+    control.setAttribute('aria-label', label)
   }
-  document.documentElement.setAttribute('data-install-expanded', isOpen.value ? 'true' : 'false')
-  console.log('onMounted', document.documentElement.dataset.installExpanded, isOpen.value)
-})
 
-function toggle() {
-  appSettings.settings.value.installCommandsExpanded =
-    !appSettings.settings.value.installCommandsExpanded
-
-  if (appSettings.settings.value.installCommandsExpanded) {
-    isOpen.value = true
-  } else {
-    isOpen.value = false
+  const panel = el.querySelector<HTMLDivElement>(`#${el.dataset.panelId}`)
+  if (panel) {
+    if (isExpanded) {
+      panel.removeAttribute('inert')
+    } else {
+      panel.setAttribute('inert', 'true')
+    }
   }
-  document.documentElement.setAttribute('data-install-expanded', isOpen.value ? 'true' : 'false')
-  console.log(
-    'toggle',
-    appSettings.settings.value.installCommandsExpanded,
-    document.documentElement.dataset.installExpanded,
-    isOpen.value,
-  )
-}
-
-watch(
-  () => appSettings.settings.value.installCommandsExpanded,
-  newVal => {
-    isOpen.value = newVal
-    document.documentElement.setAttribute('data-install-expanded', newVal ? 'true' : 'false')
-  },
-)
+  document.documentElement.setAttribute('data-install-expanded', isExpanded ? 'true' : 'false')
+})
 </script>
 
 <template>
-  <section class="scroll-mt-20">
+  <section class="scroll-mt-20" :data-panel-id="panelId">
     <h2 :id="headingId" class="sr-only">{{ $t('package.get_started.title') }}</h2>
 
     <PackageSecurityDowngradeAlert
@@ -140,13 +111,16 @@ watch(
             type="button"
             data-testid="install-commands-toggle"
             class="flex items-center justify-center cursor-pointer size-8 rounded-md text-fg-subtle transition-all duration-150 hover:bg-bg-elevated hover:text-fg active:scale-90 focus-visible:outline-2 focus-visible:outline-accent/70"
-            :aria-expanded="isOpen"
+            :id="`${panelId}-toggle`"
             :aria-controls="panelId"
+            :aria-expanded="isOpen"
             :aria-label="
               isOpen
                 ? $t('package.get_started.collapse_commands')
                 : $t('package.get_started.expand_commands')
             "
+            :data-label-expanded="$t('package.get_started.collapse_commands')"
+            :data-label-collapsed="$t('package.get_started.expand_commands')"
             @click="toggle"
           >
             <span
