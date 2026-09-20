@@ -64,9 +64,10 @@ const isOpen = shallowRef(
 
 onPrehydrate(() => {
   const settings = JSON.parse(localStorage.getItem('npmx-settings') || '{}')
-  if (settings?.installCommandsExpanded) {
-    document.documentElement.setAttribute('data-install-expanded', 'true')
-  }
+  document.documentElement.setAttribute(
+    'data-install-expanded',
+    settings?.installCommandsExpanded ? 'true' : 'false',
+  )
   console.log(
     'onPrehydrate',
     settings?.installCommandsExpanded,
@@ -80,6 +81,7 @@ onMounted(() => {
   } else {
     isOpen.value = false
   }
+  document.documentElement.setAttribute('data-install-expanded', isOpen.value ? 'true' : 'false')
   console.log('onMounted', document.documentElement.dataset.installExpanded, isOpen.value)
 })
 
@@ -88,12 +90,11 @@ function toggle() {
     !appSettings.settings.value.installCommandsExpanded
 
   if (appSettings.settings.value.installCommandsExpanded) {
-    document.documentElement.setAttribute('data-install-expanded', 'true')
     isOpen.value = true
   } else {
-    document.documentElement.removeAttribute('data-install-expanded')
     isOpen.value = false
   }
+  document.documentElement.setAttribute('data-install-expanded', isOpen.value ? 'true' : 'false')
   console.log(
     'toggle',
     appSettings.settings.value.installCommandsExpanded,
@@ -106,6 +107,7 @@ watch(
   () => appSettings.settings.value.installCommandsExpanded,
   newVal => {
     isOpen.value = newVal
+    document.documentElement.setAttribute('data-install-expanded', newVal ? 'true' : 'false')
   },
 )
 
