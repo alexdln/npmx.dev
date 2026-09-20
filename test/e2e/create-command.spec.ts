@@ -22,7 +22,10 @@ test.describe('Create Command', () => {
 
       const createCommandSection = page.locator('[data-testid="create-command"]').first()
       await expect(createCommandSection).toBeVisible()
-      await expect(createCommandSection.locator('code')).toContainText(/create vite/i)
+      const activePm = page.locator('[data-pm]').first().getAttribute('data-pm')
+      const commandRow = createCommandSection.locator(`[data-pm-additional-cmd="${activePm}"]`)
+      await expect(commandRow).toBeVisible()
+      await expect(commandRow).toContainText(/create vite/i)
 
       // Link to create-vite should be present (uses sr-only text, so check attachment not visibility)
       await expect(page.locator('a[href="/package/create-vite"]').first()).toBeAttached()
@@ -39,7 +42,10 @@ test.describe('Create Command', () => {
 
       const createCommandSection = page.locator('[data-testid="create-command"]').first()
       await expect(createCommandSection).toBeVisible()
-      await expect(createCommandSection.locator('code')).toContainText(/create next-app/i)
+      const activePm = page.locator('[data-pm]').first().getAttribute('data-pm')
+      const commandRow = createCommandSection.locator(`[data-pm-additional-cmd="${activePm}"]`)
+      await expect(commandRow).toBeVisible()
+      await expect(commandRow).toContainText(/create next-app/i)
 
       // Link to create-next-app should be present (uses sr-only text, so check attachment not visibility)
       await expect(page.locator('a[href="/package/create-next-app"]').first()).toBeAttached()
@@ -57,7 +63,10 @@ test.describe('Create Command', () => {
       // nuxt has create-nuxt package, so command is "npm create nuxt"
       const createCommandSection = page.locator('[data-testid="create-command"]').first()
       await expect(createCommandSection).toBeVisible()
-      await expect(createCommandSection.locator('code')).toContainText(/create nuxt/i)
+      const activePm = page.locator('[data-pm]').first().getAttribute('data-pm')
+      const commandRow = createCommandSection.locator(`[data-pm-additional-cmd="${activePm}"]`)
+      await expect(commandRow).toBeVisible()
+      await expect(commandRow).toContainText(/create nuxt/i)
     })
 
     test('/is-odd - should NOT show create command (no create-is-odd exists)', async ({
