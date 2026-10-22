@@ -12,6 +12,8 @@ const props = defineProps<{
   url?: string
   /** Optional preload hint. Rendering still depends on the fetched embed metadata. */
   mediaHint?: 'video'
+  /** Render the post quoted by this post (if any) inside the embed */
+  showQuotedPost?: boolean
 }>()
 
 if (props.mediaHint === 'video') {
@@ -44,6 +46,12 @@ interface EmbedGallery {
   items: EmbedImage[]
 }
 
+interface EmbedRecord {
+  uri: string
+  /** Present on `app.bsky.embed.recordWithMedia#view`, where the quoted record is nested */
+  record?: { uri: string }
+}
+
 interface BlueskyPost {
   uri: string
   author: PostAuthor
@@ -55,6 +63,7 @@ interface BlueskyPost {
     thumbnail?: string
     playlist?: string
     aspectRatio?: { width: number; height: number }
+    record?: EmbedRecord
   } & EmbedGallery
   likeCount?: number
   replyCount?: number
@@ -116,6 +125,13 @@ const postUrl = computed(() => {
   if (!match) return null
   const [, did, rkey] = match
   return `https://bsky.app/profile/${did}/post/${rkey}`
+})
+
+const quotedPostUri = computed(() => {
+  const embed = post.value?.embed
+  if (embed?.$type === 'app.bsky.embed.record#view') return embed.record?.uri
+  if (embed?.$type === 'app.bsky.embed.recordWithMedia#view') return embed.record?.record?.uri
+  return undefined
 })
 </script>
 
@@ -236,6 +252,11 @@ const postUrl = computed(() => {
         />
       </div>
     </template>
+
+    <!-- Quoted post -->
+    <div v-if="showQuotedPost && quotedPostUri" class="relative z-10">
+      <LazyBlueskyPostEmbed :uri="quotedPostUri" />
+    </div>
 
     <!-- Timestamp + engagement -->
     <div class="flex items-center gap-4 text-sm text-fg-subtle mt-3">

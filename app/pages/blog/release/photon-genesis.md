@@ -242,6 +242,7 @@ Amid all this ongoing work to “cook” a better user experience, there was of 
 <BlueskyPostEmbed
   url="https://bsky.app/profile/patak.cat/post/3mqu4n4byok27"
   uri="at://did:plc:2gkh62xvzokhlf6li4ol3b3d/app.bsky.feed.post/3mqu4n4byok27"
+  show-quoted-post
 />
 
 ### National GIF Day
@@ -263,6 +264,7 @@ Amid all this ongoing work to “cook” a better user experience, there was of 
 <BlueskyPostEmbed
   url="https://bsky.app/profile/alexdln.com/post/3mxqgnxwj6c2r"
   uri="at://did:plc:er6erflnnxcozlbqmrpflt6h/app.bsky.feed.post/3mxqgnxwj6c2r"
+  show-quoted-post
 />
 
 <details>
